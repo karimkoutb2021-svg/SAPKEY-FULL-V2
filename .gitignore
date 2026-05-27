@@ -1,0 +1,41 @@
+# Dependencies
+node_modules/
+
+# Build
+.next/
+dist/
+out/
+build/
+
+# Environment
+.env
+.env.local
+.env.*.local
+.env.pages.json
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+*.log
+
+# Testing
+coverage/
+
+# Docker
+docker/data/
+docker/logs/
+
+# Supabase
+supabase/.temp/
+
+# Temp
+dist.zip
+
+.vercel

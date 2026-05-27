@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <!-- Green Background -->
+  <rect width="400" height="400" fill="#22C55E"/>
+  
+  <!-- Spotlight Effect -->
+  <defs>
+    <radialGradient id="spotlight" cx="50%" cy="30%" r="60%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.3"/>
+      <stop offset="50%" stop-color="#ffffff" stop-opacity="0.1"/>
+      <stop offset="100%" stop-color="#22C55E" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glow" cx="50%" cy="35%" r="40%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#22C55E" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  
+  <!-- Spotlight overlay -->
+  <rect width="400" height="400" fill="url(#spotlight)"/>
+  
+  <!-- Light beam from top -->
+  <polygon points="150,0 250,0 320,200 80,200" fill="#ffffff" opacity="0.1"/>
+  <polygon points="170,0 230,0 290,180 110,180" fill="#ffffff" opacity="0.15"/>
+  
+  <!-- Glow circle -->
+  <circle cx="200" cy="140" r="120" fill="url(#glow)"/>
+  
+  <!-- SAPKEY SOLUTIONS Text -->
+  <text x="200" y="180" font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="bold" fill="#000000" text-anchor="middle" letter-spacing="2">SAPKEY</text>
+  <text x="200" y="215" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="300" fill="#000000" text-anchor="middle" letter-spacing="4">SOLUTIONS</text>
+  
+  <!-- Subtle line under text -->
+  <line x1="140" y1="235" x2="260" y2="235" stroke="#000000" stroke-width="1" opacity="0.3"/>
+  
+  <!-- Bottom subtle gradient -->
+  <rect x="0" y="300" width="400" height="100" fill="#000000" opacity="0.1"/>
+</svg>

@@ -1,0 +1,16 @@
+{
+  "headers": {
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/accounting/layout,_N_T_/accounting/treasury/layout,_N_T_/accounting/treasury/page,_N_T_/accounting/treasury"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/accounting/treasury/__PAGE__",
+    "/accounting/treasury",
+    "/accounting",
+    "/_index",
+    "/_head"
+  ]
+}

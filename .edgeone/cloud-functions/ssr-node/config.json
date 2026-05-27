@@ -1,0 +1,205 @@
+{
+  "version": 3,
+  "routes": [
+    {
+      "src": "^/_next/static/(?:[^/]+/pages|pages|chunks|runtime|css|image|media|X9bj8Lbz4lxb8l1e0fw7x)/.+",
+      "headers": {
+        "cache-control": "public,max-age=31536000,immutable"
+      },
+      "continue": true
+    },
+    {
+      "src": "^/(.*)\\/$",
+      "headers": {
+        "Location": "/$1"
+      },
+      "status": 308
+    },
+    {
+      "src": "^\\/sw\\.js$",
+      "headers": {
+        "Cache-Control": "no-cache, no-store, must-revalidate",
+        "Pragma": "no-cache",
+        "Expires": "0",
+        "Service-Worker-Allowed": "/"
+      },
+      "continue": true
+    },
+    {
+      "src": "^\\/version\\.json$",
+      "headers": {
+        "Cache-Control": "no-cache, no-store, must-revalidate",
+        "Pragma": "no-cache",
+        "Expires": "0"
+      },
+      "continue": true
+    },
+    {
+      "src": "^\\/api\\/version$",
+      "headers": {
+        "Cache-Control": "no-cache, no-store, must-revalidate",
+        "Pragma": "no-cache",
+        "Expires": "0"
+      },
+      "continue": true
+    },
+    {
+      "src": "^(?:\\/((?:[^\\/]+?)(?:\\/(?:[^\\/]+?))*))?\\.svg$",
+      "headers": {
+        "Content-Type": "image/svg+xml",
+        "Cache-Control": "public, max-age=31536000, immutable"
+      },
+      "continue": true
+    },
+    {
+      "src": "^/?$",
+      "has": [
+        {
+          "type": "header",
+          "key": "rsc",
+          "value": "1"
+        }
+      ],
+      "dest": "/index.rsc",
+      "headers": {
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Next-Router-Segment-Prefetch",
+        "content-type": "text/x-component"
+      },
+      "continue": true
+    },
+    {
+      "src": "^/(.+?)(?:/)?$",
+      "exclude": "\\.rsc/?$",
+      "has": [
+        {
+          "type": "header",
+          "key": "rsc",
+          "value": "1"
+        }
+      ],
+      "dest": "/$1.rsc",
+      "headers": {
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Next-Router-Segment-Prefetch",
+        "content-type": "text/x-component"
+      },
+      "continue": true
+    },
+    {
+      "src": "^/404/?$",
+      "status": 404,
+      "continue": true,
+      "missing": [
+        {
+          "type": "header",
+          "key": "x-prerender-revalidate"
+        }
+      ]
+    },
+    {
+      "src": "^/500$",
+      "status": 500,
+      "continue": true
+    },
+    {
+      "src": "^/((?:[^/]+/)*[^/.]+)/$",
+      "dest": "/$1",
+      "continue": true
+    },
+    {
+      "handle": "filesystem"
+    },
+    {
+      "src": "^/api/admin/backup$"
+    },
+    {
+      "src": "^/api/admin/tenants$"
+    },
+    {
+      "src": "^/api/admin/users$"
+    },
+    {
+      "src": "^/api/auth/convert\\-account$"
+    },
+    {
+      "src": "^/api/auth/profile$"
+    },
+    {
+      "src": "^/api/auth/reset\\-password$"
+    },
+    {
+      "src": "^/api/branding$"
+    },
+    {
+      "src": "^/api/checkout$"
+    },
+    {
+      "src": "^/api/cron/check\\-expiry$"
+    },
+    {
+      "src": "^/api/cron/health\\-check$"
+    },
+    {
+      "src": "^/api/delivery/location$"
+    },
+    {
+      "src": "^/api/delivery/proof$"
+    },
+    {
+      "src": "^/api/delivery/status$"
+    },
+    {
+      "src": "^/api/guides$"
+    },
+    {
+      "src": "^/api/manage\\-user$"
+    },
+    {
+      "src": "^/api/migrate$"
+    },
+    {
+      "src": "^/api/payment$"
+    },
+    {
+      "src": "^/api/report\\-error$"
+    },
+    {
+      "src": "^/api/search$"
+    },
+    {
+      "src": "^/api/seed\\-users$"
+    },
+    {
+      "src": "^/api/setup$"
+    },
+    {
+      "src": "^/api/system/health\\-log$"
+    },
+    {
+      "src": "^/api/validate\\-coupon$"
+    },
+    {
+      "src": "^/api/version$"
+    },
+    {
+      "src": "^/api/whatsapp/send$"
+    },
+    {
+      "src": "^/api/whatsapp/webhook$"
+    },
+    {
+      "src": "^/delivery/driver/orders/([^/]+?)(?:/)?$"
+    },
+    {
+      "src": "^/shop/product/([^/]+?)(?:/)?$"
+    },
+    {
+      "src": "^/tracking/([^/]+?)(?:/)?$"
+    },
+    {
+      "src": "^/.*$"
+    }
+  ],
+  "framework": {
+    "version": "16.2.6"
+  }
+}

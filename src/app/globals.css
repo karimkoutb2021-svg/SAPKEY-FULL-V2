@@ -1,0 +1,436 @@
+@import "tailwindcss";
+
+/* ═══════════════════════════════════════════════════════════
+   FORCE LIGHT MODE - Override ALL dark: classes globally
+   ═══════════════════════════════════════════════════════════ */
+
+/* ═══════════════════════════════════════════════════════════
+   LAYOUT CLASSES
+   ═══════════════════════════════════════════════════════════ */
+
+/* Mobile Bottom Navigation */
+.mobile-bottom-nav {
+  display: none;
+}
+@media (max-width: 767px) {
+  .mobile-bottom-nav {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 64px;
+    background-color: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+    z-index: 50;
+    padding-bottom: env(safe-area-inset-bottom);
+    box-sizing: content-box;
+    align-items: center;
+    justify-content: space-around;
+  }
+}
+
+.mobile-bottom-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  height: 100%;
+  color: #86868B;
+  transition: color 0.2s ease;
+  text-decoration: none;
+  font-size: 10px;
+  gap: 4px;
+}
+.mobile-bottom-nav-item.active {
+  color: #0071E3;
+}
+
+/* Sidebar & Main Content Area */
+.desktop-sidebar {
+  width: 260px;
+  transition: width 0.3s ease;
+}
+.desktop-sidebar.collapsed {
+  width: 80px;
+}
+@media (max-width: 767px) {
+  .desktop-sidebar {
+    display: none !important; /* Hide completely on mobile to use bottom nav instead */
+  }
+}
+
+.main-content-area {
+  margin-right: 260px;
+  transition: margin-right 0.3s ease;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+.main-content-area.sidebar-collapsed {
+  margin-right: 80px;
+}
+@media (max-width: 767px) {
+  .main-content-area {
+    margin-right: 0 !important;
+    padding-bottom: calc(64px + env(safe-area-inset-bottom)) !important; /* Make room for bottom nav */
+  }
+}
+
+.content-container {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Button Utilities */
+.apple-btn-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background-color: #F5F5F7;
+  color: #1D1D1F;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.apple-btn-icon:hover {
+  background-color: #E8E8ED;
+}
+
+.sidebar-text-label {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   MOBILE OPTIMIZATIONS
+   ═══════════════════════════════════════════════════════════ */
+
+/* Z-index layer map:
+     z-10: overlay backdrops (header menus)
+     z-20: dropdown menus
+     z-30: top bar, mobile overlays
+     z-40: sidebar
+     z-50: mobile bottom nav, modals
+     z-[200]: POS scanner
+     z-[9998]: FAB overlay
+     z-[9999]: FAB button, FAB panel
+     z-[99999]: FAB badge, FAB toast
+*/
+
+@media (max-width: 767px) {
+  /* Prevent text-size adjustment on landscape orientation */
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  /* Smooth touch scrolling */
+  * {
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Prevent callout on long-press */
+  * {
+    -webkit-touch-callout: none;
+  }
+
+  /* Stabilize backdrop blur on low-end devices */
+  .backdrop-blur-xl, .backdrop-blur-\[25px\] {
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+    will-change: transform;
+  }
+
+  /* Reduce animation jitter on mobile */
+  .motion-div, [class*="animate-"] {
+    will-change: transform, opacity;
+  }
+
+  /* Stabilize fixed elements */
+  .fixed, .sticky {
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+  }
+}
+
+@media (max-width: 767px) {
+  ::-webkit-scrollbar { width: 0; height: 0; }
+}
+
+@media (max-width: 767px) {
+  .backdrop-blur-xl, .backdrop-blur-\[25px\] {
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+  }
+}
+
+@media print {
+  .no-print { display: none !important; }
+  body { background: white !important; color: black !important; }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   SELECTION
+   ═══════════════════════════════════════════════════════════ */
+
+::selection {
+  background: rgba(0, 113, 227, 0.2);
+  color: #1D1D1F;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   FOCUS VISIBLE
+   ═══════════════════════════════════════════════════════════ */
+
+:focus-visible {
+  outline: 2px solid #0071E3;
+  outline-offset: 2px;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   ANIMATIONS
+   ═══════════════════════════════════════════════════════════ */
+
+@keyframes fall {
+  0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+  10% { opacity: 0.3; }
+  90% { opacity: 0.3; }
+  100% { transform: translateY(400px) rotate(360deg); opacity: 0; }
+}
+
+@keyframes cartBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes slide {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(200%); }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   QUANTITY SELECTOR
+   ═══════════════════════════════════════════════════════════ */
+
+.quantity-selector {
+  display: inline-flex;
+  align-items: center;
+  background: #F5F5F7;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.quantity-selector button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.quantity-selector button:hover {
+  background: #E8E8ED;
+}
+
+.quantity-selector span {
+  min-width: 28px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 700;
+  color: #1D1D1F;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   SHADOWS
+   ═══════════════════════════════════════════════════════════ */
+
+.shadow-elevated {
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   RTL-SAFE ANIMATIONS
+   ═══════════════════════════════════════════════════════════ */
+
+[dir="rtl"] .animate-slide-in {
+  animation: slide-in-rtl 0.3s ease-out;
+}
+
+@keyframes slide-in-rtl {
+  from { opacity: 0; transform: translateX(10px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   FORCE LIGHT MODE - Override ALL dark: classes globally
+   ═══════════════════════════════════════════════════════════ */
+
+.dark,
+:root.dark,
+html.dark,
+body.dark {
+  background: #FFFFFF !important;
+  color: #1D1D1F !important;
+}
+
+.dark * {
+  background: #FFFFFF !important;
+  color: #1D1D1F !important;
+  border-color: rgba(0, 0, 0, 0.08) !important;
+}
+
+.dark\:bg-slate-900,
+.dark\:bg-slate-950,
+.dark\:bg-\[\#020617\],
+.dark\:bg-\[\#0A0A0C\],
+.dark\:bg-\[\#1C1C1E\],
+.dark\:bg-\[\#0f172a\],
+.dark\:bg-gray-900,
+.dark\:bg-gray-800,
+.dark\:bg-gray-950,
+.dark\:bg-black,
+.dark\:bg-neutral-900,
+.dark\:bg-zinc-900,
+.dark\:bg-white\/5,
+.dark\:bg-white\/10,
+.dark\:bg-emerald-900\/20,
+.dark\:bg-emerald-900\/30,
+.dark\:bg-red-900\/20,
+.dark\:bg-blue-900\/20,
+.dark\:bg-blue-900\/30,
+.dark\:bg-purple-900\/20,
+.dark\:bg-purple-900\/30,
+.dark\:bg-amber-50,
+.dark\:bg-red-950\/20,
+.dark\:bg-slate-800,
+.dark\:bg-slate-800\/50 {
+  background-color: #F5F5F7 !important;
+}
+
+.dark\:text-white,
+.dark\:text-gray-100,
+.dark\:text-gray-200,
+.dark\:text-gray-300,
+.dark\:text-gray-400,
+.dark\:text-gray-500,
+.dark\:text-slate-300,
+.dark\:text-slate-400,
+.dark\:text-slate-500,
+.dark\:text-neutral-300,
+.dark\:text-neutral-400 {
+  color: #1D1D1F !important;
+}
+
+.dark\:border-slate-800,
+.dark\:border-slate-700,
+.dark\:border-gray-800,
+.dark\:border-gray-700,
+.dark\:border-white\/5,
+.dark\:border-white\/10,
+.dark\:border-slate-800\/50,
+.dark\:border-gray-200\/70 {
+  border-color: rgba(0, 0, 0, 0.08) !important;
+}
+
+.dark\:hover\:bg-slate-700:hover,
+.dark\:hover\:bg-slate-800:hover,
+.dark\:hover\:bg-gray-700:hover,
+.dark\:hover\:bg-gray-800:hover,
+.dark\:hover\:bg-white\/5:hover,
+.dark\:hover\:bg-white\/10:hover,
+.dark\:hover\:bg-emerald-900\/20:hover,
+.dark\:hover\:bg-red-900\/20:hover,
+.dark\:hover\:bg-slate-600:hover,
+.dark\:hover\:bg-slate-700:hover {
+  background-color: #E8E8ED !important;
+}
+
+.dark\:ring-slate-950,
+.dark\:ring-offset-slate-900,
+.dark\:ring-white {
+  --tw-ring-color: #0071E3 !important;
+  --tw-ring-offset-color: #FFFFFF !important;
+}
+
+.dark\:placeholder\:text-slate-600::placeholder,
+.dark\:placeholder\:text-gray-600::placeholder,
+.dark\:placeholder\:text-slate-700::placeholder {
+  color: #86868B !important;
+}
+
+.dark\:shadow-2xl,
+.dark\:shadow-xl,
+.dark\:shadow-lg {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05) !important;
+}
+
+.dark * {
+  border-color: rgba(0, 0, 0, 0.08) !important;
+}
+
+.dark\:bg-slate-900,
+.dark\:bg-slate-950,
+.dark\:bg-\[\#020617\],
+.dark\:bg-\[\#0A0A0C\],
+.dark\:bg-gray-900,
+.dark\:bg-gray-800,
+.dark\:bg-black,
+.dark\:bg-neutral-900,
+.dark\:bg-zinc-900,
+.dark\:bg-white\/5,
+.dark\:bg-white\/10 {
+  background-color: #F5F5F7 !important;
+}
+
+.dark\:text-white,
+.dark\:text-gray-300,
+.dark\:text-gray-400,
+.dark\:text-gray-500,
+.dark\:text-slate-300,
+.dark\:text-slate-400,
+.dark\:text-slate-500 {
+  color: #1D1D1F !important;
+}
+
+.dark\:border-slate-800,
+.dark\:border-slate-700,
+.dark\:border-gray-800,
+.dark\:border-gray-700,
+.dark\:border-white\/5,
+.dark\:border-white\/10 {
+  border-color: rgba(0, 0, 0, 0.08) !important;
+}
+
+.dark\:hover\:bg-slate-700:hover,
+.dark\:hover\:bg-slate-800:hover,
+.dark\:hover\:bg-gray-700:hover,
+.dark\:hover\:bg-gray-800:hover,
+.dark\:hover\:bg-white\/5:hover,
+.dark\:hover\:bg-emerald-900\/20:hover,
+.dark\:hover\:bg-red-900\/20:hover {
+  background-color: #E8E8ED !important;
+}
+
+.dark\:ring-slate-950,
+.dark\:ring-offset-slate-900 {
+  --tw-ring-color: #0071E3 !important;
+  --tw-ring-offset-color: #FFFFFF !important;
+}
+
+.dark\:placeholder\:text-slate-600::placeholder,
+.dark\:placeholder\:text-gray-600::placeholder {
+  color: #86868B !important;
+}

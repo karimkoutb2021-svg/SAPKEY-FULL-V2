@@ -1,0 +1,64 @@
+version: '3.8'
+
+services:
+  # Main Application
+  app:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: supermarket-app
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - NEXT_PUBLIC_FIREBASE_API_KEY=${FIREBASE_API_KEY}
+      - NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=${FIREBASE_AUTH_DOMAIN}
+      - NEXT_PUBLIC_FIREBASE_PROJECT_ID=${FIREBASE_PROJECT_ID}
+      - NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=${FIREBASE_STORAGE_BUCKET}
+      - NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=${FIREBASE_MESSAGING_SENDER_ID}
+      - NEXT_PUBLIC_FIREBASE_APP_ID=${FIREBASE_APP_ID}
+    env_file:
+      - ../.env.production
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "http://localhost:3000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Firebase Emulators (Development)
+  firebase-emulators:
+    image: firebaseemulators:latest
+    container_name: supermarket-firebase
+    ports:
+      - "4000:4000"   # Emulator UI
+      - "9099:9099"   # Auth
+      - "5001:5001"   # Functions
+      - "8080:8080"   # Firestore
+      - "9199:9199"   # Storage
+    volumes:
+      - ../firebase.json:/opt/firebase/firebase.json
+      - ../firestore.rules:/opt/firebase/firestore.rules
+      - ../storage.rules:/opt/firebase/storage.rules
+    command: firebase emulators:start --project=demo-supermarket
+    profiles:
+      - dev
+      - emulators
+
+  # Nginx Reverse Proxy (Production)
+  nginx:
+    image: nginx:alpine
+    container_name: supermarket-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./ssl:/etc/nginx/ssl
+    depends_on:
+      - app
+    profiles:
+      - production
+
+volumes:
+  firebase-data:
