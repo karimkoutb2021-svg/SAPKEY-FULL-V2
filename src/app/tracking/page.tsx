@@ -42,7 +42,7 @@ export default function TrackingPage() {
 
         <div className="mt-6 text-center">
           <p className="text-sm text-gray-500 mb-3">أو اتبع من طلباتك</p>
-          <button onClick={() => router.push('/orders')} className="h-10 px-6 rounded-xl text-sm font-bold border border-gray-200 dark:border-slate-700 text-gray-700 dark:text-gray-300 flex items-center gap-2 mx-auto">
+          <button onClick={() => router.push('/customer/orders')} className="h-10 px-6 rounded-xl text-sm font-bold border border-gray-200 dark:border-slate-700 text-gray-700 dark:text-gray-300 flex items-center gap-2 mx-auto">
             <ArrowRight className="h-4 w-4" /> طلباتي
           </button>
         </div>

@@ -10,7 +10,8 @@ import { useCartStore } from '@/lib/store/ecommerce-store';
 import { useBrandingStore } from '@/lib/store/branding-store';
 import { useAuthStore } from '@/lib/store/auth-store';
 import { productService } from '@/lib/supabase/services/products';
-import { categoryService, type ProductCategory } from '@/lib/supabase/services/categories';
+import { type ProductCategory } from '@/lib/supabase/services/categories';
+import { loadCategories } from '@/lib/category-utils';
 import { Footer } from '@/components/layout/footer';
 import { Ticker } from '@/components/layout/ticker';
 import { useVoiceAssistant } from '@/lib/hooks/use-voice-assistant';
@@ -319,15 +320,15 @@ export default function ShopPage() {
     async function loadData() {
       try {
         const [prodRes, catRes] = await Promise.allSettled([
-          productService.getAll({ is_active: true, limit: 200 }),
-          categoryService.getAll({ is_active: true }),
+          productService.getAll({ is_active: true, limit: 500 }),
+          loadCategories(),
         ]);
 
         if (prodRes.status === 'fulfilled' && prodRes.value.data) {
           setProducts(prodRes.value.data.map(mapProduct));
         }
-        if (catRes.status === 'fulfilled' && catRes.value.data) {
-          const cats = [{ id: 'all', name: 'الكل', image: '/category-placeholder.svg' }, ...catRes.value.data.map((c: ProductCategory) => ({ id: c.id, name: c.name_ar, image: c.image_url || '/category-placeholder.svg' }))];
+        if (catRes.status === 'fulfilled' && catRes.value) {
+          const cats = [{ id: 'all', name: 'الكل', image: '/category-placeholder.svg' }, ...catRes.value.map((c: ProductCategory) => ({ id: c.id, name: c.name_ar, image: c.image_url || '/category-placeholder.svg' }))];
           setCategories(cats);
         }
 
@@ -551,7 +552,7 @@ export default function ShopPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-[#020617]" dir="rtl">
-      <Ticker />
+
       <OffersNotification />
       {/* ───── Header (Sticky on mobile + desktop) ───── */}
       <header className="sticky top-0 z-40 bg-white dark:bg-slate-950 border-b border-gray-100 dark:border-slate-800 shadow-sm">
@@ -562,10 +563,16 @@ export default function ShopPage() {
                 className="h-9 w-9 rounded-xl bg-gray-100 flex items-center justify-center hover:bg-gray-200 transition-colors">
                 <Home className="h-4 w-4 text-gray-900" />
               </button>
-              <button onClick={() => router.push('/')}
-                className="h-9 w-9 rounded-xl flex items-center justify-center shadow-sm" style={{ backgroundColor: primaryColor }}>
-                <Store className="h-4 w-4 text-white" />
-              </button>
+              {(branding.logo || '/logo.jpg') ? (
+                <button onClick={() => router.push('/')}>
+                  <img src={branding.logo || '/logo.jpg'} className="h-9 w-9 rounded-lg object-contain block bg-white p-0.5 border border-gray-100" alt={branding.storeName} />
+                </button>
+              ) : (
+                <button onClick={() => router.push('/')}
+                  className="h-9 w-9 rounded-xl flex items-center justify-center shadow-sm" style={{ backgroundColor: primaryColor }}>
+                  <Store className="h-4 w-4 text-white" />
+                </button>
+              )}
           <div>
             <h1 className="text-sm sm:text-base font-black text-gray-900 dark:text-white cursor-pointer leading-tight" onClick={() => router.push('/')}>{branding.storeName || 'سوبر ماركت'}</h1>
             <p className="text-[10px] sm:text-xs text-gray-400 mt-0.5 max-w-[150px] sm:max-w-xs truncate">{branding.slogan || 'تسوق أفضل المنتجات بأسعار منافسة'}</p>

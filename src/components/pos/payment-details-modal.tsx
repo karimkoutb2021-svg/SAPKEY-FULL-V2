@@ -17,13 +17,18 @@ const WALLET_PROVIDERS = [
   { id: 'vodafone', name: 'فودافون كاش', color: 'bg-red-500', logo: 'V' },
   { id: 'orange', name: 'أورانج كاش', color: 'bg-orange-500', logo: 'O' },
   { id: 'etisalat', name: 'اتصالات كاش', color: 'bg-emerald-500', logo: 'E' },
-  { id: 'instapay', name: 'إنستاباي', color: 'bg-purple-600', logo: 'I' },
+  { id: 'we', name: 'وي باي', color: 'bg-purple-600', logo: 'W' },
+  { id: 'instapay', name: 'إنستاباي', color: 'bg-indigo-600', logo: 'I' },
+  { id: 'other', name: 'أخرى', color: 'bg-gray-500', logo: '?' },
 ];
 
 const CARD_PROVIDERS = [
-  { id: 'visa', name: 'فيزا (Visa)', color: 'bg-blue-600' },
-  { id: 'mastercard', name: 'ماستركارد (Mastercard)', color: 'bg-red-500' },
-  { id: 'meeza', name: 'ميزة (Meeza)', color: 'bg-emerald-600' },
+  { id: 'nbe', name: 'البنك الأهلي المصري', color: 'bg-green-700' },
+  { id: 'banque_misr', name: 'بنك مصر', color: 'bg-red-700' },
+  { id: 'cib', name: 'CIB البنك التجاري', color: 'bg-blue-700' },
+  { id: 'qnb', name: 'QNB بنك قطر الوطني', color: 'bg-blue-900' },
+  { id: 'alex', name: 'بنك الإسكندرية', color: 'bg-cyan-700' },
+  { id: 'other', name: 'أخرى', color: 'bg-gray-500' },
 ];
 
 export function PaymentDetailsModal({ isOpen, onClose, onConfirm, method, total }: PaymentDetailsModalProps) {

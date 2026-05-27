@@ -183,7 +183,7 @@ export const NAV_ITEMS: NavItem[] = [
   { title: 'Offers', titleAr: 'العروض', href: '/offers', icon: 'Tags', roles: ['manager'], permissions: ['offers.view'] },
   { title: 'Coupons', titleAr: 'الكوبونات', href: '/coupons', icon: 'Percent', roles: ['manager'], permissions: ['coupons.view'] },
   { title: 'Shop', titleAr: 'المتجر', href: '/shop', icon: 'Store', roles: ['manager', 'cashier', 'sales', 'customer'] },
-  { title: 'AI Assistant', titleAr: 'المساعد الذكي', href: '/ai-assistant', icon: 'Headphones', roles: ['manager', 'cashier', 'sales'], permissions: ['ai.access'] },
+  { title: 'AI Assistant', titleAr: 'المساعد الذكي', href: '/ai-assistant', icon: 'Headphones', roles: ['admin', 'manager', 'cashier', 'sales'], permissions: ['ai.access'] },
   { title: 'AI Voice Ordering', titleAr: 'الطلب الصوتي', href: '/ai-ordering', icon: 'Mic', roles: ['manager', 'cashier', 'sales'], permissions: ['ai.access'] },
   { title: 'My Store', titleAr: 'متجري', href: '/customer', icon: 'Store', roles: ['customer'] },
   { title: 'Addresses', titleAr: 'العناوين', href: '/customer/addresses', icon: 'MapPin', roles: ['customer'], permissions: ['addresses.view'] },

@@ -59,23 +59,23 @@ export function Header() {
             <Home className="h-4 w-4 text-gray-900" />
           </button>
 
-          {(branding.logo || '/logo.jpg') ? (
-            <img src={branding.logo || '/logo.jpg'} className="h-8 w-8 rounded-lg object-contain block" alt={branding.storeName} />
-          ) : (
-            <div className="h-8 w-8 rounded-lg bg-gray-100 dark:bg-slate-800 flex items-center justify-center hidden md:flex" style={{ color: branding.primaryColor }}>
-              <Store className="h-4 w-4" />
-            </div>
-          )}
-          <div className="flex flex-col justify-center">
-            <span className="font-bold text-sm block text-gray-900 dark:text-white leading-tight">
-              {isRtl ? branding.storeName : branding.storeNameEn}
-            </span>
-            {branding.slogan && (
-              <span className="text-[10px] text-gray-500 dark:text-gray-400 hidden sm:block">
-                {branding.slogan}
-              </span>
+          <Link href="/" className="flex items-center gap-2">
+            {(branding.logo || '/logo.jpg') ? (
+              <img src={branding.logo || '/logo.jpg'} className="h-9 sm:h-10 w-auto max-w-[140px] object-contain block" alt={branding.storeName} />
+            ) : (
+              <div className="h-9 w-9 sm:h-10 sm:w-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: branding.primaryColor || '#10B981' }}>
+                <Store className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
+              </div>
             )}
-          </div>
+            <div className="flex flex-col justify-center">
+              <span className="font-black text-sm sm:text-base block text-gray-900 dark:text-white leading-tight">
+                {branding.storeName || 'SAPKEY'}
+              </span>
+              <span className="text-[10px] sm:text-xs text-gray-500 dark:text-gray-400 block">
+                {branding.slogan || 'حلول ذكية للتجزئة'}
+              </span>
+            </div>
+          </Link>
 
           {/* Search - hidden on mobile */}
           <div className="relative hidden md:block mr-4">

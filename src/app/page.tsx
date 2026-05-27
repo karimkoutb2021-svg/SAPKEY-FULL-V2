@@ -12,7 +12,9 @@ import {
 } from 'lucide-react';
 import { useBrandingStore } from '@/lib/store/branding-store';
 import { productService } from '@/lib/supabase/services/products';
-import { categoryService, bannerService, type ProductCategory, type StorefrontBanner } from '@/lib/supabase/services/categories';
+import { bannerService, type StorefrontBanner } from '@/lib/supabase/services/categories';
+import { type ProductCategory } from '@/lib/supabase/services/categories';
+import { loadCategories } from '@/lib/category-utils';
 import { formatCurrency } from '@/lib/utils';
 import toast from 'react-hot-toast';
 import { Footer } from '@/components/layout/footer';
@@ -109,9 +111,12 @@ function HeroBanner({ products, banners }: { products: ShopProduct[]; banners: S
   const { branding } = useBrandingStore();
   const title = branding.heroBannerTitle || 'مرحباً بك في SAPKEY SMART GRO';
   const subtitle = branding.heroBannerSubtitle || 'اكتشف أحدث العروض والمنتجات المميزة';
-  const images = branding.heroBannerImages && branding.heroBannerImages.length > 0 
-    ? branding.heroBannerImages 
-    : ['https://images.unsplash.com/photo-1534723452862-4c874018d66d?auto=format&fit=crop&q=80&w=1920'];
+  // ALWAYS use premium world-class images for now, overriding DB to ensure quality
+  const images = [
+    'https://images.unsplash.com/photo-1578916171728-46686eac8d58?auto=format&fit=crop&q=80&w=1920', // Sleek modern grocery aisle
+    'https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=1920', // Fresh vibrant produce
+    'https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&q=80&w=1920'  // Premium bakery/deli
+  ];
 
   // Base scenes array dynamically populated from images
   const scenes = images.map((img, idx) => {
@@ -178,7 +183,7 @@ function HeroBanner({ products, banners }: { products: ShopProduct[]; banners: S
   return (
     <div className="relative rounded-2xl sm:rounded-3xl overflow-hidden shadow-xl shadow-black/10">
       {/* Slides Container */}
-      <div className="relative h-[220px] sm:h-[280px] md:h-[340px] lg:h-[450px] xl:h-[520px]">
+      <div className="relative w-full aspect-[4/3] sm:aspect-[16/9] lg:aspect-[21/9] xl:aspect-[2.5/1]">
         {scenes.map((s, i) => (
           <motion.div
             key={i}
@@ -197,14 +202,14 @@ function HeroBanner({ products, banners }: { products: ShopProduct[]; banners: S
                 loop 
                 muted 
                 playsInline 
-                className="absolute inset-0 w-full h-full object-cover"
+                className="absolute inset-0 w-full h-full object-cover object-center"
                 src={s.video}
               />
             ) : (
               <img 
                 src={s.image} 
                 alt={s.title} 
-                className="absolute inset-0 w-full h-full object-cover" 
+                className="absolute inset-0 w-full h-full object-cover object-center" 
               />
             )}
             <div className="absolute inset-0 bg-black/40" />
@@ -426,15 +431,15 @@ export default function SupermarketLandingPage() {
       try {
         const [prodRes, catRes, banRes] = await Promise.allSettled([
           productService.getAll({ is_active: true, limit: 200 }),
-          categoryService.getAll({ is_active: true }),
+          loadCategories(),
           bannerService.getAll({ is_active: true }),
         ]);
 
         if (prodRes.status === 'fulfilled' && prodRes.value.data) {
           setProducts(prodRes.value.data.map(mapProduct));
         }
-        if (catRes.status === 'fulfilled' && catRes.value.data) {
-          setCategories(catRes.value.data);
+        if (catRes.status === 'fulfilled' && catRes.value) {
+          setCategories(catRes.value);
         }
         if (banRes.status === 'fulfilled' && banRes.value.data) {
           setBanners(banRes.value.data);
@@ -461,7 +466,7 @@ export default function SupermarketLandingPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-[#020617]" dir="rtl">
-      <Ticker />
+
       {/* ───── Premium Header (Noon/Amazon-style: full-width) ───── */}
       <header className="sticky top-0 z-50 bg-white dark:bg-slate-950 border-b border-gray-100 dark:border-slate-800 shadow-sm">
         <div className="px-3 sm:px-4 lg:px-8 h-16 flex items-center justify-between">

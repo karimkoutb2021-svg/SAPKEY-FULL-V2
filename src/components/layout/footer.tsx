@@ -65,7 +65,7 @@ export function Footer() {
           <div className="lg:col-span-2">
             <Link href="/" className="flex items-center gap-3 mb-4">
               {(branding.logo || '/logo.jpg') ? (
-                <img src={branding.logo || '/logo.jpg'} alt={branding.storeName || 'SAPKEY'} className="h-10 w-10 rounded-xl object-contain bg-white/10 p-1" />
+                <img src={branding.logo || '/logo.jpg'} alt={branding.storeName || 'SAPKEY'} className="h-10 w-auto max-w-[160px] rounded-xl object-contain bg-white/10 p-1" />
               ) : (
                 <div className="h-10 w-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: primaryColor }}>
                   <Store className="h-5 w-5 text-white" />
@@ -105,7 +105,7 @@ export function Footer() {
                 </div>
                 <ul className="space-y-2.5">
                   {section.links.map((link) => (
-                    <li key={link.href}>
+                    <li key={link.id || link.label || link.href}>
                       <Link href={link.href}
                         className="text-sm text-gray-500 hover:text-gray-900 dark:hover:text-white transition-colors flex items-center gap-1 group">
                         <ChevronLeft className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -133,7 +133,7 @@ export function Footer() {
                       transition={{ duration: 0.2 }} className="overflow-hidden">
                       <ul className="px-4 pb-3 space-y-2">
                         {section.links.map((link) => (
-                          <li key={link.href}>
+                          <li key={link.id || link.label || link.href}>
                             <Link href={link.href}
                               className="text-sm text-gray-500 hover:text-gray-900 dark:hover:text-white transition-colors block py-1">
                               {link.label}
@@ -198,12 +198,21 @@ function defaultFooterSections(branding: any) {
     Gift: <Gift className="h-4 w-4" />,
   };
 
+  const patchedLinks = links.map((l: any) => {
+    let href = l.href;
+    if (href === '/orders') href = '/customer/orders';
+    if (href === '/wallet') href = '/customer/wallet';
+    if (href === '/loyalty') href = '/customer'; // redirect to customer dashboard
+    if (href === '/profile') href = '/customer';
+    return { ...l, href };
+  });
+
   if (config && config.sections && config.sections.length > 0) {
     return config.sections.map((section: any) => ({
       title: section.name,
       description: section.description || '',
       icon: iconMap[section.icon] || <Store className="h-4 w-4" />,
-      links: links.filter((l: any) => l.sectionId === section.id),
+      links: patchedLinks.filter((l: any) => l.sectionId === section.id),
     }));
   }
 
@@ -215,7 +224,7 @@ function defaultFooterSections(branding: any) {
     { title: 'الدليل المساعد', description: '', icon: <BookOpen className="h-4 w-4" />, links: [] as any[] },
   ];
 
-  links.forEach((link: any) => {
+  patchedLinks.forEach((link: any) => {
     const section = sections.find((s) => s.title === link.section);
     if (section) {
       section.links.push(link);

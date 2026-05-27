@@ -5,7 +5,6 @@ import './globals.css';
 import { Providers } from './providers';
 import { PremiumLoader } from '@/components/layout/premium-loader';
 import { DynamicFavicon } from '@/components/layout/dynamic-favicon';
-import { PushNotification } from '@/components/layout/push-notification';
 
 function getBuildId(): string {
   try {
@@ -63,7 +62,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <PremiumLoader />
         <Providers>
           {children}
-          <PushNotification />
         </Providers>
       </body>
     </html>

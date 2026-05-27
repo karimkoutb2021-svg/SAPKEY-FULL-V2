@@ -24,7 +24,8 @@ import { UnifiedScanner } from '@/components/scanner/unified-scanner';
 import { SyncManager } from '@/components/scanner/sync-manager';
 import { cacheProducts, findProductByBarcode, addOfflineSale, LocalProduct } from '@/lib/offline/db';
 import { productService } from '@/lib/supabase/services/products';
-import { categoryService, type ProductCategory } from '@/lib/supabase/services/categories';
+import { type ProductCategory } from '@/lib/supabase/services/categories';
+import { loadCategories } from '@/lib/category-utils';
 import { shiftService, type Shift } from '@/lib/supabase/services/shifts';
 import { heldOrderService } from '@/lib/supabase/services/held-orders';
 import { createClient } from '@/lib/supabase/client';
@@ -207,7 +208,7 @@ function POSContent({ primaryColor, userRole, userName, userId }: { primaryColor
       try {
         const [prodRes, catRes] = await Promise.allSettled([
           productService.getAll({ is_active: true, limit: 200 }),
-          categoryService.getAll({ is_active: true }),
+          loadCategories(),
         ]);
 
         if (prodRes.status === 'fulfilled' && prodRes.value.data) {
@@ -233,8 +234,8 @@ function POSContent({ primaryColor, userRole, userName, userId }: { primaryColor
           }));
           await cacheProducts(localProducts);
         }
-        if (catRes.status === 'fulfilled' && catRes.value.data) {
-          const cats = [{ id: 'all', name: 'الكل', image: '' }, ...catRes.value.data.map((c: ProductCategory) => ({ id: c.id, name: c.name_ar, image: c.image_url || '' }))];
+        if (catRes.status === 'fulfilled' && catRes.value) {
+          const cats = [{ id: 'all', name: 'الكل', image: '' }, ...catRes.value.map((c: ProductCategory) => ({ id: c.id, name: c.name_ar, image: c.image_url || '' }))];
           setCategories(cats);
         }
       } catch (e) {

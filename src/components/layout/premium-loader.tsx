@@ -10,7 +10,7 @@ export function PremiumLoader() {
     // Hide loader after minimum duration to ensure smooth entry
     const timer = setTimeout(() => {
       setLoading(false);
-    }, 2500);
+    }, 500);
     return () => clearTimeout(timer);
   }, []);
 

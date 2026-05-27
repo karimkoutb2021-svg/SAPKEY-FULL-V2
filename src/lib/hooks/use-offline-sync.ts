@@ -4,7 +4,7 @@ import { useEffect, useCallback, useRef } from 'react';
 import { useOfflineSyncStore, processSyncQueue } from '@/lib/supabase/sync-client';
 import toast from 'react-hot-toast';
 
-const SYNC_INTERVAL = 5000;
+const SYNC_INTERVAL = 3000;
 
 export function useOfflineSync() {
   const isOnline = useOfflineSyncStore((s) => s.isOnline);

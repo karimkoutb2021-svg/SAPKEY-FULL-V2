@@ -8,22 +8,34 @@ import toast from 'react-hot-toast';
 
 const supabase = createClient();
 
-export default function OrdersPage() {
-  const [orders, setOrders] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [filter, setFilter] = useState<string>('all');
+  import { useAuthStore } from '@/lib/store/auth-store';
+  import { useRouter } from 'next/navigation';
+
+  export default function OrdersPage() {
+    const { user, isAuthenticated } = useAuthStore();
+    const router = useRouter();
+    const [orders, setOrders] = useState<any[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [filter, setFilter] = useState<string>('all');
+
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
+    if (!isAuthenticated) {
+      router.replace('/shop?login=true');
+      return;
+    }
     loadOrders();
     const channel = supabase.channel('customer-orders')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'orders' }, () => loadOrders())
       .subscribe();
     return () => { channel.unsubscribe(); };
-  }, []);
+  }, [isAuthenticated, router]);
 
   async function loadOrders() {
-    const userId = 'customer-demo';
-    const data = await customerOrderService.getOrderHistory(userId);
+    if (!user?.id) return;
+    const data = await customerOrderService.getOrderHistory(user.id);
     setOrders(data);
     setLoading(false);
   }
@@ -38,6 +50,10 @@ export default function OrdersPage() {
   }
 
   const filtered = filter === 'all' ? orders : orders.filter(o => o.status === filter);
+
+  if (!mounted || !isAuthenticated) {
+    return <div className="h-dvh flex items-center justify-center"><div className="w-8 h-8 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin"></div></div>;
+  }
 
   return (
     <div className="p-4 space-y-4 max-w-lg mx-auto">

@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { motion } from 'framer-motion';
 import { Star, Gift, ArrowRight, Trophy, TrendingUp, Home, Loader2, Sparkles } from 'lucide-react';
 import { useBrandingStore } from '@/lib/store/branding-store';
 import { useAuthStore } from '@/lib/store/auth-store';
@@ -30,15 +29,19 @@ const rewards: RewardTier[] = [
 export default function LoyaltyPage() {
   const router = useRouter();
   const { branding } = useBrandingStore();
-  const { user } = useAuthStore();
+  const { user, isAuthenticated } = useAuthStore();
   const primaryColor = branding.primaryColor || '#22C55E';
   const [points, setPoints] = useState(0);
   const [loading, setLoading] = useState(true);
   const [redeeming, setRedeeming] = useState(false);
 
   useEffect(() => {
+    if (!isAuthenticated) {
+      router.replace('/shop?login=true');
+      return;
+    }
     loadPoints();
-  }, []);
+  }, [isAuthenticated]);
 
   useEffect(() => {
     const ch = supabase.channel('sync-loyalty_transactions')
@@ -68,7 +71,7 @@ export default function LoyaltyPage() {
   }
 
   async function handleRedeem(reward: RewardTier) {
-    if (!user?.id) { toast.error('سجل دخول أولاً لاستبدال النقاط'); router.push('/login'); return; }
+    if (!user?.id) { toast.error('سجل دخول أولاً لاستبدال النقاط'); router.replace('/shop?login=true'); return; }
     if (points < reward.points) { toast.error('رصيد النقاط غير كافي'); return; }
     if (redeeming) return;
 
@@ -130,9 +133,9 @@ export default function LoyaltyPage() {
     <div className="min-h-screen bg-gray-50 dark:bg-[#020617]" dir="rtl">
       <div className="bg-white dark:bg-slate-950 border-b border-gray-100 dark:border-slate-800">
         <div className="max-w-4xl mx-auto px-4 py-8 md:py-12 text-center">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="h-14 w-14 md:h-16 md:w-16 rounded-2xl flex items-center justify-center mx-auto mb-4" style={{ backgroundColor: `${primaryColor}15` }}>
+          <div className="h-14 w-14 md:h-16 md:w-16 rounded-2xl flex items-center justify-center mx-auto mb-4" style={{ backgroundColor: `${primaryColor}15` }}>
             <Star className="h-6 w-6 md:h-8 md:w-8" style={{ color: primaryColor }} />
-          </motion.div>
+          </div>
           <h1 className="text-2xl md:text-3xl font-black text-gray-900 dark:text-white mb-2">نقاط الولاء</h1>
           <p className="text-sm md:text-base text-gray-500">اكسب نقاط مع كل طلب واستبدلها بخصومات</p>
         </div>
@@ -144,126 +147,104 @@ export default function LoyaltyPage() {
         </Link>
       </div>
 
-      <div className="max-w-4xl mx-auto px-4 py-6 md:py-8 space-y-4 md:space-y-6">
-        {/* Points Card */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-          className="bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-2xl p-5 md:p-6 text-white">
-          {loading ? (
-            <div className="flex items-center justify-center py-8">
-              <Loader2 className="h-8 w-8 animate-spin text-white/60" />
+      <div className="max-w-4xl mx-auto px-4 py-4">
+        <div className="bg-gray-900 rounded-3xl p-6 text-white shadow-xl relative overflow-hidden">
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <p className="text-gray-400 text-sm">رصيد نقاطك</p>
+              <p className="text-4xl font-black">{points}</p>
             </div>
-          ) : (
-            <>
-              <div className="flex items-center justify-between mb-4">
-                <div>
-                  <p className="text-emerald-100 text-xs md:text-sm">رصيد نقاطك</p>
-                  <motion.p key={points} initial={{ scale: 1.3 }} animate={{ scale: 1 }}
-                    className="text-3xl md:text-4xl font-black">{points}</motion.p>
-                  <p className="text-emerald-100 text-[10px] md:text-xs">نقطة</p>
-                </div>
-                <Trophy className="h-14 w-14 md:h-16 md:w-16 text-emerald-200/30" />
+            <Trophy className="h-12 w-12 text-yellow-500" />
+          </div>
+          {nextReward && pointsToNext > 0 && (
+            <div className="space-y-2">
+              <div className="flex justify-between text-xs text-gray-400">
+                <span>المرحلة التالية</span>
+                <span>{pointsToNext} نقطة متبقية</span>
               </div>
-              {nextReward && pointsToNext > 0 && (
-                <div className="bg-white/20 rounded-xl p-2.5 md:p-3">
-                  <div className="flex items-center justify-between text-[10px] md:text-sm mb-1.5">
-                    <span>المرحلة التالية: {nextReward.reward}</span>
-                    <span className="font-bold">{pointsToNext} نقطة متبقية</span>
-                  </div>
-                  <div className="h-2 bg-white/30 rounded-full overflow-hidden">
-                    <motion.div
-                      initial={{ width: 0 }}
-                      animate={{ width: `${Math.min(100, progressPct)}%` }}
-                      transition={{ duration: 1, ease: 'easeOut' }}
-                      className="h-full bg-white rounded-full"
-                    />
-                  </div>
-                </div>
-              )}
-              {pointsToNext <= 0 && (
-                <div className="bg-white/20 rounded-xl p-2.5 md:p-3 text-center">
-                  <Sparkles className="h-5 w-5 inline-block mb-1" />
-                  <p className="text-sm font-bold">أحسنت! يمكنك استبدال نقاطك الآن</p>
-                </div>
-              )}
-              {!user?.id && (
-                <div className="mt-3 text-center">
-                  <p className="text-[10px] text-emerald-100">سجل دخول لرؤية رصيد نقاطك الحقيقي</p>
-                </div>
-              )}
-            </>
+              <div className="h-2 bg-gray-800 rounded-full overflow-hidden">
+                <div className="h-full bg-emerald-500 rounded-full" style={{ width: `${Math.min(100, progressPct)}%` }} />
+              </div>
+            </div>
           )}
-        </motion.div>
+        </div>
+      </div>
 
-        {/* How it works */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
-          className="bg-white dark:bg-slate-900 rounded-2xl border border-gray-100 dark:border-slate-800 p-5 md:p-6">
-          <h3 className="text-sm md:text-base font-bold text-gray-900 dark:text-white mb-3 md:mb-4">إزاي تكسب نقاط؟</h3>
-          <div className="space-y-3 md:space-y-4">
+      <div className="max-w-4xl mx-auto px-4 py-6 space-y-6">
+        <div className="bg-white rounded-3xl p-6 shadow-sm border border-gray-100">
+          <h3 className="font-bold text-gray-900 mb-4">طرق كسب النقاط</h3>
+          <div className="space-y-4">
             {[
-              { icon: <TrendingUp className="h-4 w-4 md:h-5 md:w-5" />, title: 'كل 10 جنيه = 1 نقطة', desc: 'اكسب نقطة مع كل 10 جنيه تنفقهم' },
-              { icon: <Star className="h-4 w-4 md:h-5 md:w-5" />, title: 'بونص التقييم', desc: 'اكسب 5 نقاط إضافية لما تقيم طلبك' },
-              { icon: <Gift className="h-4 w-4 md:h-5 md:w-5" />, title: 'بونص الإحالة', desc: 'اكسب 50 نقطة لكل صاحب تدعيه' },
+              { icon: <TrendingUp />, title: 'كل 10 جنيه = 1 نقطة', desc: 'اكسب نقطة مع كل 10 جنيه تنفقهم' },
+              { icon: <Star />, title: 'بونص التقييم', desc: 'اكسب 5 نقاط إضافية لما تقيم طلبك' },
+              { icon: <Gift />, title: 'بونص الإحالة', desc: 'اكسب 50 نقطة لكل صاحب تدعيه' },
             ].map((item, i) => (
-              <div key={i} className="flex items-start gap-2.5 md:gap-3">
-                <div className="h-9 w-9 md:h-10 md:w-10 rounded-xl flex items-center justify-center shrink-0" style={{ backgroundColor: `${primaryColor}15` }}>
-                  <span className="text-primary" style={{ color: primaryColor }}>{item.icon}</span>
+              <div key={i} className="flex items-center gap-4">
+                <div className="h-10 w-10 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600">
+                  {item.icon}
                 </div>
                 <div>
-                  <h4 className="text-xs md:text-sm font-bold text-gray-900 dark:text-white">{item.title}</h4>
-                  <p className="text-[10px] md:text-xs text-gray-500">{item.desc}</p>
+                  <h4 className="text-sm font-bold text-gray-900">{item.title}</h4>
+                  <p className="text-xs text-gray-500">{item.desc}</p>
                 </div>
               </div>
             ))}
           </div>
-        </motion.div>
+        </div>
 
-        {/* Rewards */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
-          className="bg-white dark:bg-slate-900 rounded-2xl border border-gray-100 dark:border-slate-800 p-5 md:p-6">
-          <h3 className="text-sm md:text-base font-bold text-gray-900 dark:text-white mb-3 md:mb-4">استبدل نقاطك</h3>
-          <div className="space-y-2.5 md:space-y-3">
-            {rewards.map((item, i) => {
-              const canAfford = points >= item.points;
+        <div className="bg-white rounded-3xl p-5 shadow-sm border border-gray-100">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-10 h-10 rounded-xl bg-orange-50 flex items-center justify-center">
+              <Gift className="w-5 h-5 text-orange-500" />
+            </div>
+            <div>
+              <h2 className="font-bold text-gray-900">استبدل نقاطك</h2>
+              <p className="text-xs text-gray-500">اختر المكافأة المناسبة لرصيدك</p>
+            </div>
+          </div>
+
+          <div className="space-y-3">
+            {rewards.map((r, i) => {
+              const canAfford = points >= r.points;
               return (
-                <motion.div key={i} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.05 * i }}
+                <div key={i}
                   className={`flex items-center justify-between p-3 md:p-4 rounded-xl border transition-all ${
-                    canAfford ? 'border-emerald-200 dark:border-emerald-900 bg-emerald-50/50 dark:bg-emerald-900/10' : 'border-gray-100 dark:border-slate-800 opacity-60'
+                    canAfford ? 'border-emerald-200 bg-emerald-50/50' : 'border-gray-100 opacity-60'
                   }`}>
                   <div className="flex items-center gap-2.5 md:gap-3">
-                    <div className={`h-9 w-9 md:h-10 md:w-10 rounded-xl flex items-center justify-center ${canAfford ? 'bg-emerald-100 dark:bg-emerald-900/30' : 'bg-gray-100 dark:bg-slate-800'}`}>
+                    <div className={`h-9 w-9 md:h-10 md:w-10 rounded-xl flex items-center justify-center ${canAfford ? 'bg-emerald-100' : 'bg-gray-100'}`}>
                       <Gift className={`h-4 w-4 md:h-5 md:w-5 ${canAfford ? 'text-emerald-500' : 'text-gray-400'}`} />
                     </div>
                     <div>
-                      <h4 className="text-xs md:text-sm font-bold text-gray-900 dark:text-white">{item.reward}</h4>
-                      <p className="text-[10px] md:text-xs text-gray-500">{item.points} نقطة</p>
+                      <h4 className="text-xs md:text-sm font-bold text-gray-900">{r.reward}</h4>
+                      <p className="text-[10px] md:text-xs text-gray-500">{r.points} نقطة</p>
                     </div>
                   </div>
                   <button
-                    onClick={() => handleRedeem(item)}
+                    onClick={() => handleRedeem(r)}
                     disabled={!canAfford || redeeming}
                     className={`h-8 md:h-9 px-3 md:px-4 rounded-lg text-[10px] md:text-xs font-bold transition-all ${
                       canAfford
                         ? 'text-white shadow-md hover:shadow-lg'
-                        : 'bg-gray-100 dark:bg-slate-800 text-gray-400 cursor-not-allowed'
+                        : 'bg-gray-100 text-gray-400 cursor-not-allowed'
                     }`}
                     style={canAfford ? { backgroundColor: primaryColor } : {}}
                   >
-                    {redeeming ? 'جاري...' : canAfford ? 'استبدال' : `${item.points} نقطة`}
+                    {redeeming ? 'جاري...' : canAfford ? 'استبدال' : `${r.points} نقطة`}
                   </button>
-                </motion.div>
+                </div>
               );
             })}
           </div>
-        </motion.div>
+        </div>
 
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }}
-          className="text-center">
+        <div className="text-center">
           <button onClick={() => router.push('/shop')}
             className="h-10 md:h-12 px-6 md:px-8 rounded-xl text-white font-bold text-xs md:text-sm flex items-center gap-2 mx-auto shadow-lg hover:shadow-xl transition-all"
             style={{ backgroundColor: primaryColor }}>
             <ArrowRight className="h-3.5 w-3.5 md:h-4 md:w-4" /> تسوق واكسب نقاط
           </button>
-        </motion.div>
+        </div>
       </div>
       <Footer />
     </div>

@@ -3,12 +3,14 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ShoppingCart, MapPin, CreditCard, CheckCircle, Truck, Wallet, ArrowRight, Loader2, Home } from 'lucide-react';
+import { ShoppingCart, MapPin, CreditCard, CheckCircle, Truck, Wallet, ArrowRight, Loader2, Home, User, Mail, Lock, UserPlus, Printer, Share2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { formatCurrency } from '@/lib/utils';
 import { useCartStore, useCheckoutStore } from '@/lib/store/ecommerce-store';
 import { useBrandingStore } from '@/lib/store/branding-store';
+import { useAuthStore } from '@/lib/store/auth-store';
+import { createClient } from '@/lib/supabase/client';
 import { PageTransition } from '@/components/ui/page-transition';
 import toast from 'react-hot-toast';
 
@@ -19,12 +21,14 @@ export default function CheckoutPage() {
   const { shippingAddress, paymentMethod, notes, setShippingAddress, setPaymentMethod, setNotes, setLastOrder, reset } = useCheckoutStore();
   const [step, setStep] = useState<Step>('shipping');
   const [walletPhone, setWalletPhone] = useState('');
+  const [selectedWallet, setSelectedWallet] = useState('vodafone');
   const [cardPhone, setCardPhone] = useState('');
+  const [selectedBank, setSelectedBank] = useState('nbe');
   const [processing, setProcessing] = useState(false);
   const [completed, setCompleted] = useState(false);
   const { branding } = useBrandingStore();
   const [couponInput, setCouponInput] = useState('');
-  const { items, getTotal, appliedCoupon, applyCoupon, removeCoupon } = useCartStore();
+  const { items, getTotal, appliedCoupon, applyCoupon, removeCoupon, clearCart, getItemCount } = useCartStore();
   const totals = getTotal(15, branding.taxRate || 0);
 
   const [form, setForm] = useState({
@@ -36,6 +40,54 @@ export default function CheckoutPage() {
     building: shippingAddress?.building || '',
     notes: '',
   });
+
+  const { isAuthenticated, user, login } = useAuthStore();
+  const [authMode, setAuthMode] = useState<'login' | 'register'>('login');
+  const [authEmail, setAuthEmail] = useState('');
+  const [authPassword, setAuthPassword] = useState('');
+  const [authName, setAuthName] = useState('');
+  const [authPhone, setAuthPhone] = useState('');
+  const [authLoading, setAuthLoading] = useState(false);
+
+  const handleAuth = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setAuthLoading(true);
+    
+    try {
+      if (authMode === 'login') {
+        const res = await login(authEmail, authPassword);
+        if (res.success) toast.success('تم تسجيل الدخول بنجاح');
+        else toast.error(res.error || 'فشل تسجيل الدخول');
+      } else {
+        const supabase = createClient();
+        const { data, error } = await supabase.auth.signUp({
+          email: authEmail,
+          password: authPassword,
+          options: { data: { full_name: authName, full_name_ar: authName, role: 'customer', phone: authPhone } }
+        });
+        
+        if (error) throw error;
+        
+        if (data.user) {
+          await supabase.from('users').upsert({
+            id: data.user.id,
+            email: authEmail,
+            full_name_ar: authName,
+            full_name_en: authName,
+            phone: authPhone,
+            role: 'customer',
+            is_active: true
+          });
+          toast.success('تم إنشاء الحساب! جاري تسجيل الدخول...');
+          await login(authEmail, authPassword);
+        }
+      }
+    } catch (err: any) {
+      toast.error(err.message || 'حدث خطأ');
+    } finally {
+      setAuthLoading(false);
+    }
+  };
 
   const isEmpty = items.length === 0;
   if (isEmpty && !completed) {
@@ -51,6 +103,87 @@ export default function CheckoutPage() {
     );
   }
 
+  // WooCommerce Style Auth Guard
+  if (!isAuthenticated && !completed) {
+    return (
+      <PageTransition>
+        <div className="bg-white dark:bg-slate-950 border-b border-gray-100 dark:border-slate-800 p-4 sticky top-0 z-10 flex items-center shadow-sm">
+          <button onClick={() => router.push('/shop')} className="flex items-center gap-2 text-gray-600 dark:text-gray-300 hover:text-emerald-600 dark:hover:text-emerald-500 transition-colors">
+            <ArrowRight className="w-5 h-5" />
+            <span className="font-bold text-sm">العودة للمتجر</span>
+          </button>
+        </div>
+        <div className="max-w-md mx-auto px-4 py-12">
+          <div className="text-center mb-8">
+            <div className="h-16 w-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <User className="h-8 w-8 text-emerald-600" />
+            </div>
+            <h1 className="text-2xl font-bold text-gray-900">مرحباً بك!</h1>
+            <p className="text-gray-500 mt-2">يرجى تسجيل الدخول أو إنشاء حساب لمتابعة الطلب وتتبعه بسهولة.</p>
+          </div>
+
+          <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-6 sm:p-8">
+            <div className="flex bg-gray-100 p-1 rounded-xl mb-6">
+              <button 
+                onClick={() => setAuthMode('login')} 
+                className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all ${authMode === 'login' ? 'bg-white shadow text-emerald-600' : 'text-gray-500 hover:text-gray-700'}`}
+              >
+                تسجيل الدخول
+              </button>
+              <button 
+                onClick={() => setAuthMode('register')} 
+                className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all ${authMode === 'register' ? 'bg-white shadow text-emerald-600' : 'text-gray-500 hover:text-gray-700'}`}
+              >
+                حساب جديد
+              </button>
+            </div>
+
+            <form onSubmit={handleAuth} className="space-y-4">
+              {authMode === 'register' && (
+                <>
+                  <div>
+                    <label className="block text-xs font-medium text-gray-700 mb-1">الاسم الكامل</label>
+                    <div className="relative">
+                      <User className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                      <input type="text" required value={authName} onChange={e => setAuthName(e.target.value)} className="w-full h-11 pr-10 pl-4 border border-gray-200 rounded-xl text-sm focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none" placeholder="محمد أحمد" />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-gray-700 mb-1">رقم الجوال</label>
+                    <div className="relative">
+                      <UserPlus className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                      <input type="tel" required value={authPhone} onChange={e => setAuthPhone(e.target.value)} className="w-full h-11 pr-10 pl-4 border border-gray-200 rounded-xl text-sm focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none" placeholder="01XXXXXXXXX" />
+                    </div>
+                  </div>
+                </>
+              )}
+              
+              <div>
+                <label className="block text-xs font-medium text-gray-700 mb-1">البريد الإلكتروني</label>
+                <div className="relative">
+                  <Mail className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                  <input type="email" required dir="ltr" value={authEmail} onChange={e => setAuthEmail(e.target.value)} className="w-full h-11 pr-10 pl-4 border border-gray-200 rounded-xl text-sm focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none text-left" placeholder="user@example.com" />
+                </div>
+              </div>
+              
+              <div>
+                <label className="block text-xs font-medium text-gray-700 mb-1">كلمة المرور</label>
+                <div className="relative">
+                  <Lock className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                  <input type="password" required dir="ltr" value={authPassword} onChange={e => setAuthPassword(e.target.value)} className="w-full h-11 pr-10 pl-4 border border-gray-200 rounded-xl text-sm focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none text-left" placeholder="********" />
+                </div>
+              </div>
+
+              <Button type="submit" className="w-full h-12 text-base font-bold bg-emerald-600 hover:bg-emerald-700" disabled={authLoading}>
+                {authLoading ? <Loader2 className="h-5 w-5 animate-spin mx-auto" /> : authMode === 'login' ? 'دخول للمتابعة' : 'إنشاء حساب ومتابعة'}
+              </Button>
+            </form>
+          </div>
+        </div>
+      </PageTransition>
+    );
+  }
+
   const handlePlaceOrder = async () => {
     setProcessing(true);
     try {
@@ -61,7 +194,7 @@ export default function CheckoutPage() {
           items,
           shippingAddress: form,
           paymentMethod: paymentMethod === 'wallet' ? `wallet (${walletPhone})` : paymentMethod === 'card' ? `card (${cardPhone})` : paymentMethod,
-          couponCode,
+          couponCode: appliedCoupon?.code || '',
           notes: form.notes,
           subtotal: totals.subtotal,
           deliveryFee: totals.deliveryFee,
@@ -93,7 +226,7 @@ export default function CheckoutPage() {
     msg += `📱 *الجوال:* ${form.phone}\n`;
     msg += `📍 *العنوان:* ${form.city} - ${form.district}، ${form.street}، مبنى ${form.building}\n`;
     if (form.notes) msg += `📝 *ملاحظات:* ${form.notes}\n`;
-    msg += `\n*💳 طريقة الدفع:* ${paymentMethod === 'cod' ? 'نقداً عند الاستلام' : paymentMethod === 'wallet' ? 'محفظة إلكترونية (' + walletPhone + ')' : 'بطاقة ائتمان'}\n\n`;
+    msg += `\n*💳 طريقة الدفع:* ${paymentMethod === 'cod' ? 'نقداً عند الاستلام' : paymentMethod === 'wallet' ? `محفظة إلكترونية (${selectedWallet === 'other' ? 'أخرى' : selectedWallet} - ${walletPhone})` : `بطاقة ائتمان (${selectedBank === 'other' ? 'أخرى' : selectedBank} - ${cardPhone})`}\n\n`;
     
     msg += `*📦 المنتجات:*\n`;
     items.forEach((item) => {
@@ -166,16 +299,36 @@ export default function CheckoutPage() {
           </motion.div>
 
           {/* Action Buttons */}
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }} className="mt-8 space-y-3">
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }} className="mt-6 space-y-3 print:hidden">
+            <div className="flex gap-2">
+              <button 
+                onClick={() => window.print()}
+                className="flex-1 h-12 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-all"
+              >
+                <Printer className="h-4 w-4" />
+                طباعة الفاتورة
+              </button>
+              {navigator.share && (
+                <button 
+                  onClick={() => navigator.share({ title: 'فاتورة المتجر', text: 'مراجعة فاتورة المتجر الخاصة بي', url: window.location.href })}
+                  className="flex-1 h-12 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-all"
+                >
+                  <Share2 className="h-4 w-4" />
+                  مشاركة
+                </button>
+              )}
+            </div>
+
             {waLink && (
-              <a href={waLink} target="_blank" rel="noopener noreferrer" className="w-full h-14 bg-[#25D366] hover:bg-[#128C7E] text-white rounded-xl font-bold text-lg flex items-center justify-center gap-2 shadow-lg shadow-[#25D366]/30 transition-all">
-                <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+              <a href={waLink} target="_blank" rel="noopener noreferrer" className="w-full h-12 bg-[#25D366] hover:bg-[#128C7E] text-white rounded-xl font-bold text-sm flex items-center justify-center gap-2 shadow-lg shadow-[#25D366]/30 transition-all">
+                <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
                 أرسل الطلب عبر واتساب
               </a>
             )}
-            <div className="flex gap-3">
-              <Button variant="outline" className="flex-1 h-12" onClick={() => router.push('/shop')}>تسوق المزيد</Button>
-              <Button className="flex-1 h-12" onClick={() => router.push('/customer')}>طلباتي</Button>
+            
+            <div className="flex gap-2 pt-2 border-t border-gray-100">
+              <Button variant="outline" className="flex-1 h-11 text-xs" onClick={() => router.push('/shop')}>تسوق المزيد</Button>
+              <Button className="flex-1 h-11 text-xs" onClick={() => router.push('/customer')}>تتبع الطلب</Button>
             </div>
           </motion.div>
         </div>
@@ -244,14 +397,49 @@ export default function CheckoutPage() {
                       {paymentMethod === key && <CheckCircle className="h-5 w-5 text-emerald-500" />}
                     </button>
                     {paymentMethod === 'wallet' && key === 'wallet' && (
-                      <div className="mt-2 p-3 bg-gray-50 dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
+                      <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} className="mt-2 p-4 bg-gray-50 dark:bg-slate-800/50 rounded-xl border border-gray-200 dark:border-slate-700 space-y-4">
+                        <div>
+                          <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-2">اختر المحفظة الإلكترونية</label>
+                          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                            {[
+                              { id: 'vodafone', name: 'فودافون كاش', color: 'bg-red-50 text-red-600 border-red-200' },
+                              { id: 'etisalat', name: 'اتصالات كاش', color: 'bg-emerald-50 text-emerald-600 border-emerald-200' },
+                              { id: 'orange', name: 'أورانج كاش', color: 'bg-orange-50 text-orange-600 border-orange-200' },
+                              { id: 'we', name: 'وي باي (WE)', color: 'bg-purple-50 text-purple-600 border-purple-200' },
+                              { id: 'other', name: 'أخرى', color: 'bg-gray-100 text-gray-600 border-gray-200' },
+                            ].map(w => (
+                              <button
+                                key={w.id}
+                                onClick={() => setSelectedWallet(w.id)}
+                                className={`p-2 rounded-lg text-xs font-bold border transition-all ${selectedWallet === w.id ? w.color + ' ring-2 ring-emerald-500/50' : 'bg-white dark:bg-slate-900 border-gray-200 dark:border-slate-700 text-gray-600 dark:text-gray-400 hover:border-emerald-300'}`}
+                              >
+                                {w.name}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
                         <Input type="tel" label="رقم المحفظة" placeholder="01XXXXXXXXX" value={walletPhone} onChange={(e) => setWalletPhone(e.target.value)} />
-                      </div>
+                      </motion.div>
                     )}
                     {paymentMethod === 'card' && key === 'card' && (
-                      <div className="mt-2 p-3 bg-gray-50 dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
+                      <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} className="mt-2 p-4 bg-gray-50 dark:bg-slate-800/50 rounded-xl border border-gray-200 dark:border-slate-700 space-y-4">
+                        <div>
+                          <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-2">اختر البنك</label>
+                          <select 
+                            className="w-full h-11 px-3 border border-gray-200 dark:border-slate-700 rounded-xl text-sm bg-white dark:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500/30"
+                            value={selectedBank}
+                            onChange={(e) => setSelectedBank(e.target.value)}
+                          >
+                            <option value="nbe">البنك الأهلي المصري (NBE)</option>
+                            <option value="banque_misr">بنك مصر (Banque Misr)</option>
+                            <option value="cib">البنك التجاري الدولي (CIB)</option>
+                            <option value="qnb">بنك قطر الوطني الأهلي (QNB)</option>
+                            <option value="alex">بنك الإسكندرية (AlexBank)</option>
+                            <option value="other">أخرى</option>
+                          </select>
+                        </div>
                         <Input type="tel" label="رقم الهاتف المسجل بالبطاقة" placeholder="01XXXXXXXXX" value={cardPhone} onChange={(e) => setCardPhone(e.target.value)} />
-                      </div>
+                      </motion.div>
                     )}
                   </div>
                 ))}

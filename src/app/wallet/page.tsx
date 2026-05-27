@@ -22,6 +22,10 @@ export default function WalletPage() {
   const [depositAmount, setDepositAmount] = useState('');
 
   useEffect(() => {
+    if (!isAuthenticated) {
+      router.replace('/shop?login=true');
+      return;
+    }
     if (user?.id) {
       loadWallet();
       const channel = supabase.channel('wallet-sync')
@@ -30,7 +34,7 @@ export default function WalletPage() {
         .subscribe();
       return () => { supabase.removeChannel(channel); };
     }
-  }, [user]);
+  }, [user, isAuthenticated]);
 
   async function loadWallet() {
     if (!user?.id) return;
@@ -106,7 +110,7 @@ export default function WalletPage() {
     loyalty_redeemed: 'استبدال نقاط',
   };
 
-  if (loading) {
+  if (!isAuthenticated || loading) {
     return (
       <div className="min-h-screen bg-gray-50 dark:bg-[#020617] flex items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin text-emerald-500" />
@@ -129,9 +133,7 @@ export default function WalletPage() {
 
       <div className="max-w-4xl mx-auto px-4 py-4 space-y-4">
         {/* Balance Card */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
+        <div
           className="bg-gradient-to-br from-emerald-500 to-emerald-700 rounded-2xl p-6 text-white shadow-lg"
         >
           <div className="flex items-center gap-2 mb-3">
@@ -151,7 +153,7 @@ export default function WalletPage() {
               <Plus className="h-3.5 w-3.5" /> إيداع
             </button>
           </div>
-        </motion.div>
+        </div>
 
         {/* Quick Actions */}
         <div className="grid grid-cols-2 gap-3">
@@ -218,10 +220,8 @@ export default function WalletPage() {
                 const colorClass = typeColors[tx.type] || 'text-gray-500 bg-gray-50';
                 const label = typeLabels[tx.type] || tx.type;
                 return (
-                  <motion.div
+                  <div
                     key={tx.id}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
                     className="bg-white dark:bg-slate-900 rounded-xl p-3 border border-gray-100 dark:border-slate-800 flex items-center gap-3"
                   >
                     <div className={`h-9 w-9 rounded-lg flex items-center justify-center ${colorClass}`}>
@@ -236,7 +236,7 @@ export default function WalletPage() {
                     <span className={`text-sm font-bold ${tx.amount > 0 ? 'text-green-500' : 'text-red-500'}`}>
                       {tx.amount > 0 ? '+' : ''}{formatCurrency(Math.abs(tx.amount))}
                     </span>
-                  </motion.div>
+                  </div>
                 );
               })
             )}

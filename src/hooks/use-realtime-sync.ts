@@ -228,7 +228,7 @@ export function useAutoSync() {
 
     const interval = setInterval(() => {
       processSyncQueue();
-    }, 30000);
+    }, 3000);
 
     return () => clearInterval(interval);
   }, [isOnline]);
