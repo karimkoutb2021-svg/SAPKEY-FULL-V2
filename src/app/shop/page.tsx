@@ -294,8 +294,9 @@ export default function ShopPage() {
    const [category, setCategory] = useState(searchParams.get('category') || 'all');
    const [sort, setSort] = useState<SortOption>('default');
   const [showFilters, setShowFilters] = useState(false);
-  const [showCart, setShowCart] = useState(false);
   const [showCheckout, setShowCheckout] = useState(false);
+  const [walletPhone, setWalletPhone] = useState('');
+  const [cardPhone, setCardPhone] = useState('');
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [authTab, setAuthTab] = useState<'login' | 'register'>('login');
   const [authEmail, setAuthEmail] = useState('');
@@ -1071,18 +1072,32 @@ export default function ShopPage() {
                       { id: 'card', label: 'بطاقة', icon: CreditCard },
                       { id: 'wallet', label: 'محفظة', icon: MessageCircle },
                     ].map(({ id, label, icon: Icon }) => (
-                      <button key={id} onClick={() => setPaymentMethod(id)}
-                        className={`p-3 rounded-xl border-2 text-center transition-all ${
-                          paymentMethod === id
-                            ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-900/20'
-                            : 'border-gray-200 dark:border-slate-700 text-gray-400 hover:border-gray-300 dark:hover:border-slate-600'
-                        }`}>
-                        <Icon className="h-5 w-5 mx-auto mb-1" style={paymentMethod === id ? { color: primaryColor } : {}} />
-                        <span className="text-xs font-medium text-gray-900 dark:text-white">{label}</span>
-                      </button>
-                    ))}
+                        <button key={id} onClick={() => setPaymentMethod(id as any)}
+                          className={`p-3 rounded-xl border-2 text-center transition-all ${
+                            paymentMethod === id
+                              ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-900/20'
+                              : 'border-gray-200 dark:border-slate-700 text-gray-400 hover:border-gray-300 dark:hover:border-slate-600'
+                          }`}>
+                          <Icon className="h-5 w-5 mx-auto mb-1" style={paymentMethod === id ? { color: primaryColor } : {}} />
+                          <span className="text-xs font-medium text-gray-900 dark:text-white">{label}</span>
+                        </button>
+                      ))}
+                    </div>
+                    {paymentMethod === 'wallet' && (
+                      <div className="mt-3 p-3 bg-gray-50 dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
+                        <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">رقم المحفظة (فودافون كاش، إلخ)</label>
+                        <input type="tel" placeholder="01XXXXXXXXX" value={walletPhone} onChange={(e) => setWalletPhone(e.target.value)}
+                          className="w-full h-10 px-3 rounded-lg bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 text-sm focus:outline-none focus:border-emerald-500" dir="ltr" />
+                      </div>
+                    )}
+                    {paymentMethod === 'card' && (
+                      <div className="mt-3 p-3 bg-gray-50 dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
+                        <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">رقم الهاتف المسجل بالبطاقة</label>
+                        <input type="tel" placeholder="01XXXXXXXXX" value={cardPhone} onChange={(e) => setCardPhone(e.target.value)}
+                          className="w-full h-10 px-3 rounded-lg bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 text-sm focus:outline-none focus:border-emerald-500" dir="ltr" />
+                      </div>
+                    )}
                   </div>
-                </div>
 
                 {/* Order Summary */}
                 <div className="bg-gray-50 dark:bg-slate-900 rounded-xl p-4 space-y-2">
@@ -1103,7 +1118,7 @@ export default function ShopPage() {
                 <button onClick={handleOrder}
                   className="w-full h-12 rounded-xl text-sm font-bold text-white shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2"
                   style={{ backgroundColor: primaryColor }}>
-                  <MessageCircle className="h-5 w-5" /> تأكيد عبر واتساب
+                  <MessageCircle className="h-5 w-5" /> تأكيد الطلب
                 </button>
                 <button onClick={() => { setShowCheckout(false); setShowCart(true); }}
                   className="w-full h-10 text-xs text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 flex items-center justify-center gap-1 transition-colors">

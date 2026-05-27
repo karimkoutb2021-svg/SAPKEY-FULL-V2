@@ -2,6 +2,13 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+html, body {
+  overflow-x: hidden !important;
+  width: 100%;
+  position: relative;
+  max-width: 100vw;
+}
+
 /* ═══════════════════════════════════════════════════════════
    FORCE LIGHT MODE - Override ALL dark: classes globally
    ═══════════════════════════════════════════════════════════ */

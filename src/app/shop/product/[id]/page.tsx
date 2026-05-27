@@ -297,8 +297,8 @@ export default function ProductDetailPage() {
         </div>
       </div>
 
-      {/* ───── Main Content (Noon/Amazon-style 2-column on desktop) ───── */}
-      <div className="px-3 sm:px-4 lg:px-8 py-4 sm:py-6 pb-28 lg:pb-6">
+      {/* ───── Main Content ───── */}
+      <main className="max-w-7xl mx-auto px-4 py-6 md:py-12 pb-32">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-10">
           {/* Left: Product Gallery */}
           <div className="order-1">

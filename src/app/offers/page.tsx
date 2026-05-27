@@ -11,6 +11,7 @@ import { createClient } from '@/lib/supabase/client';
 import { CATEGORY_KEYS, findCategoryId, loadCategories } from '@/lib/category-utils';
 import { formatCurrency } from '@/lib/utils';
 import toast from 'react-hot-toast';
+import { CartDrawer } from '@/components/ecommerce/cart-drawer';
 
 interface OfferProduct {
   id: string;
@@ -132,6 +133,7 @@ export default function OffersPage() {
   const primaryColor = branding.primaryColor || '#22C55E';
   const cartItems = useCartStore((s) => s.items);
   const cartItemCount = cartItems.reduce((acc, item) => acc + item.quantity, 0);
+  const [showCart, setShowCart] = useState(false);
 
   useEffect(() => {
     async function loadOffers() {
@@ -183,7 +185,7 @@ export default function OffersPage() {
             <ArrowLeft className="h-4 w-4 text-gray-600 dark:text-gray-300" />
           </button>
           <span className="text-sm font-black text-gray-900 dark:text-white">العروض والتخفيضات</span>
-          <button onClick={() => router.push('/cart')} className="relative h-8 w-8 rounded-lg bg-gray-100 dark:bg-slate-800 flex items-center justify-center">
+          <button onClick={() => setShowCart(true)} className="relative h-8 w-8 rounded-lg bg-gray-100 dark:bg-slate-800 flex items-center justify-center">
             <ShoppingBag className="h-4 w-4 text-gray-600 dark:text-gray-300" />
             {cartItemCount > 0 && (
               <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-red-500 text-white text-[10px] flex items-center justify-center font-bold">
@@ -253,7 +255,7 @@ export default function OffersPage() {
              { icon: Percent, label: 'العروض', active: true, action: () => {} },
              { icon: Heart, label: 'المفضلة', action: () => router.push('/favorites') },
              { icon: Truck, label: 'طلباتي', action: () => router.push('/orders') },
-             { icon: ShoppingCart, label: 'عربة التسوق', action: () => router.push('/cart') },
+             { icon: ShoppingCart, label: 'عربة التسوق', action: () => setShowCart(true) },
            ].map(({ icon: Icon, label, active, action }) => (
              <button key={label} onClick={action}
                className={`flex flex-col items-center gap-0.5 px-3 py-1.5 relative transition-all ${active ? 'font-bold' : 'text-gray-400 dark:text-gray-500'}`}
@@ -264,6 +266,8 @@ export default function OffersPage() {
            ))}
          </div>
        </div>
+
+       <CartDrawer open={showCart} onClose={() => setShowCart(false)} />
     </div>
   );
 }

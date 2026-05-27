@@ -29,35 +29,25 @@ export function Ticker() {
     >
       <div className="absolute inset-0 bg-gradient-to-r from-black/10 via-transparent to-black/10 z-10 pointer-events-none" />
 
-      <style jsx>{`
-        @keyframes marquee {
-          0% {
-            transform: translateX(0);
+      <div 
+        className="flex h-full items-center whitespace-nowrap"
+        style={{
+          animation: `marquee ${duration}s linear infinite`,
+        }}
+      >
+        <style dangerouslySetInnerHTML={{__html: `
+          @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
           }
-          100% {
-            transform: translateX(-50%);
-          }
-        }
-        .ticker-track {
-          display: flex;
-          align-items: center;
-          white-space: nowrap;
-          animation: marquee ${duration}s linear infinite;
-          height: 100%;
-        }
-        .ticker-track:hover {
-          animation-play-state: paused;
-        }
-      `}</style>
-
-      <div className="ticker-track">
+        `}} />
         {/* Render offers twice for seamless loop */}
         {[0, 1].map((setIndex) => (
           <div key={setIndex} className="flex items-center shrink-0">
             {offers.map((offer, i) => (
               <span
                 key={`${setIndex}-${i}`}
-                className="flex items-center gap-3 px-6 text-white text-sm font-bold tracking-wide"
+                className="flex items-center gap-2 sm:gap-3 px-4 sm:px-6 text-white text-[11px] sm:text-sm font-bold tracking-wide"
               >
                 <Sparkles className="w-4 h-4 text-yellow-300 animate-pulse shrink-0" />
                 <span>{offer}</span>

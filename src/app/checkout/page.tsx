@@ -192,7 +192,6 @@ export default function CheckoutPage() {
                     <div key={item.variantId || item.productId} className="flex justify-between py-2 text-sm"><span className="text-gray-700">{item.nameAr} x{item.quantity}</span><span className="font-medium text-gray-900 tabular-nums">{formatCurrency(item.price * item.quantity)}</span></div>
                   ))}
                 </div>
-                </div>
               </motion.div>
             )}
           </div>
