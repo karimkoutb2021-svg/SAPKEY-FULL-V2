@@ -585,7 +585,7 @@ export default function ProductDetailPage() {
             ))}
           </div>
         </div>
-      </div>
+      </main>
 
       {/* ───── Bottom Action Bar (Mobile only) ───── */}
       <div className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/95 dark:bg-slate-950/95 backdrop-blur-3xl border-t border-gray-100 dark:border-slate-800 shadow-[0_-15px_40px_-15px_rgba(0,0,0,0.15)] pb-safe">
