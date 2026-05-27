@@ -177,7 +177,7 @@ function HeroBanner({ products, banners }: { products: ShopProduct[]; banners: S
   return (
     <div className="relative rounded-2xl sm:rounded-3xl overflow-hidden shadow-xl shadow-black/10">
       {/* Slides Container */}
-      <div className="relative h-[220px] sm:h-[280px] md:h-[340px]">
+      <div className="relative h-[220px] sm:h-[280px] md:h-[340px] lg:h-[450px] xl:h-[520px]">
         {scenes.map((s, i) => (
           <motion.div
             key={i}
