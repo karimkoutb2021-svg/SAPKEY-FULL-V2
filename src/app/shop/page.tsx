@@ -294,6 +294,7 @@ export default function ShopPage() {
    const [category, setCategory] = useState(searchParams.get('category') || 'all');
    const [sort, setSort] = useState<SortOption>('default');
   const [showFilters, setShowFilters] = useState(false);
+  const [showCart, setShowCart] = useState(false);
   const [showCheckout, setShowCheckout] = useState(false);
   const [walletPhone, setWalletPhone] = useState('');
   const [cardPhone, setCardPhone] = useState('');

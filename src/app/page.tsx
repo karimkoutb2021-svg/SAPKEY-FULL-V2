@@ -111,7 +111,7 @@ function HeroBanner({ products, banners }: { products: ShopProduct[]; banners: S
   const subtitle = branding.heroBannerSubtitle || 'اكتشف أحدث العروض والمنتجات المميزة';
   const images = branding.heroBannerImages && branding.heroBannerImages.length > 0 
     ? branding.heroBannerImages 
-    : ['https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=1920'];
+    : ['https://images.unsplash.com/photo-1534723452862-4c874018d66d?auto=format&fit=crop&q=80&w=1920'];
 
   // Base scenes array dynamically populated from images
   const scenes = images.map((img, idx) => {
@@ -208,24 +208,7 @@ function HeroBanner({ products, banners }: { products: ShopProduct[]; banners: S
               />
             )}
             <div className="absolute inset-0 bg-black/40" />
-            {/* Decorative Background Elements */}
-            <div className="absolute inset-0 overflow-hidden">
-              {/* Large circle top-right */}
-              <div className="absolute -top-16 -right-16 w-48 h-48 sm:w-64 sm:h-64 rounded-full bg-white/10 blur-2xl" />
-              {/* Small circle bottom-left */}
-              <div className="absolute -bottom-10 -left-10 w-32 h-32 sm:w-48 sm:h-48 rounded-full bg-white/10 blur-2xl" />
-              {/* Floating accent shapes */}
-              <motion.div
-                className="absolute top-6 right-6 sm:top-10 sm:right-10 w-16 h-16 sm:w-24 sm:h-24 rounded-2xl bg-white/10 backdrop-blur-sm rotate-12"
-                animate={{ y: [0, -8, 0], rotate: [12, 18, 12] }}
-                transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-              />
-              <motion.div
-                className="absolute bottom-12 left-8 sm:bottom-16 sm:left-16 w-12 h-12 sm:w-20 sm:h-20 rounded-full bg-white/10 backdrop-blur-sm"
-                animate={{ y: [0, 6, 0], x: [0, 4, 0] }}
-                transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut', delay: 0.5 }}
-              />
-            </div>
+            {/* Decorative Background Elements Removed */}
 
             {/* Content */}
             <div className="relative z-10 h-full flex flex-col items-center justify-center px-6 sm:px-10 md:px-16 text-center">

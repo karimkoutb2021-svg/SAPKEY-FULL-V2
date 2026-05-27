@@ -24,7 +24,7 @@ export default function CheckoutPage() {
   const [completed, setCompleted] = useState(false);
   const { branding } = useBrandingStore();
   const [couponInput, setCouponInput] = useState('');
-  const { appliedCoupon, applyCoupon, removeCoupon } = useCartStore();
+  const { items, getTotal, appliedCoupon, applyCoupon, removeCoupon } = useCartStore();
   const totals = getTotal(15, branding.taxRate || 0);
 
   const [form, setForm] = useState({
@@ -84,19 +84,100 @@ export default function CheckoutPage() {
     } finally { setProcessing(false); }
   };
 
+  const generateWhatsAppLink = () => {
+    const storePhone = branding.whatsapp || branding.phone || '';
+    if (!storePhone) return null;
+
+    let msg = `*🛍️ طلب جديد من المتجر الإلكتروني*\n\n`;
+    msg += `👤 *العميل:* ${form.fullName}\n`;
+    msg += `📱 *الجوال:* ${form.phone}\n`;
+    msg += `📍 *العنوان:* ${form.city} - ${form.district}، ${form.street}، مبنى ${form.building}\n`;
+    if (form.notes) msg += `📝 *ملاحظات:* ${form.notes}\n`;
+    msg += `\n*💳 طريقة الدفع:* ${paymentMethod === 'cod' ? 'نقداً عند الاستلام' : paymentMethod === 'wallet' ? 'محفظة إلكترونية (' + walletPhone + ')' : 'بطاقة ائتمان'}\n\n`;
+    
+    msg += `*📦 المنتجات:*\n`;
+    items.forEach((item) => {
+      msg += `▪️ ${item.nameAr} - العدد: ${item.quantity} - السعر: ${formatCurrency(item.price * item.quantity)}\n`;
+    });
+    
+    msg += `\n*🧾 الملخص:*\n`;
+    msg += `المجموع: ${formatCurrency(totals.subtotal)}\n`;
+    if (totals.discount > 0) msg += `الخصم: -${formatCurrency(totals.discount)}\n`;
+    msg += `التوصيل: ${totals.deliveryFee > 0 ? formatCurrency(totals.deliveryFee) : 'مجاني'}\n`;
+    if (totals.tax > 0) msg += `الضريبة: ${formatCurrency(totals.tax)}\n`;
+    msg += `*الإجمالي المستحق: ${formatCurrency(totals.total)}*\n`;
+
+    const cleanPhone = storePhone.replace(/\D/g, '');
+    const phoneWithCode = cleanPhone.startsWith('20') ? cleanPhone : `20${cleanPhone.startsWith('0') ? cleanPhone.substring(1) : cleanPhone}`;
+    return `https://wa.me/${phoneWithCode}?text=${encodeURIComponent(msg)}`;
+  };
+
   if (completed) {
+    const waLink = generateWhatsAppLink();
     return (
       <PageTransition>
-        <div className="max-w-lg mx-auto px-4 py-20 text-center">
-          <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: 'spring', damping: 15 }} className="h-20 w-20 rounded-full bg-emerald-100 flex items-center justify-center mx-auto mb-6">
-            <CheckCircle className="h-10 w-10 text-emerald-600" />
+        <div className="max-w-md mx-auto px-4 py-8">
+          {/* Professional Receipt */}
+          <motion.div initial={{ scale: 0.95, opacity: 0, y: 20 }} animate={{ scale: 1, opacity: 1, y: 0 }} className="bg-white rounded-3xl shadow-2xl overflow-hidden border border-gray-100">
+            {/* Receipt Header */}
+            <div className="bg-gray-50 border-b border-dashed border-gray-300 p-6 text-center relative">
+              <div className="absolute -bottom-3 left-[-10px] w-6 h-6 bg-gray-50 rounded-full"></div>
+              <div className="absolute -bottom-3 right-[-10px] w-6 h-6 bg-gray-50 rounded-full"></div>
+              
+              <div className="h-16 w-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <CheckCircle className="h-8 w-8 text-emerald-600" />
+              </div>
+              <h2 className="text-2xl font-black text-gray-900 mb-1">تم تأكيد الطلب!</h2>
+              <p className="text-sm text-gray-500">رقم الطلب: #{Math.floor(100000 + Math.random() * 900000)}</p>
+            </div>
+
+            {/* Receipt Body */}
+            <div className="p-6 space-y-6">
+              <div className="space-y-3 text-sm">
+                <div className="flex justify-between items-center pb-3 border-b border-gray-100">
+                  <span className="text-gray-500">العميل</span>
+                  <span className="font-bold text-gray-900">{form.fullName}</span>
+                </div>
+                <div className="flex justify-between items-center pb-3 border-b border-gray-100">
+                  <span className="text-gray-500">طريقة الدفع</span>
+                  <span className="font-bold text-gray-900">{paymentMethod === 'cod' ? 'نقداً عند الاستلام' : paymentMethod === 'wallet' ? 'محفظة إلكترونية' : 'بطاقة ائتمان'}</span>
+                </div>
+              </div>
+
+              <div>
+                <h3 className="font-bold text-gray-900 mb-3 text-sm">المنتجات</h3>
+                <div className="space-y-3">
+                  {items.map((item, idx) => (
+                    <div key={idx} className="flex justify-between text-sm">
+                      <span className="text-gray-700">{item.nameAr} <span className="text-gray-400">x{item.quantity}</span></span>
+                      <span className="font-bold text-gray-900 tabular-nums">{formatCurrency(item.price * item.quantity)}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="bg-gray-50 rounded-xl p-4 space-y-2 text-sm border border-gray-100">
+                <div className="flex justify-between"><span className="text-gray-500">المجموع</span><span className="text-gray-900 font-medium tabular-nums">{formatCurrency(totals.subtotal)}</span></div>
+                {totals.discount > 0 && <div className="flex justify-between"><span className="text-gray-500">الخصم</span><span className="text-red-500 font-medium tabular-nums">-{formatCurrency(totals.discount)}</span></div>}
+                <div className="flex justify-between"><span className="text-gray-500">التوصيل</span><span className="text-emerald-600 font-medium tabular-nums">{totals.deliveryFee > 0 ? formatCurrency(totals.deliveryFee) : 'مجاني'}</span></div>
+                <div className="flex justify-between text-lg font-black pt-2 border-t border-gray-200 mt-2"><span className="text-gray-900">الإجمالي</span><span className="text-emerald-600 tabular-nums">{formatCurrency(totals.total)}</span></div>
+              </div>
+            </div>
           </motion.div>
-          <h1 className="text-2xl font-bold mb-2 text-gray-900">تم تقديم الطلب!</h1>
-          <p className="text-gray-500 mb-6">سيتم تأكيد طلبك وتوصيله في أقرب وقت</p>
-          <div className="flex gap-3 justify-center">
-            <Button variant="outline" onClick={() => router.push('/shop')}>متابعة التسوق</Button>
-            <Button onClick={() => router.push('/customer')}>متابعة الطلب</Button>
-          </div>
+
+          {/* Action Buttons */}
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }} className="mt-8 space-y-3">
+            {waLink && (
+              <a href={waLink} target="_blank" rel="noopener noreferrer" className="w-full h-14 bg-[#25D366] hover:bg-[#128C7E] text-white rounded-xl font-bold text-lg flex items-center justify-center gap-2 shadow-lg shadow-[#25D366]/30 transition-all">
+                <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+                أرسل الطلب عبر واتساب
+              </a>
+            )}
+            <div className="flex gap-3">
+              <Button variant="outline" className="flex-1 h-12" onClick={() => router.push('/shop')}>تسوق المزيد</Button>
+              <Button className="flex-1 h-12" onClick={() => router.push('/customer')}>طلباتي</Button>
+            </div>
+          </motion.div>
         </div>
       </PageTransition>
     );
