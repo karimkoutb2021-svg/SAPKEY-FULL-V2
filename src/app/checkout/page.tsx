@@ -16,8 +16,10 @@ type Step = 'shipping' | 'payment' | 'review';
 
 export default function CheckoutPage() {
   const router = useRouter();
-  const { items, getItemCount, getTotal, couponCode, clearCart } = useCartStore();
   const { shippingAddress, paymentMethod, notes, setShippingAddress, setPaymentMethod, setNotes, setLastOrder, reset } = useCheckoutStore();
+  const [step, setStep] = useState<Step>('shipping');
+  const [walletPhone, setWalletPhone] = useState('');
+  const [cardPhone, setCardPhone] = useState('');
   const [step, setStep] = useState<Step>('shipping');
   const [processing, setProcessing] = useState(false);
   const [completed, setCompleted] = useState(false);
@@ -59,7 +61,7 @@ export default function CheckoutPage() {
         body: JSON.stringify({
           items,
           shippingAddress: form,
-          paymentMethod,
+          paymentMethod: paymentMethod === 'wallet' ? `wallet (${walletPhone})` : paymentMethod === 'card' ? `card (${cardPhone})` : paymentMethod,
           couponCode,
           notes: form.notes,
           subtotal: totals.subtotal,
@@ -153,18 +155,26 @@ export default function CheckoutPage() {
                 {[
                   { key: 'cod', label: 'الدفع عند الاستلام', icon: Wallet, desc: 'ادفع نقداً عند استلام الطلب' },
                   { key: 'card', label: 'بطاقة ائتمان', icon: CreditCard, desc: 'ادفع عبر بطاقة الائتمان أو الخصم' },
-                  { key: 'online', label: 'دفع إلكتروني', icon: CreditCard, desc: 'ادفع عبر Apple Pay أو مدى' },
+                  { key: 'wallet', label: 'محفظة إلكترونية', icon: Wallet, desc: 'فودافون كاش، اتصالات كاش، إلخ' },
                 ].map(({ key, label, icon: Icon, desc }) => (
-                  <button key={key} onClick={() => setPaymentMethod(key as any)} className={`w-full flex items-center gap-4 p-4 rounded-xl border text-right transition-all ${paymentMethod === key ? 'border-emerald-500 bg-emerald-50' : 'border-gray-200 hover:bg-gray-50'}`}>
-                    <div className={`h-10 w-10 rounded-lg flex items-center justify-center ${paymentMethod === key ? 'bg-emerald-500 text-white' : 'bg-gray-100 text-gray-500'}`}><Icon className="h-5 w-5" /></div>
-                    <div className="flex-1"><p className="font-medium text-gray-900">{label}</p><p className="text-xs text-gray-500">{desc}</p></div>
-                    {paymentMethod === key && <CheckCircle className="h-5 w-5 text-emerald-500" />}
-                  </button>
+                  <div key={key}>
+                    <button onClick={() => setPaymentMethod(key as any)} className={`w-full flex items-center gap-4 p-4 rounded-xl border text-right transition-all ${paymentMethod === key ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-900/20' : 'border-gray-200 dark:border-slate-700 hover:bg-gray-50 dark:hover:bg-slate-800'}`}>
+                      <div className={`h-10 w-10 rounded-lg flex items-center justify-center ${paymentMethod === key ? 'bg-emerald-500 text-white' : 'bg-gray-100 dark:bg-slate-800 text-gray-500'}`}><Icon className="h-5 w-5" /></div>
+                      <div className="flex-1"><p className="font-medium text-gray-900 dark:text-white">{label}</p><p className="text-xs text-gray-500">{desc}</p></div>
+                      {paymentMethod === key && <CheckCircle className="h-5 w-5 text-emerald-500" />}
+                    </button>
+                    {paymentMethod === 'wallet' && key === 'wallet' && (
+                      <div className="mt-2 p-3 bg-gray-50 dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
+                        <Input type="tel" label="رقم المحفظة" placeholder="01XXXXXXXXX" value={walletPhone} onChange={(e) => setWalletPhone(e.target.value)} />
+                      </div>
+                    )}
+                    {paymentMethod === 'card' && key === 'card' && (
+                      <div className="mt-2 p-3 bg-gray-50 dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
+                        <Input type="tel" label="رقم الهاتف المسجل بالبطاقة" placeholder="01XXXXXXXXX" value={cardPhone} onChange={(e) => setCardPhone(e.target.value)} />
+                      </div>
+                    )}
+                  </div>
                 ))}
-                <div className="flex gap-3">
-                  <Button variant="outline" onClick={() => setStep('shipping')}>السابق</Button>
-                  <Button className="flex-1" onClick={() => setStep('review')}>التالي</Button>
-                </div>
               </motion.div>
             )}
 
@@ -182,9 +192,6 @@ export default function CheckoutPage() {
                     <div key={item.variantId || item.productId} className="flex justify-between py-2 text-sm"><span className="text-gray-700">{item.nameAr} x{item.quantity}</span><span className="font-medium text-gray-900 tabular-nums">{formatCurrency(item.price * item.quantity)}</span></div>
                   ))}
                 </div>
-                <div className="flex gap-3">
-                  <Button variant="outline" onClick={() => setStep('payment')}>السابق</Button>
-                  <Button className="flex-1 h-12 text-base bg-emerald-500 hover:bg-emerald-600" onClick={handlePlaceOrder} disabled={processing}>{processing ? <><Loader2 className="h-4 w-4 ml-1 animate-spin" /> جاري تقديم الطلب...</> : 'تأكيد الطلب'}</Button>
                 </div>
               </motion.div>
             )}
@@ -262,7 +269,35 @@ export default function CheckoutPage() {
               </div>
             </div>
           </div>
+          {/* Fixed Bottom Bar for Actions like POS */}
+          <div className="fixed bottom-0 left-0 right-0 z-50 bg-white dark:bg-slate-950 border-t border-gray-100 dark:border-slate-800 shadow-[0_-4px_20px_rgba(0,0,0,0.05)] p-4 safe-area-bottom">
+            <div className="max-w-4xl mx-auto flex items-center gap-4">
+              <div className="flex-1">
+                <p className="text-[10px] text-gray-400 font-medium">الإجمالي المستحق</p>
+                <p className="text-xl font-black text-emerald-600">{formatCurrency(totals.total)}</p>
+              </div>
+              <div className="flex items-center gap-3 w-2/3">
+                {step !== 'shipping' && (
+                  <Button variant="outline" className="h-12 w-1/3 text-base font-bold" onClick={() => setStep(step === 'review' ? 'payment' : 'shipping')}>السابق</Button>
+                )}
+                {step === 'review' ? (
+                  <Button className="flex-1 h-12 text-base font-bold bg-emerald-600 hover:bg-emerald-700 shadow-lg shadow-emerald-600/20" onClick={handlePlaceOrder} disabled={processing}>
+                    {processing ? <><Loader2 className="h-5 w-5 ml-2 animate-spin" /> جاري التأكيد...</> : 'إتمام الطلب'}
+                  </Button>
+                ) : (
+                  <Button className="flex-1 h-12 text-base font-bold bg-gray-900 hover:bg-gray-800 text-white" 
+                    onClick={() => setStep(step === 'shipping' ? 'payment' : 'review')} 
+                    disabled={step === 'shipping' ? (!form.fullName || !form.phone || !form.city) : false}>
+                    متابعة
+                  </Button>
+                )}
+              </div>
+            </div>
+          </div>
         </div>
+        
+        {/* Spacer for bottom bar */}
+        <div className="h-24"></div>
       </div>
     </PageTransition>
   );

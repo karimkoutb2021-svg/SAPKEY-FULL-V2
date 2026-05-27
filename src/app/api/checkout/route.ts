@@ -33,8 +33,6 @@ export async function POST(req: Request) {
           building: body.shippingAddress.building,
           payment_method: body.paymentMethod,
           subtotal: body.subtotal,
-          delivery_fee: body.deliveryFee,
-          tax_amount: body.taxAmount,
           total: body.total,
           notes: body.notes,
           items: body.items,
