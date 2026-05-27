@@ -20,7 +20,6 @@ export default function CheckoutPage() {
   const [step, setStep] = useState<Step>('shipping');
   const [walletPhone, setWalletPhone] = useState('');
   const [cardPhone, setCardPhone] = useState('');
-  const [step, setStep] = useState<Step>('shipping');
   const [processing, setProcessing] = useState(false);
   const [completed, setCompleted] = useState(false);
   const { branding } = useBrandingStore();
