@@ -17,9 +17,9 @@ export function Ticker() {
     .map((s) => s.trim())
     .filter(Boolean);
 
-  // Calculate animation duration based on total content length
+  // Calculate animation duration based on total content length (slower scrolling)
   const totalLength = offers.join('').length;
-  const duration = Math.max(20, totalLength * 0.35);
+  const duration = Math.max(30, totalLength * 0.5);
 
   return (
     <div

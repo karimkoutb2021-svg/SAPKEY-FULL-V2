@@ -150,9 +150,8 @@ function ProductCard({ product, viewMode, onAdd, onOrderNow, isWishlisted, onTog
   }
 
   return (
-    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-      whileHover={isOutOfStock ? undefined : { y: -4 }}
-      className={`bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-gray-100 dark:border-slate-800 overflow-hidden group transition-all flex flex-col h-full ${isOutOfStock ? 'opacity-60' : 'hover:shadow-md'}`}>
+    <div
+      className={`bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-gray-100 dark:border-slate-800 overflow-hidden group transition-all flex flex-col h-full ${isOutOfStock ? 'opacity-60' : 'hover:shadow-md hover:-translate-y-1'}`}>
       <div className="relative aspect-square overflow-hidden cursor-pointer bg-gray-100 dark:bg-slate-800 shrink-0"
         onClick={() => router.push(`/shop/product/${product.id}`)}>
         {!imgLoaded && !imgError && <div className="absolute inset-0 bg-gray-200 dark:bg-slate-700 animate-pulse" />}
@@ -175,7 +174,7 @@ function ProductCard({ product, viewMode, onAdd, onOrderNow, isWishlisted, onTog
         )}
         {!isOutOfStock && isLowStock && (
           <div className="absolute bottom-2 left-2 right-2">
-            <div className="bg-orange-500/90 backdrop-blur-md text-white text-[10px] font-bold px-2 py-1.5 rounded-lg flex items-center justify-center gap-1 shadow-lg border border-orange-400/50 animate-pulse">
+            <div className="bg-orange-500/95 text-white text-[10px] font-bold px-2 py-1.5 rounded-lg flex items-center justify-center gap-1 shadow-lg border border-orange-400/50 animate-pulse">
               <Zap className="h-3 w-3 fill-white" />
               متبقي {product.stock} فقط في المخزن! أسرع بالطلب
             </div>
@@ -183,7 +182,7 @@ function ProductCard({ product, viewMode, onAdd, onOrderNow, isWishlisted, onTog
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
         <button onClick={(e) => { e.stopPropagation(); onToggleWishlist(product.id); }}
-          className="absolute top-2 left-2 h-9 w-9 rounded-full bg-white/90 dark:bg-slate-800/90 backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-white shadow-sm">
+          className="absolute top-2 left-2 h-9 w-9 rounded-full bg-white/95 dark:bg-slate-800/95 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-white shadow-sm">
           <Heart className={`h-4 w-4 ${isWishlisted ? 'fill-red-500 text-red-500' : 'text-gray-400'}`} />
         </button>
       </div>
@@ -216,7 +215,7 @@ function ProductCard({ product, viewMode, onAdd, onOrderNow, isWishlisted, onTog
           </button>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 }
 
@@ -261,11 +260,11 @@ function OffersNotification() {
     <AnimatePresence>
       {visible && offer && (
         <motion.div
-          initial={{ opacity: 0, y: -50, scale: 0.9 }}
+          initial={{ opacity: 0, y: 50, scale: 0.9 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
-          exit={{ opacity: 0, y: -20, scale: 0.9 }}
+          exit={{ opacity: 0, y: 50, scale: 0.9 }}
           transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-          className="fixed top-20 left-4 right-4 sm:left-auto sm:right-4 sm:w-80 z-[100] pointer-events-none"
+          className="fixed bottom-24 left-4 right-4 sm:bottom-4 sm:left-4 sm:right-auto sm:w-80 z-[100] pointer-events-none"
         >
           <div className="bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border border-gray-100 dark:border-slate-800 shadow-2xl rounded-2xl p-3 flex items-center gap-3">
             <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-emerald-500 to-green-600 flex items-center justify-center shrink-0">

@@ -468,7 +468,6 @@ function AdminCodeModal({ onClose, onSuccess }: { onClose: () => void; onSuccess
               onChange={(e) => { setCode(e.target.value); setError(''); }}
               placeholder="••••••••"
               dir="ltr"
-              inputMode="numeric"
               autoComplete="off"
               className={`w-full h-14 px-5 rounded-xl border-2 text-center text-lg font-mono tracking-[0.25em] transition-all outline-none
                 ${error

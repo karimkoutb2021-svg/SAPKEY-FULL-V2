@@ -263,6 +263,8 @@ export default function ProductDetailPage() {
   const primaryColor = branding.primaryColor || '#22C55E';
   const cartCount = getItemCount();
 
+  const isLowStock = (branding.lowStockEnabled !== false) && (product.stock ?? 0) > 0 && (product.stock ?? 0) <= (branding.lowStockThreshold || 5);
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-[#020617]">
       {/* ───── Top Nav (Noon/Amazon-style: full-width) ───── */}
@@ -296,7 +298,7 @@ export default function ProductDetailPage() {
       </div>
 
       {/* ───── Main Content (Noon/Amazon-style 2-column on desktop) ───── */}
-      <div className="px-3 sm:px-4 lg:px-8 py-4 sm:py-6">
+      <div className="px-3 sm:px-4 lg:px-8 py-4 sm:py-6 pb-28 lg:pb-6">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-10">
           {/* Left: Product Gallery */}
           <div className="order-1">
@@ -363,6 +365,11 @@ export default function ProductDetailPage() {
                   <span className="text-sm font-medium">
                     {(product.stock ?? 0) > 0 ? 'متوفر' : 'نفذ'}
                   </span>
+                  {isLowStock && (
+                    <span className="text-xs font-bold text-orange-500 bg-orange-50 dark:bg-orange-900/20 px-2 py-0.5 rounded-md mr-2 animate-pulse">
+                      باقي {product.stock} فقط في المخزن
+                    </span>
+                  )}
                 </div>
               </div>
             </div>
