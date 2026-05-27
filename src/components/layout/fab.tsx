@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { motion, AnimatePresence } from 'framer-motion';
+import { AdminCodeModal } from '@/components/auth/admin-code-modal';
 
 export function FAB() {
   const { user, isAuthenticated } = useAuthStore();
@@ -22,6 +23,7 @@ export function FAB() {
   const [isOnline, setIsOnline] = useState(navigator.onLine);
   const [isSyncing, setIsSyncing] = useState(false);
   const [lastSync, setLastSync] = useState<Date | null>(null);
+  const [showAdminModal, setShowAdminModal] = useState(false);
   const deferredPrompt = useRef<any>(null);
   const { updateAvailable, reload, checking } = useVersionCheck({ intervalMs: 15000 });
 
@@ -62,6 +64,32 @@ export function FAB() {
     }, 60000);
     return () => clearInterval(interval);
   }, [isAuthenticated]);
+
+  // Auto-show install prompt toast
+  useEffect(() => {
+    if (installable && !installed) {
+      toast((t) => (
+        <div className="flex flex-col gap-2 p-1" dir="rtl">
+          <p className="font-bold text-sm">تثبيت التطبيق</p>
+          <p className="text-xs text-gray-500">قم بتثبيت التطبيق للوصول السريع بدون إنترنت</p>
+          <div className="flex gap-2 mt-2">
+            <button
+              onClick={() => { toast.dismiss(t.id); handleInstall(); }}
+              className="bg-emerald-500 text-white px-3 py-1.5 rounded-lg text-xs font-bold w-full"
+            >
+              تثبيت الآن
+            </button>
+            <button
+              onClick={() => toast.dismiss(t.id)}
+              className="bg-gray-100 text-gray-700 px-3 py-1.5 rounded-lg text-xs font-medium w-full"
+            >
+              لاحقاً
+            </button>
+          </div>
+        </div>
+      ), { duration: 15000, position: 'bottom-center' });
+    }
+  }, [installable, installed]);
 
   const handleInstall = async () => {
     if (deferredPrompt.current) {
@@ -337,7 +365,7 @@ export function FAB() {
                         <span className="text-xs font-medium">الذهاب للرئيسية</span>
                       </button>
                       {isAuthenticated && (
-                        <button onClick={() => { setIsOpen(false); window.location.href = '/dashboard'; }} className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-50 transition-colors text-gray-600">
+                        <button onClick={() => { setIsOpen(false); setShowAdminModal(true); }} className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-50 transition-colors text-gray-600">
                           <Settings className="w-4 h-4" />
                           <span className="text-xs font-medium">لوحة تحكم الإدارة</span>
                         </button>
@@ -366,6 +394,16 @@ export function FAB() {
           >
             تم نسخ الرابط
           </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Admin Code Modal */}
+      <AnimatePresence>
+        {showAdminModal && (
+          <AdminCodeModal
+            onClose={() => setShowAdminModal(false)}
+            onSuccess={() => { setShowAdminModal(false); toast.success('تم التحقق بنجاح'); window.location.href = '/login'; }}
+          />
         )}
       </AnimatePresence>
     </>

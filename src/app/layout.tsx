@@ -20,7 +20,7 @@ function getBuildId(): string {
 export const metadata: Metadata = {
   title: 'SAPKEY GROCERY - نظام إدارة السوبر ماركت',
   description: 'Enterprise Supermarket ERP + POS + Ecommerce Platform',
-  manifest: '/api/manifest',
+  manifest: '/site.webmanifest',
   icons: {
     icon: [
       { url: '/logo.jpg' },

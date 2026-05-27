@@ -16,7 +16,9 @@ let cachedCategories: ProductCategory[] | null = null;
 
 const CATEGORY_IMAGE_MAP: Record<string, string> = {
   'المشروبات': '/categories/cat_beverages_1779892243061.png',
+  'مشروبات': '/categories/cat_beverages_1779892243061.png',
   'الألبان': '/categories/cat_dairy_1779892227755.png',
+  'ألبان وأجبان': '/categories/cat_dairy_1779892227755.png',
   'وجبات خفيفة': '/categories/cat_snacks_1779892258838.png',
   'مواد معلبة': '/categories/cat_canned_1779892290215.png',
   'مجمدات': '/categories/cat_frozen_1779892304943.png',
@@ -31,8 +33,10 @@ const CATEGORY_IMAGE_MAP: Record<string, string> = {
   'فواكه طازجة': '/categories/cat_fruits_1779892472203.png',
   'لحوم ودواجن': '/categories/cat_meat_1779892486030.png',
   'أسماك ومأكولات بحرية': '/categories/cat_seafood_1779892508582.png',
+  'وجبات إفطار': '/categories/cat_breakfast_1779892522148.png',
   'إفطار وحبوب': '/categories/cat_breakfast_1779892522148.png',
-  'ألبان وأجبان': '/categories/cat_dairy_1779892227755.png', // Fallback for alternative naming
+  'مستلزمات أطفال': '/categories/e3270069-9b40-4c18-af33-41c66cb0d9db.png',
+  'مستلزمات حيوانات': '/categories/2299e293-1714-43ca-bac8-bb1f4156bd9e.png',
 };
 
 export async function loadCategories(): Promise<ProductCategory[]> {
