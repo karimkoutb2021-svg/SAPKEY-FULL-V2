@@ -67,9 +67,9 @@ html, body {
   width: 80px;
 }
 @media (max-width: 767px) {
-  .desktop-sidebar {
-    display: none !important; /* Hide completely on mobile to use bottom nav instead */
-  }
+  /* .desktop-sidebar {
+    display: none !important;
+  } */
 }
 
 .main-content-area {

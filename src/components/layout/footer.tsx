@@ -105,7 +105,7 @@ export function Footer() {
                 </div>
                 <ul className="space-y-2.5">
                   {section.links.map((link) => (
-                    <li key={link.id || link.label || link.href}>
+                    <li key={link.label || link.href}>
                       <Link href={link.href}
                         className="text-sm text-gray-500 hover:text-gray-900 dark:hover:text-white transition-colors flex items-center gap-1 group">
                         <ChevronLeft className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -133,7 +133,7 @@ export function Footer() {
                       transition={{ duration: 0.2 }} className="overflow-hidden">
                       <ul className="px-4 pb-3 space-y-2">
                         {section.links.map((link) => (
-                          <li key={link.id || link.label || link.href}>
+                          <li key={link.label || link.href}>
                             <Link href={link.href}
                               className="text-sm text-gray-500 hover:text-gray-900 dark:hover:text-white transition-colors block py-1">
                               {link.label}

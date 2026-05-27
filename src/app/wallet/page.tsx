@@ -14,7 +14,7 @@ const supabase = createClient();
 
 export default function WalletPage() {
   const router = useRouter();
-  const { user } = useAuthStore();
+  const { user, isAuthenticated } = useAuthStore();
   const [wallet, setWallet] = useState<CustomerWallet | null>(null);
   const [transactions, setTransactions] = useState<WalletTransaction[]>([]);
   const [loading, setLoading] = useState(true);

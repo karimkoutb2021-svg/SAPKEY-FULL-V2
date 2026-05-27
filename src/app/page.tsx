@@ -436,7 +436,9 @@ export default function SupermarketLandingPage() {
         ]);
 
         if (prodRes.status === 'fulfilled' && prodRes.value.data) {
-          setProducts(prodRes.value.data.map(mapProduct));
+          const mapped = prodRes.value.data.map(mapProduct);
+          // Allow all products. Products without images will use the fallback colored SVGs.
+          setProducts(mapped);
         }
         if (catRes.status === 'fulfilled' && catRes.value) {
           setCategories(catRes.value);
@@ -470,17 +472,21 @@ export default function SupermarketLandingPage() {
       {/* ───── Premium Header (Noon/Amazon-style: full-width) ───── */}
       <header className="sticky top-0 z-50 bg-white dark:bg-slate-950 border-b border-gray-100 dark:border-slate-800 shadow-sm">
         <div className="px-3 sm:px-4 lg:px-8 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 shrink-0">
             {(branding.logo || '/logo.jpg') ? (
-              <img src={branding.logo || '/logo.jpg'} className="h-10 w-10 rounded-xl object-contain" alt={branding.storeName} />
+              <img src={branding.logo || '/logo.jpg'} className="h-10 sm:h-12 w-auto max-w-[160px] rounded-xl object-contain bg-white/10 p-1 shrink-0" alt={branding.storeName} />
             ) : (
-              <div className="h-10 w-10 rounded-xl bg-emerald-500 flex items-center justify-center shadow-glow">
-                <Store className="h-5 w-5 text-white" />
+              <div className="h-9 w-9 sm:h-10 sm:w-10 rounded-xl flex items-center justify-center shrink-0" style={{ backgroundColor: branding.primaryColor || '#10B981' }}>
+                <Store className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
               </div>
             )}
-            <div>
-              <span className="text-base font-black text-gray-900 dark:text-white">{branding.storeName}</span>
-              <span className="hidden sm:block text-[10px] text-gray-400 -mt-0.5">{branding.slogan}</span>
+            <div className="flex flex-col justify-center whitespace-nowrap">
+              <span className="font-black text-sm sm:text-base block text-gray-900 dark:text-white leading-tight">
+                {branding.storeName || 'SAPKEY'}
+              </span>
+              <span className="text-[10px] sm:text-xs text-gray-500 dark:text-gray-400 block">
+                {branding.slogan || 'حلول ذكية للتجزئة'}
+              </span>
             </div>
           </div>
 

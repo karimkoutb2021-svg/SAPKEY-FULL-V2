@@ -734,8 +734,26 @@ function POSContent({ primaryColor, userRole, userName, userId }: { primaryColor
       {/* ═══════════ MAIN CONTENT ═══════════ */}
       <div className="flex-1 flex overflow-hidden min-h-0 bg-gradient-to-b from-gray-50 to-gray-100 dark:from-[#020617] dark:to-slate-900/50">
 
-        {/* ─── Products Grid ─── */}
-        <div className="flex-1 overflow-y-auto p-2 md:p-4 scrollbar-hide">
+        {/* ─── Products Grid & Categories ─── */}
+        <div className="flex-1 overflow-y-auto p-2 md:p-4 scrollbar-hide flex flex-col gap-3">
+          
+          {/* ─── Category Tabs ─── */}
+          <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide shrink-0">
+            {categories.map(c => (
+              <button
+                key={c.id}
+                onClick={() => setCategory(c.id)}
+                className={`px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all shadow-sm border ${
+                  category === c.id
+                    ? 'bg-blue-600 text-white border-blue-600'
+                    : 'bg-white dark:bg-slate-800 text-gray-600 dark:text-gray-300 border-gray-200 dark:border-slate-700 hover:bg-gray-50 dark:hover:bg-slate-700/50'
+                }`}
+              >
+                {c.name}
+              </button>
+            ))}
+          </div>
+
           {filtered.length > 0 ? (
             <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-2 md:gap-3 lg:gap-4 pb-20 md:pb-6">
               {filtered.map(p => <ProductBtn key={p.id} product={p} onAdd={handleProductClick} />)}

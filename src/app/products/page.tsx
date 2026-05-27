@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, Fragment } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -46,6 +46,83 @@ export default function ProductsPage() {
     !search || (p.name_ar || '').includes(search) || (p.name || '').toLowerCase().includes(search.toLowerCase()) || (p.barcode || '').includes(search)
   );
 
+  let bodyContent = null;
+
+  if (loading) {
+    bodyContent = <tr><td colSpan={7} className="p-8 text-center text-sm text-gray-400">جاري تحميل البيانات...</td></tr>;
+  } else if (filtered.length === 0) {
+    bodyContent = <tr><td colSpan={7} className="p-8 text-center text-sm text-gray-400">لا توجد بيانات</td></tr>;
+  } else {
+    bodyContent = filtered.map((product: any) => {
+      const nameAr = product.name_ar || '';
+      const nameEn = product.name || '';
+      const barcode = product.barcode || '';
+      const category = product.category || '';
+      const price = product.price || 0;
+      const cost = product.cost || 0;
+      const stock = product.stock ?? 0;
+      const minStock = product.min_stock ?? 0;
+      const unit = product.unit || 'قطعة';
+      const isActive = product.is_active ?? product.active ?? true;
+      const imageUrl = product.image_url;
+
+      return <tr key={product.id} className="border-b border-gray-50 dark:border-slate-800/50 hover:bg-gray-50/50 dark:hover:bg-slate-800/30 transition-all group">
+        <td className="p-4">
+          <div className="flex items-center gap-3">
+            {imageUrl ? (
+              <div className="relative h-10 w-10 rounded-xl overflow-hidden shrink-0 border border-gray-100 dark:border-slate-800 shadow-sm group-hover:scale-105 transition-transform">
+                <img src={imageUrl} alt={nameAr} className="h-full w-full object-cover" />
+              </div>
+            ) : (
+              <div className="h-10 w-10 rounded-xl bg-gray-100 dark:bg-slate-800 flex items-center justify-center shrink-0 border border-gray-200 dark:border-slate-700 shadow-sm group-hover:scale-105 transition-transform">
+                <Package className="h-4 w-4 text-gray-400" />
+              </div>
+            )}
+            <div>
+              <p className="font-bold text-sm text-gray-900 dark:text-white">{nameAr}</p>
+              <p className="text-xs text-gray-500 font-mono mt-0.5">{barcode || nameEn}</p>
+            </div>
+          </div>
+        </td>
+        <td className="p-4 text-right">
+          <span className="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-medium bg-gray-100 text-gray-700 dark:bg-slate-800 dark:text-gray-300 border border-gray-200 dark:border-slate-700">
+            {category}
+          </span>
+        </td>
+        <td className="p-4 text-right font-bold text-gray-900 dark:text-white">
+          {price.toLocaleString('ar-EG')} <span className="text-[10px] text-gray-500 font-normal">ر.س</span>
+        </td>
+        <td className="p-4 text-right text-sm text-gray-600 dark:text-gray-400">
+          {cost.toLocaleString('ar-EG')} <span className="text-[10px] text-gray-500">ر.س</span>
+        </td>
+        <td className="p-4 text-right">
+          <div className="flex items-center gap-1.5 justify-end">
+            <span className={`font-bold text-sm ${stock <= minStock ? 'text-red-500' : 'text-emerald-500'}`}>
+              {stock.toLocaleString('ar-EG')}
+            </span>
+            <span className="text-xs text-gray-500">{unit}</span>
+          </div>
+        </td>
+        <td className="p-4 text-right">
+          <Badge variant={isActive ? "default" : "secondary"} className={isActive ? "bg-emerald-500/10 text-emerald-600 border-emerald-500/20" : "bg-gray-100 text-gray-500 dark:bg-slate-800 dark:text-gray-400 border-gray-200 dark:border-slate-700"}>
+            {isActive ? 'نشط' : 'غير نشط'}
+          </Badge>
+        </td>
+        <td className="p-4">
+          <div className="flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+            {canEdit && (
+              <button onClick={() => setEditProduct({ ...product })} className="p-2 rounded-lg bg-blue-50 text-blue-600 hover:bg-blue-100 dark:bg-blue-500/10 dark:text-blue-400 dark:hover:bg-blue-500/20 transition-colors shadow-sm">
+                <Edit className="h-4 w-4" />
+              </button>
+            )}
+            <button className="p-2 rounded-lg bg-gray-50 text-gray-600 hover:bg-gray-100 dark:bg-slate-800 dark:text-gray-400 dark:hover:bg-slate-700 transition-colors shadow-sm">
+              <MoreHorizontal className="h-4 w-4" />
+            </button>
+          </div>
+        </td>
+      </tr>;
+    });
+  }
   const handleSaveProduct = (updatedProduct: any) => {
     if (!updatedProduct) return;
     const updated = (products || []).map((p: any) => p.id === updatedProduct.id ? updatedProduct : p);
@@ -192,7 +269,7 @@ export default function ProductsPage() {
         </div>
         <div className="flex items-center gap-1.5">
           {canEdit && (
-            <>
+            <Fragment>
               <Button variant="outline" size="sm" onClick={handleDownloadTemplate}>
                 <FileDown className="h-3.5 w-3.5 ml-1" /> نموذج
               </Button>
@@ -203,7 +280,7 @@ export default function ProductsPage() {
                 <FileSpreadsheet className="h-3.5 w-3.5 ml-1" /> تصدير
               </Button>
               <input ref={excelInputRef} type="file" accept=".xlsx,.xls" className="hidden" onChange={handleFileSelect} />
-            </>
+            </Fragment>
           )}
           {canEdit && (
             <Button size="sm" onClick={() => demoAction("إضافة منتج جديد")}>
@@ -234,85 +311,31 @@ export default function ProductsPage() {
         <Button variant="outline" size="sm"><Filter className="h-3.5 w-3.5 ml-1" /> تصفية</Button>
       </div>
 
-      <Card>
-        <CardContent className="p-0">
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead>
-                <tr className="border-b bg-muted/50">
-                  <th className="text-right p-3 text-[10px] font-medium text-muted-foreground">المنتج</th>
-                  <th className="text-right p-3 text-[10px] font-medium text-muted-foreground">القسم</th>
-                  <th className="text-right p-3 text-[10px] font-medium text-muted-foreground">السعر</th>
-                  <th className="text-right p-3 text-[10px] font-medium text-muted-foreground">التكلفة</th>
-                  <th className="text-right p-3 text-[10px] font-medium text-muted-foreground">المخزون</th>
-                  <th className="text-right p-3 text-[10px] font-medium text-muted-foreground">الحالة</th>
-                  <th className="text-center p-3 text-[10px] font-medium text-muted-foreground">الإجراءات</th>
-                </tr>
-              </thead>
-              {loading ? (
-                <tbody><tr><td colSpan={7} className="p-6 text-center text-muted-foreground">جاري تحميل البيانات...</td></tr></tbody>
-              ) : filtered.length === 0 ? (
-                <tbody><tr><td colSpan={7} className="p-6 text-center text-muted-foreground">لا توجد بيانات</td></tr></tbody>
-              ) : (
-              <tbody>
-                {filtered.map((product: any) => {
-                  const nameAr = product.name_ar || '';
-                  const barcode = product.barcode || '';
-                  const category = product.category || '';
-                  const price = product.price || 0;
-                  const cost = product.cost || 0;
-                  const stock = product.stock ?? 0;
-                  const minStock = product.min_stock ?? 0;
-                  const isActive = product.is_active ?? product.active ?? true;
-                  return (
-                  <tr key={product.id} className="border-b hover:bg-accent/50 transition-colors">
-                    <td className="p-3">
-                      <div className="flex items-center gap-2">
-                        <div className="h-9 w-9 rounded-lg bg-muted flex items-center justify-center overflow-hidden shrink-0">
-                          <img src={product.image_url || '/product-placeholder.svg'} className="h-full w-full object-cover" />
-                        </div>
-                        <div className="min-w-0">
-                          <p className="text-xs font-medium truncate">{nameAr}</p>
-                          <p className="text-[9px] text-muted-foreground truncate">{barcode}</p>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="p-3 text-[10px]">{category}</td>
-                    <td className="p-3 text-[10px] font-medium">{formatCurrency(price)}</td>
-                    <td className="p-3 text-[10px] text-muted-foreground">{formatCurrency(cost)}</td>
-                    <td className="p-3">
-                      <span className={`text-[10px] font-medium ${stock <= minStock ? 'text-red-500' : ''}`}>
-                        {stock} {stock <= minStock && stock > 0 ? '(منخفض)' : ''}
-                        {stock === 0 ? '(نفذ)' : ''}
-                      </span>
-                    </td>
-                    <td className="p-3">
-                      <Badge variant={isActive ? 'success' : 'secondary'} className="text-[9px] px-1.5 py-0">
-                        {isActive ? 'نشط' : 'غير نشط'}
-                      </Badge>
-                    </td>
-                    <td className="p-3">
-                      <div className="flex items-center justify-center gap-1">
-                        {canEdit && (
-                          <button onClick={() => setEditProduct({ ...product })} className="p-1.5 rounded-md hover:bg-accent"><Edit className="h-3.5 w-3.5" /></button>
-                        )}
-                        <button className="p-1.5 rounded-md hover:bg-accent"><MoreHorizontal className="h-3.5 w-3.5" /></button>
-                      </div>
-                    </td>
-                  </tr>
-                  );
-                })}
-              </tbody>
-              )}
-            </table>
-          </div>
-        </CardContent>
-      </Card>
+      <div className="bg-white dark:bg-slate-900 rounded-3xl shadow-sm border border-gray-100 dark:border-slate-800 overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-50/80 dark:bg-slate-800/50 border-b border-gray-100 dark:border-slate-800">
+                <th className="text-right p-4 text-[11px] font-bold text-gray-500 uppercase tracking-wider">المنتج</th>
+                <th className="text-right p-4 text-[11px] font-bold text-gray-500 uppercase tracking-wider">القسم</th>
+                <th className="text-right p-4 text-[11px] font-bold text-gray-500 uppercase tracking-wider">السعر</th>
+                <th className="text-right p-4 text-[11px] font-bold text-gray-500 uppercase tracking-wider">التكلفة</th>
+                <th className="text-right p-4 text-[11px] font-bold text-gray-500 uppercase tracking-wider">المخزون</th>
+                <th className="text-right p-4 text-[11px] font-bold text-gray-500 uppercase tracking-wider">الحالة</th>
+                <th className="text-center p-4 text-[11px] font-bold text-gray-500 uppercase tracking-wider">الإجراءات</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-100 dark:divide-slate-800">
+              {bodyContent}
+            </tbody>
+          </table>
+        </div>
+      </div>
 
       {/* Import Errors Modal */}
       <AnimatePresence>
         {showImportErrors && (
-          <>
+          <Fragment>
             <motion.div initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}} className="fixed inset-0 bg-black/50 z-50" onClick={() => setShowImportErrors(false)} />
             <motion.div initial={{y:'100%'}} animate={{y:0}} exit={{y:'100%'}} className="fixed bottom-0 left-0 right-0 z-50 bg-white dark:bg-[#0F172A] rounded-t-2xl shadow-2xl max-h-[85vh] overflow-y-auto max-w-2xl mx-auto" dir="rtl">
               <div className="flex justify-center mt-2 mb-1"><div className="h-1 w-10 rounded-full bg-gray-300" /></div>
@@ -365,14 +388,14 @@ export default function ProductsPage() {
                 </div>
               </div>
             </motion.div>
-          </>
+          </Fragment>
         )}
       </AnimatePresence>
 
       {/* Import Preview Modal */}
       <AnimatePresence>
         {showImportModal && (
-          <>
+          <Fragment>
             <motion.div initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}} className="fixed inset-0 bg-black/50 z-50" onClick={() => setShowImportModal(false)} />
             <motion.div initial={{y:'100%'}} animate={{y:0}} exit={{y:'100%'}} className="fixed bottom-0 left-0 right-0 z-50 bg-white dark:bg-[#0F172A] rounded-t-2xl shadow-2xl max-h-[85vh] overflow-y-auto max-w-2xl mx-auto" dir="rtl">
               <div className="flex justify-center mt-2 mb-1"><div className="h-1 w-10 rounded-full bg-gray-300" /></div>
@@ -453,7 +476,7 @@ export default function ProductsPage() {
                 </div>
               </div>
             </motion.div>
-          </>
+          </Fragment>
         )}
       </AnimatePresence>
 

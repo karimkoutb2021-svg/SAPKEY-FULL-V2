@@ -58,7 +58,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <script dangerouslySetInnerHTML={{ __html: 'document.documentElement.classList.remove("dark");' }} />
         <DynamicFavicon />
       </head>
-      <body className="min-h-screen antialiased" style={{ fontFamily: '"Cairo", -apple-system, BlinkMacSystemFont, "SF Pro Arabic", "Segoe UI", Roboto, sans-serif' }}>
+      <body suppressHydrationWarning className="min-h-screen antialiased" style={{ fontFamily: '"Cairo", -apple-system, BlinkMacSystemFont, "SF Pro Arabic", "Segoe UI", Roboto, sans-serif' }}>
         <PremiumLoader />
         <Providers>
           {children}

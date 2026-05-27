@@ -9,6 +9,7 @@ import { cn } from '@/lib/utils';
 import {
   Bell, LogOut, ChevronDown, Menu, Search, Headphones, ShoppingCart, MessageCircle, Home, Store,
 } from 'lucide-react';
+import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { RefreshButton, BackupButton, RestoreButton, OnlineIndicator } from '@/components/layout/app-tools';
 
@@ -59,15 +60,15 @@ export function Header() {
             <Home className="h-4 w-4 text-gray-900" />
           </button>
 
-          <Link href="/" className="flex items-center gap-2">
+          <Link href="/" className="flex items-center gap-2 shrink-0">
             {(branding.logo || '/logo.jpg') ? (
-              <img src={branding.logo || '/logo.jpg'} className="h-9 sm:h-10 w-auto max-w-[140px] object-contain block" alt={branding.storeName} />
+              <img src={branding.logo || '/logo.jpg'} className="h-9 sm:h-10 w-auto max-w-[120px] object-contain block shrink-0" alt={branding.storeName} />
             ) : (
-              <div className="h-9 w-9 sm:h-10 sm:w-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: branding.primaryColor || '#10B981' }}>
+              <div className="h-9 w-9 sm:h-10 sm:w-10 rounded-xl flex items-center justify-center shrink-0" style={{ backgroundColor: branding.primaryColor || '#10B981' }}>
                 <Store className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
               </div>
             )}
-            <div className="flex flex-col justify-center">
+            <div className="flex flex-col justify-center whitespace-nowrap">
               <span className="font-black text-sm sm:text-base block text-gray-900 dark:text-white leading-tight">
                 {branding.storeName || 'SAPKEY'}
               </span>
@@ -78,7 +79,7 @@ export function Header() {
           </Link>
 
           {/* Search - hidden on mobile */}
-          <div className="relative hidden md:block mr-4">
+          <div className="relative hidden lg:block mx-4 flex-1 max-w-xl">
             <Search className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
             <input
               type="search"

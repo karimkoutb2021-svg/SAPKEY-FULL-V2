@@ -41,7 +41,9 @@ export default function InventoryPage() {
           <div className="flex gap-2">
             <Link href="/inventory/reports"><Button variant="outline"><BarChart3 className="h-4 w-4 ml-1" /> تقارير</Button></Link>
             <Link href="/inventory/transfer"><Button variant="outline"><ArrowRightLeft className="h-4 w-4 ml-1" /> تحويل</Button></Link>
-            <Button><Plus className="h-4 w-4 ml-1" /> جرد جديد</Button>
+            <Link href="/manager/audit">
+              <Button><Plus className="h-4 w-4 ml-1" /> جرد جديد</Button>
+            </Link>
           </div>
         </div>
 

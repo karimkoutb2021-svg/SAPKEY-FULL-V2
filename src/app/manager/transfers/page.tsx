@@ -405,7 +405,7 @@ export default function TransferPage() {
     return (
       <div className="space-y-6">
         <div className="flex items-center gap-3">
-          <button onClick={() => { setActiveView('list'); setSelectedTransfer(null) }} className="p-2 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] transition-colors">
+          <button onClick={() => { setActiveView('list'); setSelectedTransfer(null) }} className="p-2 rounded-lg bg-slate-800/60 backdrop-blur-lg shadow-inner hover:bg-slate-700/80 transition-colors">
             <ChevronLeft size={18} />
           </button>
           <div>
@@ -417,7 +417,7 @@ export default function TransferPage() {
         </div>
 
         {/* Status & Date */}
-        <div className="rounded-2xl bg-white/[0.03] border border-white/[0.06] p-4 flex items-center justify-between">
+        <div className="rounded-3xl bg-slate-800/40 backdrop-blur-md shadow-xl border border-slate-700/50 p-4 flex items-center justify-between">
           <span className={cn('text-xs px-3 py-1 rounded-full', statuses[selectedTransfer.status]?.color)}>
             {statuses[selectedTransfer.status]?.label}
           </span>
@@ -427,10 +427,10 @@ export default function TransferPage() {
         </div>
 
         {/* Timeline */}
-        <div className="rounded-2xl bg-white/[0.03] border border-white/[0.06] p-6">
+        <div className="rounded-3xl bg-slate-800/40 backdrop-blur-md shadow-xl border border-slate-700/50 p-6">
           <h3 className="text-sm font-semibold mb-4">تقدم التحويل</h3>
           <div className="relative">
-            <div className="absolute right-[11px] top-2 bottom-2 w-0.5 bg-white/[0.06]" />
+            <div className="absolute right-[11px] top-2 bottom-2 w-0.5 bg-slate-700/60" />
             <div className="space-y-4">
               {timelineSteps.map((s, i) => {
                 const isActive = i <= currentIdx
@@ -440,7 +440,7 @@ export default function TransferPage() {
                   <div key={s.key} className="flex items-center gap-3 relative z-10">
                     <div className={cn(
                       'w-6 h-6 rounded-full flex items-center justify-center shrink-0',
-                      isActive ? 'bg-emerald-500 text-white' : 'bg-white/[0.06] text-gray-500'
+                      isActive ? 'bg-emerald-500 text-white' : 'bg-slate-700/60 text-gray-500'
                     )}>
                       {isCurrent && isActive ? (
                         <div className="w-2 h-2 rounded-full bg-white" />
@@ -462,11 +462,11 @@ export default function TransferPage() {
 
         {/* Products */}
         {transferItems.length > 0 && (
-          <div className="rounded-2xl bg-white/[0.03] border border-white/[0.06] p-6">
+          <div className="rounded-3xl bg-slate-800/40 backdrop-blur-md shadow-xl border border-slate-700/50 p-6">
             <h3 className="text-sm font-semibold mb-3">الأصناف ({transferItems.length})</h3>
             <div className="space-y-2">
               {transferItems.map(item => (
-                <div key={item.id} className="flex items-center justify-between p-3 rounded-xl bg-white/[0.02]">
+                <div key={item.id} className="flex items-center justify-between p-3 rounded-2xl bg-slate-800/30 backdrop-blur-sm">
                   <div>
                     <p className="text-sm font-medium">{item.product_name}</p>
                     <p className="text-xs text-gray-400">{item.product_sku} • {item.unit}</p>
@@ -483,7 +483,7 @@ export default function TransferPage() {
 
         {/* Notes */}
         {selectedTransfer.notes && (
-          <div className="rounded-2xl bg-white/[0.03] border border-white/[0.06] p-4">
+          <div className="rounded-3xl bg-slate-800/40 backdrop-blur-md shadow-xl border border-slate-700/50 p-4">
             <p className="text-xs text-gray-400 mb-1">ملاحظات</p>
             <p className="text-sm">{selectedTransfer.notes}</p>
           </div>
@@ -493,23 +493,23 @@ export default function TransferPage() {
         <div className="flex flex-wrap gap-3">
           {isManager && selectedTransfer.status === 'pending_approval' && (
             <>
-              <button onClick={() => approveTransfer(selectedTransfer)} className="flex-1 min-w-[120px] py-2.5 rounded-xl bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30 text-sm font-medium flex items-center justify-center gap-2">
+              <button onClick={() => approveTransfer(selectedTransfer)} className="flex-1 min-w-[120px] py-2.5 rounded-2xl bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30 text-sm font-medium flex items-center justify-center gap-2">
                 <CheckCircle size={16} /> اعتماد التحويل
               </button>
-              <button onClick={() => cancelTransfer(selectedTransfer)} className="flex-1 min-w-[120px] py-2.5 rounded-xl bg-red-500/20 text-red-400 hover:bg-red-500/30 text-sm font-medium">
+              <button onClick={() => cancelTransfer(selectedTransfer)} className="flex-1 min-w-[120px] py-2.5 rounded-2xl bg-red-500/20 text-red-400 hover:bg-red-500/30 text-sm font-medium">
                 إلغاء
               </button>
             </>
           )}
           {selectedTransfer.status === 'approved' && (
             <>
-              <button onClick={() => confirmInTransit(selectedTransfer)} className="flex-1 min-w-[120px] py-2.5 rounded-xl bg-amber-500/20 text-amber-400 hover:bg-amber-500/30 text-sm font-medium flex items-center justify-center gap-2">
+              <button onClick={() => confirmInTransit(selectedTransfer)} className="flex-1 min-w-[120px] py-2.5 rounded-2xl bg-amber-500/20 text-amber-400 hover:bg-amber-500/30 text-sm font-medium flex items-center justify-center gap-2">
                 <Package size={16} /> تأكيد الشحن
               </button>
             </>
           )}
           {selectedTransfer.status === 'in_transit' && (
-            <button onClick={() => receiveTransfer(selectedTransfer)} className="flex-1 min-w-[120px] py-2.5 rounded-xl bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30 text-sm font-medium flex items-center justify-center gap-2">
+            <button onClick={() => receiveTransfer(selectedTransfer)} className="flex-1 min-w-[120px] py-2.5 rounded-2xl bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30 text-sm font-medium flex items-center justify-center gap-2">
               <ArrowRightLeft size={16} /> تأكيد الاستلام
             </button>
           )}
@@ -523,7 +523,7 @@ export default function TransferPage() {
     return (
       <div className="space-y-6">
         <div className="flex items-center gap-3">
-          <button onClick={resetForm} className="p-2 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] transition-colors">
+          <button onClick={resetForm} className="p-2 rounded-lg bg-slate-800/60 backdrop-blur-lg shadow-inner hover:bg-slate-700/80 transition-colors">
             <ChevronLeft size={18} />
           </button>
           <h2 className="text-lg font-semibold">تحويل مخزني جديد</h2>
@@ -545,18 +545,18 @@ export default function TransferPage() {
                   'h-8 w-8 rounded-full flex items-center justify-center text-xs font-bold transition-colors',
                   isActive ? 'bg-emerald-500 text-white' :
                   isPast ? 'bg-emerald-500/30 text-emerald-300' :
-                  'bg-white/[0.06] text-gray-500'
+                  'bg-slate-700/60 text-gray-500'
                 )}>{isPast ? <CheckCircle size={14} /> : i + 1}</div>
                 <span className="text-xs hidden sm:block">{label}</span>
                 {i < 2 && (
-                  <div className={cn('w-6 h-0.5 rounded', isPast ? 'bg-emerald-500/50' : 'bg-white/[0.06]')} />
+                  <div className={cn('w-6 h-0.5 rounded', isPast ? 'bg-emerald-500/50' : 'bg-slate-700/60')} />
                 )}
               </div>
             )
           })}
         </div>
 
-        <div className="rounded-2xl bg-white/[0.03] border border-white/[0.06] p-6">
+        <div className="rounded-3xl bg-slate-800/40 backdrop-blur-md shadow-xl border border-slate-700/50 p-6">
           {/* STEP 1: Select Warehouses */}
           {step === 'select' && (
             <div className="space-y-4">
@@ -566,7 +566,7 @@ export default function TransferPage() {
                   <select
                     value={fromWarehouse}
                     onChange={(e) => { setFromWarehouse(e.target.value); setToWarehouse('') }}
-                    className="w-full px-3 py-2.5 rounded-xl bg-white/[0.04] border border-white/[0.08] text-sm"
+                    className="w-full px-3 py-2.5 rounded-2xl bg-slate-800/60 backdrop-blur-lg shadow-inner border border-slate-600/50 text-sm"
                   >
                     <option value="">اختر...</option>
                     {warehouses.map(w => (
@@ -584,7 +584,7 @@ export default function TransferPage() {
                   <select
                     value={toWarehouse}
                     onChange={(e) => setToWarehouse(e.target.value)}
-                    className="w-full px-3 py-2.5 rounded-xl bg-white/[0.04] border border-white/[0.08] text-sm"
+                    className="w-full px-3 py-2.5 rounded-2xl bg-slate-800/60 backdrop-blur-lg shadow-inner border border-slate-600/50 text-sm"
                   >
                     <option value="">اختر...</option>
                     {warehouses.filter(w => w.id !== fromWarehouse).map(w => (
@@ -600,14 +600,14 @@ export default function TransferPage() {
               </div>
 
               {fromWarehouse && toWarehouse && fromWarehouse === toWarehouse && (
-                <div className="flex items-start gap-2 p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm">
+                <div className="flex items-start gap-2 p-3 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm">
                   <AlertTriangle className="h-4 w-4 mt-0.5 shrink-0" />
                   <span>لا يمكن التحويل لنفس المستودع. الرجاء اختيار مستودعين مختلفين.</span>
                 </div>
               )}
 
               <button
-                className="w-full px-4 py-2.5 rounded-xl bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30 text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full px-4 py-2.5 rounded-2xl bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30 text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed"
                 disabled={!fromWarehouse || !toWarehouse || fromWarehouse === toWarehouse}
                 onClick={() => setStep('products')}
               >
@@ -619,7 +619,7 @@ export default function TransferPage() {
           {/* STEP 2: Select Products */}
           {step === 'products' && (
             <div className="space-y-4">
-              <div className="flex items-center justify-between text-sm p-3 rounded-xl bg-white/[0.04]">
+              <div className="flex items-center justify-between text-sm p-3 rounded-2xl bg-slate-800/60 backdrop-blur-lg shadow-inner">
                 <div className="flex items-center gap-2">
                   <Building2 className="h-4 w-4" />
                   {warehouses.find(w => w.id === fromWarehouse)?.name_ar}
@@ -638,7 +638,7 @@ export default function TransferPage() {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="ابحث عن صنف..."
-                  className="w-full pr-10 pl-4 py-2.5 rounded-xl bg-white/[0.04] border border-white/[0.08] text-sm"
+                  className="w-full pr-10 pl-4 py-2.5 rounded-2xl bg-slate-800/60 backdrop-blur-lg shadow-inner border border-slate-600/50 text-sm"
                 />
               </div>
 
@@ -650,10 +650,10 @@ export default function TransferPage() {
                       key={p.id}
                       onClick={() => !isSelected && addProduct(p)}
                       className={cn(
-                        'w-full flex items-center justify-between p-3 rounded-xl border text-right transition-all',
+                        'w-full flex items-center justify-between p-3 rounded-2xl border text-right transition-all',
                         isSelected
                           ? 'border-emerald-500/50 bg-emerald-500/10'
-                          : 'border-white/[0.06] hover:bg-white/[0.04]'
+                          : 'border-slate-700/50 hover:bg-slate-800/60 backdrop-blur-lg shadow-inner'
                       )}
                     >
                       <div className="flex items-center gap-3">
@@ -674,13 +674,13 @@ export default function TransferPage() {
 
               {/* Selected products with quantities */}
               {selectedProducts.length > 0 && (
-                <div className="space-y-3 p-4 rounded-xl bg-white/[0.04]">
+                <div className="space-y-3 p-4 rounded-2xl bg-slate-800/60 backdrop-blur-lg shadow-inner">
                   <div className="flex items-center justify-between">
                     <p className="text-sm font-semibold">الأصناف المحددة ({selectedProducts.length})</p>
                     <p className="text-xs text-gray-400">إجمالي الوحدات: {totalBaseUnits.toLocaleString('ar-EG')}</p>
                   </div>
                   {selectedProducts.map(p => (
-                    <div key={p.item.id} className="rounded-xl bg-white/[0.03] border border-white/[0.06] p-3 space-y-2">
+                    <div key={p.item.id} className="rounded-2xl bg-slate-800/40 backdrop-blur-md shadow-xl border border-slate-700/50 p-3 space-y-2">
                       <div className="flex items-center justify-between">
                         <div>
                           <p className="text-sm font-medium">{p.item.product_name}</p>
@@ -697,12 +697,12 @@ export default function TransferPage() {
                         <div className="flex items-center gap-2">
                           <button
                             onClick={() => updateQty(p.item.id, p.qty - 1)}
-                            className="w-7 h-7 rounded-full bg-white/[0.06] flex items-center justify-center hover:bg-white/[0.1] transition-colors text-sm"
+                            className="w-7 h-7 rounded-full bg-slate-700/60 flex items-center justify-center hover:bg-slate-600/90 transition-colors text-sm"
                           >-</button>
                           <span className="w-10 text-center font-bold text-sm">{p.qty.toLocaleString('ar-EG')}</span>
                           <button
                             onClick={() => updateQty(p.item.id, p.qty + 1)}
-                            className="w-7 h-7 rounded-full bg-white/[0.06] flex items-center justify-center hover:bg-white/[0.1] transition-colors text-sm"
+                            className="w-7 h-7 rounded-full bg-slate-700/60 flex items-center justify-center hover:bg-slate-600/90 transition-colors text-sm"
                           >+</button>
                         </div>
                         <span className="text-xs text-gray-400">{p.item.unit}</span>
@@ -715,7 +715,7 @@ export default function TransferPage() {
                           min={1}
                           value={p.conversionFactor}
                           onChange={(e) => updateConversion(p.item.id, parseInt(e.target.value) || 1, p.conversionUnit)}
-                          className="w-16 px-2 py-1 rounded-lg bg-white/[0.04] border border-white/[0.08] text-xs text-center"
+                          className="w-16 px-2 py-1 rounded-lg bg-slate-800/60 backdrop-blur-lg shadow-inner border border-slate-600/50 text-xs text-center"
                         />
                         <span className="text-xs text-gray-400">× {p.conversionUnit} = {(p.qty * p.conversionFactor).toLocaleString('ar-EG')} {p.item.unit}</span>
                       </div>
@@ -728,17 +728,17 @@ export default function TransferPage() {
                 value={transferNotes}
                 onChange={(e) => setTransferNotes(e.target.value)}
                 placeholder="ملاحظات (اختياري)..."
-                className="w-full px-3 py-2.5 rounded-xl bg-white/[0.04] border border-white/[0.08] text-sm min-h-[60px]"
+                className="w-full px-3 py-2.5 rounded-2xl bg-slate-800/60 backdrop-blur-lg shadow-inner border border-slate-600/50 text-sm min-h-[60px]"
               />
 
               <div className="flex gap-3">
-                <button onClick={() => setStep('select')} className="flex-1 px-4 py-2.5 rounded-xl bg-white/[0.06] text-sm hover:bg-white/[0.1] transition-colors">
+                <button onClick={() => setStep('select')} className="flex-1 px-4 py-2.5 rounded-2xl bg-slate-700/60 text-sm hover:bg-slate-600/90 transition-colors">
                   السابق
                 </button>
                 <button
                   onClick={() => setStep('confirm')}
                   disabled={!selectedProducts.length}
-                  className="flex-1 px-4 py-2.5 rounded-xl bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30 text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="flex-1 px-4 py-2.5 rounded-2xl bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30 text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   التالي
                 </button>
@@ -749,7 +749,7 @@ export default function TransferPage() {
           {/* STEP 3: Confirm */}
           {step === 'confirm' && (
             <div className="space-y-4">
-              <div className="p-4 rounded-xl bg-white/[0.04] space-y-3 text-sm">
+              <div className="p-4 rounded-2xl bg-slate-800/60 backdrop-blur-lg shadow-inner space-y-3 text-sm">
                 <div className="flex justify-between">
                   <span className="text-gray-400">من</span>
                   <span className="font-medium">{warehouses.find(w => w.id === fromWarehouse)?.name_ar}</span>
@@ -758,7 +758,7 @@ export default function TransferPage() {
                   <span className="text-gray-400">إلى</span>
                   <span className="font-medium">{warehouses.find(w => w.id === toWarehouse)?.name_ar}</span>
                 </div>
-                <div className="border-t border-white/[0.06] pt-3" />
+                <div className="border-t border-slate-700/50 pt-3" />
                 <div className="flex justify-between">
                   <span className="text-gray-400">عدد الأصناف</span>
                   <span className="font-bold">{selectedProducts.length.toLocaleString('ar-EG')}</span>
@@ -772,7 +772,7 @@ export default function TransferPage() {
               {/* Product list summary */}
               <div className="space-y-1">
                 {selectedProducts.map(p => (
-                  <div key={p.item.id} className="flex items-center justify-between p-2 rounded-lg bg-white/[0.02] text-sm">
+                  <div key={p.item.id} className="flex items-center justify-between p-2 rounded-lg bg-slate-800/30 backdrop-blur-sm text-sm">
                     <span>{p.item.product_name}</span>
                     <span className="text-xs text-gray-400">
                       {p.qty.toLocaleString('ar-EG')} × {p.conversionFactor} = {(p.qty * p.conversionFactor).toLocaleString('ar-EG')} {p.item.unit}
@@ -781,19 +781,19 @@ export default function TransferPage() {
                 ))}
               </div>
 
-              <div className="flex items-start gap-2 p-3 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-400 text-sm">
+              <div className="flex items-start gap-2 p-3 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-400 text-sm">
                 <AlertTriangle className="h-4 w-4 mt-0.5 shrink-0" />
                 <span>سيتم خصم الأصناف من المخزن المصدر وإضافتها للمخزن الوجهة.</span>
               </div>
 
               <div className="flex gap-3">
-                <button onClick={() => setStep('products')} className="flex-1 px-4 py-2.5 rounded-xl bg-white/[0.06] text-sm hover:bg-white/[0.1] transition-colors">
+                <button onClick={() => setStep('products')} className="flex-1 px-4 py-2.5 rounded-2xl bg-slate-700/60 text-sm hover:bg-slate-600/90 transition-colors">
                   تعديل
                 </button>
                 <button
                   onClick={createTransfer}
                   disabled={processing}
-                  className="flex-1 px-4 py-2.5 rounded-xl bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30 text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                  className="flex-1 px-4 py-2.5 rounded-2xl bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30 text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 >
                   {processing ? <><Loader2 className="h-4 w-4 animate-spin" /> جاري...</> : 'تأكيد التحويل'}
                 </button>
@@ -813,7 +813,7 @@ export default function TransferPage() {
         <h2 className="text-lg font-semibold">التحويلات المخزنية</h2>
         <button
           onClick={() => setActiveView('create')}
-          className="flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30 text-sm font-medium"
+          className="flex items-center gap-2 px-4 py-2 rounded-2xl bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30 text-sm font-medium"
         >
           <Plus size={16} /> تحويل جديد
         </button>
@@ -828,14 +828,14 @@ export default function TransferPage() {
           {warehouses.map(w => (
             <div
               key={w.id}
-              className="rounded-2xl bg-white/[0.03] border border-white/[0.06] p-4 space-y-2"
+              className="rounded-3xl bg-slate-800/40 backdrop-blur-md shadow-xl border border-slate-700/50 p-4 space-y-2"
             >
               <div className="flex items-center justify-between">
                 <div className={cn(
                   'w-8 h-8 rounded-lg flex items-center justify-center',
                   w.type === 'main' ? 'bg-blue-500/20 text-blue-400' :
                   w.type === 'branch' || w.type === 'display' ? 'bg-amber-500/20 text-amber-400' :
-                  'bg-white/[0.06] text-gray-400'
+                  'bg-slate-700/60 text-gray-400'
                 )}>
                   <Warehouse size={16} />
                 </div>
@@ -855,23 +855,23 @@ export default function TransferPage() {
 
       {/* Stats */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
-        <div className="rounded-xl bg-white/[0.03] border border-white/[0.06] p-4">
+        <div className="rounded-2xl bg-slate-800/40 backdrop-blur-md shadow-xl border border-slate-700/50 p-4">
           <p className="text-xs text-gray-400">إجمالي التحويلات</p>
           <p className="text-xl font-bold mt-1">{transfers.length.toLocaleString('ar-EG')}</p>
         </div>
-        <div className="rounded-xl bg-amber-500/10 border border-amber-500/20 p-4">
+        <div className="rounded-2xl bg-amber-500/10 border border-amber-500/20 p-4">
           <p className="text-xs text-amber-400/70">بانتظار الاعتماد</p>
           <p className="text-xl font-bold mt-1 text-amber-400">{transfers.filter(t => t.status === 'pending_approval').length.toLocaleString('ar-EG')}</p>
         </div>
-        <div className="rounded-xl bg-blue-500/10 border border-blue-500/20 p-4">
+        <div className="rounded-2xl bg-blue-500/10 border border-blue-500/20 p-4">
           <p className="text-xs text-blue-400/70">معتمد</p>
           <p className="text-xl font-bold mt-1 text-blue-400">{transfers.filter(t => t.status === 'approved').length.toLocaleString('ar-EG')}</p>
         </div>
-        <div className="rounded-xl bg-purple-500/10 border border-purple-500/20 p-4">
+        <div className="rounded-2xl bg-purple-500/10 border border-purple-500/20 p-4">
           <p className="text-xs text-purple-400/70">قيد النقل</p>
           <p className="text-xl font-bold mt-1 text-purple-400">{transfers.filter(t => t.status === 'in_transit').length.toLocaleString('ar-EG')}</p>
         </div>
-        <div className="rounded-xl bg-emerald-500/10 border border-emerald-500/20 p-4">
+        <div className="rounded-2xl bg-emerald-500/10 border border-emerald-500/20 p-4">
           <p className="text-xs text-emerald-400/70">تم الاستلام</p>
           <p className="text-xl font-bold mt-1 text-emerald-400">{transfers.filter(t => t.status === 'received').length.toLocaleString('ar-EG')}</p>
         </div>
@@ -894,7 +894,7 @@ export default function TransferPage() {
               'text-xs px-3 py-1.5 rounded-full border transition-colors',
               statusFilter === f.key
                 ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30'
-                : 'bg-white/[0.04] text-gray-400 border-white/[0.08] hover:bg-white/[0.08]'
+                : 'bg-slate-800/60 backdrop-blur-lg shadow-inner text-gray-400 border-slate-600/50 hover:bg-slate-700/80'
             )}
           >
             {f.label}
@@ -918,7 +918,7 @@ export default function TransferPage() {
             return (
               <div
                 key={transfer.id}
-                className="rounded-2xl bg-white/[0.03] border border-white/[0.06] p-4 hover:bg-white/[0.05] transition-colors cursor-pointer"
+                className="rounded-3xl bg-slate-800/40 backdrop-blur-md shadow-xl border border-slate-700/50 p-4 hover:bg-slate-700/50 transition-colors cursor-pointer"
                 onClick={() => viewDetail(transfer)}
               >
                 <div className="flex items-center justify-between">
@@ -956,7 +956,7 @@ export default function TransferPage() {
                   {isManager && transfer.status === 'pending_approval' && (
                     <button
                       onClick={(e) => { e.stopPropagation(); approveTransfer(transfer) }}
-                      className="text-xs px-3 py-1 rounded-xl bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30"
+                      className="text-xs px-3 py-1 rounded-2xl bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30"
                     >
                       اعتماد
                     </button>
@@ -964,7 +964,7 @@ export default function TransferPage() {
                   {transfer.status === 'in_transit' && (
                     <button
                       onClick={(e) => { e.stopPropagation(); receiveTransfer(transfer) }}
-                      className="text-xs px-3 py-1 rounded-xl bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30"
+                      className="text-xs px-3 py-1 rounded-2xl bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30"
                     >
                       استلام
                     </button>
@@ -972,7 +972,7 @@ export default function TransferPage() {
                   {(transfer.status === 'pending_approval' || transfer.status === 'approved') && (
                     <button
                       onClick={(e) => { e.stopPropagation(); cancelTransfer(transfer) }}
-                      className="text-xs px-3 py-1 rounded-xl bg-red-500/20 text-red-400 hover:bg-red-500/30"
+                      className="text-xs px-3 py-1 rounded-2xl bg-red-500/20 text-red-400 hover:bg-red-500/30"
                     >
                       إلغاء
                     </button>

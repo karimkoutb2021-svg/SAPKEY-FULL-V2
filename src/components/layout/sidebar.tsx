@@ -33,14 +33,22 @@ export function Sidebar() {
   const userLabel = isRtl ? roleInfo?.labelAr : roleInfo?.label;
 
   return (
-    <aside
-      className={cn(
-        'desktop-sidebar fixed top-0 right-0 z-40 h-dvh transition-all duration-300 overflow-hidden',
-        'bg-white/95 backdrop-blur-[25px]',
-        'border-l border-gray-200/50',
-        sidebarOpen ? 'w-[260px]' : 'w-[80px]'
+    <>
+      {/* Mobile Backdrop */}
+      {sidebarOpen && (
+        <div 
+          className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40 md:hidden"
+          onClick={toggleSidebar}
+        />
       )}
-    >
+      <aside
+        className={cn(
+          'desktop-sidebar fixed top-0 right-0 z-50 h-dvh transition-all duration-300 overflow-hidden',
+          'bg-white/95 backdrop-blur-[25px]',
+          'border-l border-gray-200/50',
+          sidebarOpen ? 'w-[260px] translate-x-0' : 'w-[80px] max-md:w-[260px] translate-x-full md:translate-x-0'
+        )}
+      >
       {/* Header */}
       <div className="flex items-center justify-between p-4 border-b border-gray-200/50 h-16">
         {sidebarOpen && (
@@ -129,5 +137,6 @@ export function Sidebar() {
         </button>
       </div>
     </aside>
+    </>
   );
 }

@@ -102,17 +102,17 @@ export default function FeatureFlagsPage() {
       </div>
 
       {/* Features Matrix */}
-      <div className="overflow-x-auto rounded-2xl border border-gray-100 dark:border-slate-800 shadow-lg">
+      <div className="overflow-x-auto rounded-2xl border border-gray-100 dark:border-slate-800 shadow-lg relative">
         <table className="w-full text-sm">
           <thead>
             <tr className="bg-gray-50 dark:bg-slate-900/50 border-b border-gray-100 dark:border-slate-800">
-              <th className="text-right px-4 py-3 text-[10px] font-medium text-gray-500 min-w-[200px]">
+              <th className="text-right px-4 py-3 text-[10px] font-medium text-gray-500 min-w-[180px] sticky right-0 bg-gray-50 dark:bg-slate-900 z-20 border-l border-gray-100 dark:border-slate-800 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.05)]">
                 <div className="flex items-center gap-2">
                   <Filter className="h-3 w-3" /> الميزة
                 </div>
               </th>
               {plans.map((plan) => (
-                <th key={plan.id} className="text-center px-3 py-3 min-w-[120px]">
+                <th key={plan.id} className="text-center px-3 py-3 min-w-[100px]">
                   <span className={`px-2 py-0.5 rounded-full bg-gradient-to-r ${plan.color} text-white text-[9px] font-bold`}>{plan.name}</span>
                 </th>
               ))}
@@ -128,7 +128,7 @@ export default function FeatureFlagsPage() {
               return (
                 <motion.tr key={feature.key} initial={{ opacity: 0 }} animate={{ opacity: 1 }}
                   className="hover:bg-gray-50 dark:hover:bg-slate-800/50 transition-colors">
-                  <td className="px-4 py-3">
+                  <td className="px-4 py-3 sticky right-0 bg-white dark:bg-slate-900 z-10 border-l border-gray-100 dark:border-slate-800 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.05)]">
                     <div className="flex items-center gap-2">
                       <div className={`h-1.5 w-1.5 rounded-full ${
                         feature.category === 'pos' ? 'bg-emerald-500' : feature.category === 'inventory' ? 'bg-blue-500' :
@@ -136,9 +136,8 @@ export default function FeatureFlagsPage() {
                         feature.category === 'ai' ? 'bg-cyan-500' : feature.category === 'integrations' ? 'bg-rose-500' : 'bg-gray-500'
                       }`} />
                       <div>
-                        <p className="text-xs font-medium text-gray-900 dark:text-white">{feature.labelAr}</p>
-                        <p className="text-[9px] text-gray-400">{feature.descriptionAr}</p>
-                        <code className="text-[8px] text-gray-300 dark:text-gray-600 font-mono">{feature.key}</code>
+                        <p className="text-xs font-medium text-gray-900 dark:text-white max-w-[120px] whitespace-normal leading-tight">{feature.labelAr}</p>
+                        <code className="text-[8px] text-gray-400 font-mono mt-1 block">{feature.key}</code>
                       </div>
                     </div>
                   </td>

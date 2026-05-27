@@ -30,7 +30,7 @@ export function MobileBottomNav() {
         return [
           { href: '/dashboard', icon: 'Home', label: 'الرئيسية' },
           { href: '/pos', icon: 'ShoppingCart', label: 'المبيعات' },
-          { href: '/inventory', icon: 'Boxes', label: 'المخزون' },
+          { href: '/inventory', icon: 'Package', label: 'المخزون' },
           { href: '/analytics', icon: 'BarChart3', label: 'التحليلات' },
         ];
       case 'customer':
