@@ -38,20 +38,29 @@ export interface AuditSession {
   id: string;
   type: 'voice' | 'ocr' | 'manual';
   status: 'in_progress' | 'completed' | 'cancelled';
-  total_items: number;
-  matched_items: number;
-  discrepancies: number;
-  started_by?: string;
-  started_at: string;
-  completed_at?: string;
-  notes?: string;
-  attachment_url?: string;
+  initiated_by?: string;
   created_at: string;
+  completed_at?: string;
+  differences?: any;
 }
 
 export const inventoryService = {
   async getAll() {
-    return supabase.from('stock_items').select('*').order('product_name');
+    const [stockRes, prodRes] = await Promise.all([
+      supabase.from('stock_items').select('id, product_id, product_name, sku, current_qty, min_qty, unit, cost_price, selling_price, barcode').order('product_name'),
+      supabase.from('products').select('id, name_ar, category_id, image_url')
+    ]);
+    if (stockRes.error) return stockRes;
+    const products = prodRes.data || [];
+    const merged = stockRes.data.map(item => {
+      const p = products.find(prod => prod.id === item.product_id);
+      return {
+        ...item,
+        image_url: p?.image_url || null,
+        category: p?.category_id || null, // Map category_id for filtering
+      };
+    });
+    return { data: merged, error: null };
   },
   async getById(id: string) {
     return supabase.from('stock_items').select('*').eq('id', id).single();
@@ -60,7 +69,7 @@ export const inventoryService = {
     return supabase.from('stock_items').update({ ...data, updated_at: new Date().toISOString() }).eq('id', id).select().single();
   },
   async getLowStock() {
-    const { data, error } = await supabase.from('stock_items').select('*').order('current_qty', { ascending: true });
+    const { data, error } = await supabase.from('stock_items').select('id, product_id, product_name, sku, current_qty, min_qty, max_qty, unit, cost_price, selling_price, barcode, category_id').order('current_qty', { ascending: true });
     if (error) return { data: [], error };
     const lowStock = data.filter(item => item.current_qty <= item.min_qty && item.current_qty > 0);
     return { data: lowStock, error: null };
@@ -80,10 +89,17 @@ export const stockAdjustmentService = {
 
 export const auditService = {
   async getAll() {
-    return supabase.from('audit_sessions').select('*').order('created_at', { ascending: false });
+    return supabase.from('audit_sessions').select('id, type, status, initiated_by, created_at, completed_at, differences').order('created_at', { ascending: false });
   },
   async create(data: Partial<AuditSession>) {
-    return supabase.from('audit_sessions').insert(data).select().single();
+    const res = await fetch('/api/audit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    const result = await res.json();
+    if (!result.success) throw new Error(result.error);
+    return { data: result.data, error: null };
   },
   async update(id: string, data: Partial<AuditSession>) {
     return supabase.from('audit_sessions').update(data).eq('id', id).select().single();

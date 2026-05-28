@@ -19,7 +19,7 @@ export interface Employee {
 
 export const employeeService = {
   async getAll(activeOnly = false) {
-    let query = supabase.from('employees').select('*').order('full_name_ar');
+    let query = supabase.from('employees').select('id, employee_code, full_name_ar, full_name_en, phone, role, department, salary, hire_date, is_active, created_at').order('full_name_ar');
     if (activeOnly) query = query.eq('is_active', true);
     return query;
   },

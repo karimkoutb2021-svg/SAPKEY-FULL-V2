@@ -192,9 +192,12 @@ export function FAB() {
       </AnimatePresence>
 
       {/* Side Handle */}
-      <button
+      <motion.button
+        drag="y"
+        dragConstraints={{ top: -300, bottom: 300 }}
+        dragElastic={0.1}
         onClick={() => { setIsOpen(!isOpen); setExpandedSection(null); }}
-        className="fixed z-[9999] top-1/2 -translate-y-1/2 left-0 h-14 w-10 flex items-center justify-center transition-all duration-300 shadow-lg rounded-r-xl"
+        className="fixed z-[9999] top-1/2 left-0 h-14 w-10 flex items-center justify-center transition-all duration-300 shadow-lg rounded-r-xl cursor-grab active:cursor-grabbing"
         style={{
           background: isOpen ? 'rgba(239, 68, 68, 0.95)' : 'rgba(255, 255, 255, 0.95)',
           borderColor: isOpen ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.08)',
@@ -203,9 +206,9 @@ export function FAB() {
         aria-label="قائمة سريعة"
       >
         <motion.div animate={{ rotate: isOpen ? 180 : 0 }} transition={{ duration: 0.3 }}>
-          {isOpen ? <X className="w-5 h-5 text-white" /> : <Settings className="w-5 h-5 text-gray-700" />}
+          {isOpen ? <X className="w-5 h-5 text-white pointer-events-none" /> : <Settings className="w-5 h-5 text-gray-700 pointer-events-none" />}
         </motion.div>
-      </button>
+      </motion.button>
 
       {/* Update Indicator on Handle */}
       {updateAvailable && !isOpen && (

@@ -44,7 +44,7 @@ export const shiftService = {
     try {
       const { data, error } = await supabase
         .from('shifts')
-        .select('*')
+        .select('id, cashier_id, branch_id, opened_at, closed_at, starting_cash, expected_cash, actual_cash, expected_card, actual_card, expected_network, actual_network, cash_shortage, previous_shift_closing_cash, discrepancy_amount, discrepancy_reason, discrepancy_approved_by, discrepancy_approved_at, notes, status, created_at, updated_at')
         .eq('status', 'closed')
         .order('closed_at', { ascending: false })
         .limit(1)
@@ -95,7 +95,7 @@ export const shiftService = {
           discrepancy_amount: discrepancy,
           status: newShift.status,
         })
-        .select()
+        .select('id, cashier_id, branch_id, opened_at, closed_at, starting_cash, expected_cash, actual_cash, expected_card, actual_card, expected_network, actual_network, cash_shortage, previous_shift_closing_cash, discrepancy_amount, status, created_at, updated_at')
         .single();
       if (error) throw error;
       return data as Shift;
@@ -185,7 +185,7 @@ export const shiftService = {
     try {
       const { data, error } = await supabase
         .from('shifts')
-        .select('*')
+        .select('id, cashier_id, branch_id, opened_at, closed_at, starting_cash, expected_cash, actual_cash, expected_card, actual_card, expected_network, actual_network, cash_shortage, previous_shift_closing_cash, discrepancy_amount, discrepancy_reason, discrepancy_approved_by, discrepancy_approved_at, notes, status, created_at, updated_at')
         .eq('cashier_id', cashierId)
         .eq('status', 'open')
         .single();
@@ -199,7 +199,7 @@ export const shiftService = {
 
   async getShifts(cashierId?: string, limit = 50): Promise<{ data: Shift[]; count: number }> {
     try {
-      let query = supabase.from('shifts').select('*', { count: 'exact' }).limit(limit);
+      let query = supabase.from('shifts').select('id, cashier_id, branch_id, opened_at, closed_at, starting_cash, expected_cash, actual_cash, expected_card, actual_card, expected_network, actual_network, cash_shortage, previous_shift_closing_cash, discrepancy_amount, status, created_at, updated_at', { count: 'exact' }).limit(limit);
       if (cashierId) query = query.eq('cashier_id', cashierId);
       const { data, error, count } = await query.order('opened_at', { ascending: false });
       if (error) throw error;
@@ -217,7 +217,7 @@ export const shiftService = {
 
     const { data: transactions } = await supabase
       .from('pos_transactions')
-      .select('*')
+      .select('total, cash_amount, card_amount, network_amount')
       .eq('shift_id', shiftId)
       .eq('status', 'completed');
 

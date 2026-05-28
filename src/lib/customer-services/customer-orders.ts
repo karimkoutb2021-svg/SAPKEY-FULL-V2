@@ -80,7 +80,7 @@ export const customerOrderService = {
 
 export const productViewService = {
   async getSmartCatalog(userId: string, categoryId?: string) {
-    let query = supabase.from('products').select('*, product_categories!inner(name_ar)').eq('is_active', true);
+    let query = supabase.from('products').select('id, name_ar, name_en, category_id, sku, sale_price, unit_price, barcode, is_active, product_categories!inner(name_ar)').eq('is_active', true);
     if (categoryId) query = query.eq('category_id', categoryId);
 
     const { data: products } = await query.limit(100);

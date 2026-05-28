@@ -90,10 +90,10 @@ export default function ProductsPage() {
           </span>
         </td>
         <td className="p-4 text-right font-bold text-gray-900 dark:text-white">
-          {price.toLocaleString('ar-EG')} <span className="text-[10px] text-gray-500 font-normal">ر.س</span>
+          {price.toLocaleString('ar-EG')} <span className="text-[10px] text-gray-500 font-normal">ج.م</span>
         </td>
         <td className="p-4 text-right text-sm text-gray-600 dark:text-gray-400">
-          {cost.toLocaleString('ar-EG')} <span className="text-[10px] text-gray-500">ر.س</span>
+          {cost.toLocaleString('ar-EG')} <span className="text-[10px] text-gray-500">ج.م</span>
         </td>
         <td className="p-4 text-right">
           <div className="flex items-center gap-1.5 justify-end">

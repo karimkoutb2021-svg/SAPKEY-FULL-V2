@@ -34,7 +34,7 @@ export const heldOrderService = {
     try {
       const { data, error } = await supabase
         .from('held_orders')
-        .select('*')
+        .select('id, cashier_id, customer_name, items, subtotal, tax, discount, total, notes, created_at')
         .eq('cashier_id', cashierId)
         .order('created_at', { ascending: false });
       if (error) throw error;

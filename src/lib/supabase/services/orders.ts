@@ -75,7 +75,7 @@ export const orderService = {
         payment_status: order.payment_status || 'paid',
         user_id: order.user_id || null,
       })
-      .select()
+      .select('id')
       .single();
 
     if (error) {
@@ -89,7 +89,7 @@ export const orderService = {
   async getAll(limit: number = 50) {
     const { data, error } = await supabase
       .from('orders')
-      .select('*')
+      .select('id, order_number, items, subtotal, discount, tax_total, total, paid_amount, change_amount, payment_method, customer_name, customer_phone, notes, status, created_at')
       .order('created_at', { ascending: false })
       .limit(limit);
 
@@ -111,7 +111,7 @@ export const orderService = {
   async getByStatus(status: string) {
     const { data, error } = await supabase
       .from('orders')
-      .select('*')
+      .select('id, order_number, items, subtotal, discount, tax_total, total, paid_amount, change_amount, payment_method, customer_name, customer_phone, notes, status, created_at')
       .eq('status', status)
       .order('created_at', { ascending: false });
 

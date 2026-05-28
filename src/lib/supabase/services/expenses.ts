@@ -16,7 +16,7 @@ export interface Expense {
 
 export const expenseService = {
   async getAll(params?: { status?: string; category?: string }) {
-    let query = supabase.from('expenses').select('*').order('created_at', { ascending: false });
+    let query = supabase.from('expenses').select('id, amount, description, category, responsible, attachment_url, status, created_by, created_at').order('created_at', { ascending: false });
     if (params?.status) query = query.eq('status', params.status);
     if (params?.category) query = query.eq('category', params.category);
     return query;

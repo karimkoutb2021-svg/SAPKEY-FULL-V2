@@ -13,7 +13,7 @@ export const invoiceService = {
     limit?: number;
     offset?: number;
   }) {
-    let query = supabase.from('purchase_invoices').select('*', { count: 'exact' });
+    let query = supabase.from('purchase_invoices').select('id, invoice_number, supplier_id, supplier_name_ar, invoice_date, due_date, total, paid_amount, remaining_amount, status, importance, created_at', { count: 'exact' });
 
     if (params?.status) {
       query = query.eq('status', params.status);
@@ -215,7 +215,7 @@ export const invoiceService = {
   async getPaymentSchedules(invoiceId: string) {
     const { data, error } = await supabase
       .from('payment_schedules')
-      .select('*')
+      .select('id, invoice_id, installment_number, amount, due_date, status, paid_at')
       .eq('invoice_id', invoiceId)
       .order('installment_number');
 
@@ -244,7 +244,7 @@ export const paymentService = {
     limit?: number;
     offset?: number;
   }) {
-    let query = supabase.from('payments').select('*', { count: 'exact' });
+    let query = supabase.from('payments').select('id, payment_number, supplier_id, invoice_id, amount, payment_type, payment_date, reference_number, bank_name, check_number, notes, created_at', { count: 'exact' });
 
     if (params?.supplier_id) {
       query = query.eq('supplier_id', params.supplier_id);

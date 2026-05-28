@@ -38,18 +38,30 @@ export function Providers({ children }: { children: ReactNode }) {
                   </VersionCheckWrapper>
                 </SWUpdateProvider>
                 <Toaster
-                  position="top-center"
+                  position="bottom-center"
                   toastOptions={{
-                    duration: 3000,
-                    className: 'bg-white dark:bg-slate-900 text-slate-900 dark:text-white border border-gray-100 dark:border-slate-800 shadow-xl rounded-2xl font-semibold text-[13px] px-5 py-3.5',
+                    duration: 2500,
+                    className: 'bg-gray-900 text-white rounded-2xl font-bold text-xs px-4 py-3 shadow-2xl border border-gray-800 flex items-center gap-2 mb-4',
                     success: {
                       iconTheme: { primary: '#10B981', secondary: '#FFFFFF' },
+                      style: {
+                        background: '#111827',
+                        color: '#fff',
+                      }
                     },
                     error: {
                       iconTheme: { primary: '#EF4444', secondary: '#FFFFFF' },
+                      style: {
+                        background: '#111827',
+                        color: '#fff',
+                      }
                     },
                     loading: {
                       iconTheme: { primary: '#3B82F6', secondary: '#FFFFFF' },
+                      style: {
+                        background: '#111827',
+                        color: '#fff',
+                      }
                     },
                   }}
                 />

@@ -202,124 +202,141 @@ export default function OrdersPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" dir="rtl">
       {/* Pipeline */}
-      <div className="rounded-2xl bg-white/[0.03] border border-white/[0.06] p-6">
-        <h2 className="text-lg font-semibold mb-4">خط سير الطلبات</h2>
-        <div className="flex gap-2 overflow-x-auto pb-2">
+      <div className="rounded-[2rem] bg-[#111114]/90 backdrop-blur-3xl border border-white/[0.06] p-8 shadow-2xl">
+        <h2 className="text-xl font-bold text-white mb-6">خط سير الطلبات</h2>
+        <div className="flex gap-3 overflow-x-auto pb-4 scrollbar-hide">
           {([['all', 'الكل'], ['pending', 'معلق'], ['confirmed', 'مؤكد'], ['preparing', 'تحضير'], ['ready', 'جاهز'], ['delivered', 'مسلم']] as const).map(([key, label]) => (
-            <button key={key} onClick={() => setFilter(key)} className={cn('flex-shrink-0 px-4 py-2 rounded-xl text-sm transition-all duration-200',
-              filter === key ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 'bg-white/[0.04] text-gray-400 hover:bg-white/[0.08] border border-transparent'
+            <button key={key} onClick={() => setFilter(key)} className={cn('flex-shrink-0 px-6 py-3 rounded-2xl text-sm font-bold transition-all duration-300 flex items-center gap-2',
+              filter === key ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/20' : 'bg-white/[0.02] text-gray-400 hover:text-white hover:bg-white/[0.06] border border-white/[0.04]'
             )}>
-              {label} <span className="mr-1 text-xs opacity-60">{statusCounts[key]}</span>
+              {label} 
+              <span className={cn('px-2 py-0.5 rounded-lg text-xs font-mono', filter === key ? 'bg-white/20 text-white' : 'bg-white/[0.06] text-gray-400')}>{statusCounts[key]}</span>
             </button>
           ))}
         </div>
       </div>
 
       {/* Orders List */}
-      <div className="rounded-2xl bg-white/[0.03] border border-white/[0.06] p-6">
+      <div className="rounded-[2rem] bg-[#111114]/90 backdrop-blur-3xl border border-white/[0.06] p-8 shadow-2xl">
         {loading ? (
-          <div className="text-center py-8 text-gray-500">جاري التحميل...</div>
+          <div className="flex flex-col items-center justify-center py-16 text-emerald-500/50">
+            <span className="w-10 h-10 border-4 border-current border-t-transparent rounded-full animate-spin mb-4" />
+            <p className="text-gray-400 font-medium">جاري تحميل الطلبات...</p>
+          </div>
         ) : filtered.length === 0 ? (
-          <div className="text-center py-8 text-gray-500">لا توجد طلبات</div>
+          <div className="flex flex-col items-center justify-center py-16 text-gray-500">
+            <p className="text-lg font-medium">لا توجد طلبات</p>
+          </div>
         ) : (
           <div className="space-y-4">
             {filtered.map((order) => {
               const elapsed = getElapsed(order);
               return (
-                <div key={order.id} className="flex flex-col p-4 rounded-xl bg-white/[0.02] hover:bg-white/[0.04] transition-colors gap-3">
-                  <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
-                    <div className="flex items-center gap-4">
-                      <div className="w-10 h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-400 font-bold text-sm shrink-0">
-                        #{order.id.slice(0, 4)}
-                      </div>
-                      <div>
-                        <p className="font-medium">{order.customer_name || 'عميل غير محدد'}</p>
-                        <p className="text-xs text-gray-500">{new Date(order.created_at).toLocaleString('ar-EG')}</p>
-                        {order.customer_phone && (
-                          <p className="text-xs text-gray-400 dir-ltr">{order.customer_phone}</p>
-                        )}
-                        {getItemPreview(order) && (
-                          <p className="text-xs text-gray-400 mt-0.5" dir="auto">{getItemPreview(order)}</p>
-                        )}
-                      </div>
+                <div key={order.id} className="flex flex-col xl:flex-row xl:items-center justify-between p-6 rounded-[2rem] bg-white/[0.02] border border-white/[0.04] hover:bg-white/[0.04] transition-all duration-300 gap-6">
+                  <div className="flex items-start gap-5">
+                    <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-500/20 to-teal-500/10 flex items-center justify-center text-emerald-400 font-black text-lg shrink-0 shadow-inner border border-emerald-500/20">
+                      #{order.id.slice(0, 4)}
                     </div>
-                    <div className="flex flex-wrap items-center gap-2">
-                      <span className="text-sm font-semibold">{order.total.toLocaleString('ar-EG')} ج.م</span>
-                      <span className={cn('text-xs px-2 py-1 rounded-full border', statusColors[order.status])}>{statusLabels[order.status]}</span>
-                      <span className={cn('text-xs px-2 py-1 rounded-full',
-                        order.payment_status === 'paid' ? 'bg-emerald-500/20 text-emerald-400' :
-                        order.payment_status === 'pending' ? 'bg-amber-500/20 text-amber-400' :
-                        'bg-gray-500/20 text-gray-400'
-                      )}>{paymentLabels[order.payment_status]}</span>
-                      {order.payment_method && (
-                        <span className="text-xs px-2 py-1 rounded-full bg-white/[0.06] text-gray-300">{order.payment_method}</span>
+                    <div>
+                      <h3 className="font-bold text-white text-lg mb-1">{order.customer_name || 'عميل غير محدد'}</h3>
+                      <div className="flex flex-wrap items-center gap-3 text-sm text-gray-400 mb-2">
+                        <span className="flex items-center gap-1.5"><span className="text-emerald-500">•</span>{new Date(order.created_at).toLocaleString('ar-EG')}</span>
+                        {order.customer_phone && (
+                          <span className="flex items-center gap-1.5 dir-ltr"><span className="text-emerald-500">•</span>{order.customer_phone}</span>
+                        )}
+                      </div>
+                      {getItemPreview(order) && (
+                        <p className="text-sm text-gray-400 max-w-2xl bg-white/[0.02] px-4 py-2 rounded-xl border border-white/[0.02] line-clamp-1" dir="auto">{getItemPreview(order)}</p>
                       )}
+                    </div>
+                  </div>
+                  
+                  <div className="flex flex-col items-start xl:items-end gap-4 shrink-0">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className="text-xl font-black text-white ml-4">{order.total.toLocaleString('ar-EG')} <span className="text-sm text-emerald-500">ج.م</span></span>
+                      
+                      <span className={cn('text-xs px-3 py-1.5 rounded-xl font-bold border', statusColors[order.status])}>{statusLabels[order.status]}</span>
+                      
+                      <span className={cn('text-xs px-3 py-1.5 rounded-xl font-bold',
+                        order.payment_status === 'paid' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' :
+                        order.payment_status === 'pending' ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30' :
+                        'bg-white/[0.06] text-gray-300 border border-white/[0.1]'
+                      )}>{paymentLabels[order.payment_status]}</span>
+                      
+                      {order.payment_method && (
+                        <span className="text-xs px-3 py-1.5 rounded-xl bg-white/[0.04] border border-white/[0.06] text-gray-300 font-bold">{order.payment_method}</span>
+                      )}
+                      
                       {(() => {
                         const stageInfo = getStageInfo(order);
                         if (stageInfo) {
                           const mins = Math.floor(stageInfo.remaining / 60);
                           const secs = stageInfo.remaining % 60;
                           return (
-                            <span className={cn('text-xs px-2 py-1 rounded-full flex items-center gap-1',
+                            <span className={cn('text-xs px-3 py-1.5 rounded-xl flex items-center gap-1.5 font-bold',
                               stageInfo.overdue ? 'bg-red-500/20 text-red-400 animate-pulse border border-red-500/50' :
                               stageInfo.isAlmostOverdue ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30' :
-                              'bg-white/[0.06] text-gray-300'
+                              'bg-white/[0.04] border border-white/[0.06] text-gray-300'
                             )} title={stageInfo.stageInfo.ar}>
-                              <span>{stageInfo.stageInfo.icon}</span>
-                              <span className="font-mono tabular-nums">{String(mins).padStart(2, '0')}:{String(secs).padStart(2, '0')}</span>
+                              <span className="text-base">{stageInfo.stageInfo.icon}</span>
+                              <span className="font-mono tabular-nums tracking-widest">{String(mins).padStart(2, '0')}:{String(secs).padStart(2, '0')}</span>
                             </span>
                           );
                         }
                         if (elapsed !== null && order.status === 'preparing') {
                           return (
-                            <span className={cn('text-xs px-2 py-1 rounded-full', elapsed > 30 ? 'bg-red-500/20 text-red-400' : 'bg-amber-500/20 text-amber-400')}>
-                              {elapsed > 30 ? 'متأخر' : `${elapsed} د`}
+                            <span className={cn('text-xs px-3 py-1.5 rounded-xl font-bold', elapsed > 30 ? 'bg-red-500/20 text-red-400 border border-red-500/30' : 'bg-amber-500/20 text-amber-400 border border-amber-500/30')}>
+                              {elapsed > 30 ? 'متأخر' : `${elapsed} دقيقة`}
                             </span>
                           );
                         }
                         return null;
                       })()}
+                      
                       {order.delivery_driver && (
-                        <span className="text-xs px-2 py-1 rounded-full bg-sky-500/20 text-sky-400 border border-sky-500/30">
-                          مندوب: {order.delivery_driver}
+                        <span className="text-xs px-3 py-1.5 rounded-xl bg-sky-500/10 text-sky-400 border border-sky-500/20 font-bold">
+                          المندوب: {order.delivery_driver}
                         </span>
                       )}
                     </div>
-                  </div>
-                  <div className="flex flex-wrap items-center gap-2">
-                    {/* Status update buttons */}
-                    {order.status === 'pending' && (
-                      <button onClick={() => updateStatus(order.id, 'confirmed', order)} className="px-3 py-1.5 rounded-lg bg-blue-500/20 text-blue-400 text-xs hover:bg-blue-500/30 transition-colors">تأكيد</button>
-                    )}
-                    {order.status === 'confirmed' && (
-                      <button onClick={() => updateStatus(order.id, 'preparing', order)} className="px-3 py-1.5 rounded-lg bg-purple-500/20 text-purple-400 text-xs hover:bg-purple-500/30 transition-colors">تحضير</button>
-                    )}
-                    {order.status === 'preparing' && (
-                      <button onClick={() => updateStatus(order.id, 'ready', order)} className="px-3 py-1.5 rounded-lg bg-emerald-500/20 text-emerald-400 text-xs hover:bg-emerald-500/30 transition-colors">جاهز</button>
-                    )}
-                    {order.status === 'ready' && (
-                      <button onClick={() => updateStatus(order.id, 'delivered', order)} className="px-3 py-1.5 rounded-lg bg-green-500/20 text-green-400 text-xs hover:bg-green-500/30 transition-colors">تسليم</button>
-                    )}
-                    {/* WhatsApp notification button */}
-                    {(order.status === 'confirmed' || order.status === 'ready' || order.status === 'delivered') && (
-                      <div className="flex items-center gap-1">
-                        <input
-                          type="text"
-                          dir="ltr"
-                          placeholder="رقم الهاتف"
-                          value={phoneInputs[order.id] || order.customer_phone || ''}
-                          onChange={(e) => setPhoneInputs(prev => ({ ...prev, [order.id]: e.target.value }))}
-                          className="w-28 px-2 py-1.5 rounded-lg bg-white/[0.06] border border-white/[0.1] text-xs text-gray-200 placeholder:text-gray-500 focus:outline-none focus:border-emerald-500/50"
-                        />
-                        <button onClick={() => sendWhatsApp(order)} className="px-3 py-1.5 rounded-lg bg-emerald-500/20 text-emerald-400 text-xs hover:bg-emerald-500/30 transition-colors shrink-0">إرسال إشعار</button>
-                      </div>
-                    )}
-                    {/* Delivery assignment button */}
-                    {order.status === 'ready' && (
-                      <button onClick={() => setDriverModal({ open: true, orderId: order.id })} className="px-3 py-1.5 rounded-lg bg-sky-500/20 text-sky-400 text-xs hover:bg-sky-500/30 transition-colors">تعيين مندوب</button>
-                    )}
+                    
+                    <div className="flex flex-wrap items-center gap-2">
+                      {/* Status update buttons */}
+                      {order.status === 'pending' && (
+                        <button onClick={() => updateStatus(order.id, 'confirmed', order)} className="px-5 py-2.5 rounded-xl bg-blue-500/20 text-blue-400 border border-blue-500/30 text-sm font-bold hover:bg-blue-500 text-white transition-all shadow-lg shadow-transparent hover:shadow-blue-500/25">تأكيد الطلب</button>
+                      )}
+                      {order.status === 'confirmed' && (
+                        <button onClick={() => updateStatus(order.id, 'preparing', order)} className="px-5 py-2.5 rounded-xl bg-purple-500/20 text-purple-400 border border-purple-500/30 text-sm font-bold hover:bg-purple-500 text-white transition-all shadow-lg shadow-transparent hover:shadow-purple-500/25">بدء التحضير</button>
+                      )}
+                      {order.status === 'preparing' && (
+                        <button onClick={() => updateStatus(order.id, 'ready', order)} className="px-5 py-2.5 rounded-xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-sm font-bold hover:bg-emerald-500 text-white transition-all shadow-lg shadow-transparent hover:shadow-emerald-500/25">طلب جاهز</button>
+                      )}
+                      {order.status === 'ready' && (
+                        <button onClick={() => updateStatus(order.id, 'delivered', order)} className="px-5 py-2.5 rounded-xl bg-green-500/20 text-green-400 border border-green-500/30 text-sm font-bold hover:bg-green-500 text-white transition-all shadow-lg shadow-transparent hover:shadow-green-500/25">تم التسليم</button>
+                      )}
+                      
+                      {/* WhatsApp notification button */}
+                      {(order.status === 'confirmed' || order.status === 'ready' || order.status === 'delivered') && (
+                        <div className="flex items-center gap-2 bg-white/[0.02] p-1.5 rounded-xl border border-white/[0.04]">
+                          <input
+                            type="text"
+                            dir="ltr"
+                            placeholder="رقم الهاتف"
+                            value={phoneInputs[order.id] || order.customer_phone || ''}
+                            onChange={(e) => setPhoneInputs(prev => ({ ...prev, [order.id]: e.target.value }))}
+                            className="w-32 px-3 py-2 rounded-lg bg-[#111114] border border-white/[0.08] text-sm text-white font-mono focus:outline-none focus:border-emerald-500/50"
+                          />
+                          <button onClick={() => sendWhatsApp(order)} className="px-4 py-2 rounded-lg bg-emerald-500/10 text-emerald-500 hover:bg-emerald-500 hover:text-white text-sm font-bold transition-all">إشعار 💬</button>
+                        </div>
+                      )}
+                      
+                      {/* Delivery assignment button */}
+                      {order.status === 'ready' && (
+                        <button onClick={() => setDriverModal({ open: true, orderId: order.id })} className="px-5 py-2.5 rounded-xl bg-sky-500/20 text-sky-400 border border-sky-500/30 text-sm font-bold hover:bg-sky-500 text-white transition-all shadow-lg shadow-transparent hover:shadow-sky-500/25">تعيين مندوب 🛵</button>
+                      )}
+                    </div>
                   </div>
                 </div>
               );
@@ -330,20 +347,21 @@ export default function OrdersPage() {
 
       {/* Driver Assignment Modal */}
       {driverModal.open && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm" onClick={() => setDriverModal({ open: false, orderId: '' })}>
-          <div className="rounded-2xl bg-gray-900 border border-white/[0.06] p-6 w-full max-w-sm mx-4 shadow-2xl" onClick={(e) => e.stopPropagation()}>
-            <h3 className="text-lg font-semibold mb-4">تعيين مندوب توصيل</h3>
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-[#0A0A0C]/80 backdrop-blur-sm p-4">
+          <div className="w-full max-w-sm rounded-[2rem] bg-[#111114]/95 backdrop-blur-3xl border border-white/[0.08] p-8 shadow-2xl shadow-sky-500/10" dir="rtl" onClick={(e) => e.stopPropagation()}>
+            <h3 className="text-xl font-bold text-white mb-6">تعيين مندوب توصيل</h3>
             <input
               type="text"
               placeholder="اسم المندوب"
               value={driverName}
               onChange={(e) => setDriverName(e.target.value)}
-              className="w-full px-4 py-2.5 rounded-xl bg-white/[0.06] border border-white/[0.1] text-sm text-gray-200 placeholder:text-gray-500 focus:outline-none focus:border-emerald-500/50 mb-4"
+              className="w-full px-4 py-4 rounded-2xl bg-white/[0.02] border border-white/[0.08] text-base text-white focus:outline-none focus:ring-2 focus:ring-sky-500/30 focus:border-sky-500/50 transition-all placeholder-gray-500 mb-6"
               onKeyDown={(e) => { if (e.key === 'Enter') assignDriver(); }}
+              autoFocus
             />
-            <div className="flex gap-2">
-              <button onClick={assignDriver} className="flex-1 px-4 py-2 rounded-xl bg-emerald-500/20 text-emerald-400 text-sm hover:bg-emerald-500/30 transition-colors">تأكيد</button>
-              <button onClick={() => setDriverModal({ open: false, orderId: '' })} className="flex-1 px-4 py-2 rounded-xl bg-white/[0.06] text-gray-400 text-sm hover:bg-white/[0.1] transition-colors">إلغاء</button>
+            <div className="flex gap-3">
+              <button onClick={() => setDriverModal({ open: false, orderId: '' })} className="flex-1 py-4 rounded-2xl bg-white/[0.04] border border-white/[0.04] text-gray-400 hover:text-white hover:bg-white/[0.08] transition-colors font-bold">إلغاء</button>
+              <button onClick={assignDriver} className="flex-[2] py-4 rounded-2xl bg-gradient-to-l from-sky-600 to-sky-500 text-white font-bold hover:from-sky-500 hover:to-sky-400 transition-all shadow-lg shadow-sky-500/25">تأكيد التعيين</button>
             </div>
           </div>
         </div>

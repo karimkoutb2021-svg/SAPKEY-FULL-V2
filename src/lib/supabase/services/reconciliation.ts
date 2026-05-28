@@ -63,7 +63,7 @@ export const DISCREPANCY_TYPES = {
 
 export const reconciliationService = {
   async getAll(status?: ReconciliationSession['status']) {
-    let query = supabase.from('reconciliation_sessions').select('*').order('session_date', { ascending: false });
+    let query = supabase.from('reconciliation_sessions').select('id, session_date, status, total_system_balance, total_actual_balance, total_difference, pending_operations_count, pending_transfers_count, pending_collections_count, started_by, started_at, completed_by, completed_at, notes, created_at').order('session_date', { ascending: false });
     if (status) query = query.eq('status', status);
     return query;
   },
@@ -76,7 +76,7 @@ export const reconciliationService = {
     const today = new Date().toISOString().split('T')[0];
     const { data, error } = await supabase
       .from('reconciliation_sessions')
-      .select('*')
+      .select('id, session_date, status, total_system_balance, total_actual_balance, total_difference, pending_operations_count, pending_transfers_count, pending_collections_count, started_by, started_at, completed_by, completed_at, notes, created_at')
       .eq('session_date', today)
       .single();
 
@@ -117,7 +117,7 @@ export const reconciliationService = {
     const today = new Date().toISOString().split('T')[0];
     const { data: todaySession } = await supabase
       .from('reconciliation_sessions')
-      .select('*')
+      .select('id, session_date, status, total_system_balance, total_actual_balance, total_difference, pending_operations_count, pending_transfers_count, pending_collections_count, started_by, started_at, notes, created_at')
       .eq('session_date', today)
       .maybeSingle();
 
@@ -144,7 +144,7 @@ export const reconciliationService = {
 
 export const discrepancyService = {
   async getAll(sessionId: string) {
-    return supabase.from('discrepancy_entries').select('*').eq('session_id', sessionId).order('created_at', { ascending: false });
+    return supabase.from('discrepancy_entries').select('id, session_id, type, source_type, source_id, source_name, system_value, actual_value, difference, reason, resolved, resolved_by, resolved_at, resolution_notes, created_at').eq('session_id', sessionId).order('created_at', { ascending: false });
   },
 
   async create(data: Partial<DiscrepancyEntry>) {
@@ -161,13 +161,13 @@ export const discrepancyService = {
   },
 
   async getUnresolved(sessionId: string) {
-    return supabase.from('discrepancy_entries').select('*').eq('session_id', sessionId).eq('resolved', false).order('created_at', { ascending: false });
+    return supabase.from('discrepancy_entries').select('id, session_id, type, source_type, source_id, source_name, system_value, actual_value, difference, reason, resolved, created_at').eq('session_id', sessionId).eq('resolved', false).order('created_at', { ascending: false });
   },
 };
 
 export const reconciliationLogService = {
   async getAll(sessionId: string) {
-    return supabase.from('reconciliation_logs').select('*').eq('session_id', sessionId).order('created_at', { ascending: false });
+    return supabase.from('reconciliation_logs').select('id, session_id, action, description, performed_by, performed_by_name, created_at').eq('session_id', sessionId).order('created_at', { ascending: false });
   },
 
   async create(data: Partial<ReconciliationLog>) {

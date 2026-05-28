@@ -16,7 +16,7 @@ export const excelExportService = {
   async exportSuppliers() {
     const { data: suppliers } = await supabase
       .from('suppliers')
-      .select('*')
+      .select('code, name_ar, name_en, phone, email, address, city, current_balance, credit_limit, payment_terms, status, created_at')
       .order('created_at', { ascending: false });
 
     if (!suppliers || suppliers.length === 0) {
@@ -48,7 +48,7 @@ export const excelExportService = {
   },
 
   async exportInvoices(params?: { from_date?: string; to_date?: string; status?: string }) {
-    let query = supabase.from('purchase_invoices').select('*').order('created_at', { ascending: false });
+    let query = supabase.from('purchase_invoices').select('invoice_number, supplier_name_ar, invoice_date, due_date, total, paid_amount, remaining_amount, status, importance').order('created_at', { ascending: false });
     
     if (params?.from_date) {
       query = query.gte('invoice_date', params.from_date);
@@ -90,7 +90,7 @@ export const excelExportService = {
   async exportProducts() {
     const { data: products } = await supabase
       .from('products')
-      .select('*')
+      .select('sku, barcode, name_ar, name_en, unit, cost_price, sale_price, current_stock, min_stock_level, is_active')
       .order('name_ar');
 
     if (!products || products.length === 0) {

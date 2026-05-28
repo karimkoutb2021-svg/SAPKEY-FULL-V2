@@ -217,11 +217,15 @@ function defaultFooterSections(branding: any) {
   }
 
   const sections = [
-    { title: 'المتجر', description: '', icon: <Truck className="h-4 w-4" />, links: [] as any[] },
-    { title: 'خدمة العملاء', description: '', icon: <Headphones className="h-4 w-4" />, links: [] as any[] },
-    { title: 'حسابك', description: '', icon: <Settings className="h-4 w-4" />, links: [] as any[] },
-    { title: 'النظام', description: '', icon: <Store className="h-4 w-4" />, links: [] as any[] },
-    { title: 'الدليل المساعد', description: '', icon: <BookOpen className="h-4 w-4" />, links: [] as any[] },
+    { title: 'المتجر', description: '', icon: <Truck className="h-4 w-4" />, links: [{ href: '/shop', label: 'المنتجات' }, { href: '/offers', label: 'العروض' }] },
+    { title: 'خدمة العملاء', description: '', icon: <Headphones className="h-4 w-4" />, links: [{ href: '/contact', label: 'اتصل بنا' }, { href: '/faq', label: 'الأسئلة الشائعة' }] },
+    { title: 'حسابك', description: '', icon: <Settings className="h-4 w-4" />, links: [{ href: '/customer', label: 'حسابي' }, { href: '/customer/orders', label: 'طلباتي' }] },
+    { title: 'النظام', description: '', icon: <Store className="h-4 w-4" />, links: [{ href: '/login', label: 'دخول الموظفين' }] },
+    { title: 'الدليل المساعد', description: '', icon: <BookOpen className="h-4 w-4" />, links: [
+      { href: '/guides/customer', label: 'دليل العميل' },
+      { href: '/guides/cashier', label: 'دليل الكاشير' },
+      { href: '/guides/manager', label: 'دليل المدير' },
+    ] },
   ];
 
   patchedLinks.forEach((link: any) => {

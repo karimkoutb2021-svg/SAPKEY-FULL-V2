@@ -2,8 +2,9 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
+import { useAuthStore } from '@/lib/store/auth-store';
 import { NotificationProvider } from '@/components/notifications/notification-provider';
 import { NotificationBell } from '@/components/notifications/notification-bell';
 
@@ -24,6 +25,7 @@ const navItems = [
   { id: 'reports', label: 'تقارير BI', labelEn: 'BI Reports', icon: 'BarChart3', href: '/manager/reports' },
   { id: 'notifications', label: 'الإشعارات', labelEn: 'Notifications', icon: 'Bell', href: '/manager/notifications' },
   { id: 'aibi', label: 'الذكاء الاصطناعي', labelEn: 'AI BI Hub', icon: 'Brain', href: '/manager/ai-bi' },
+  { id: 'developer', label: 'أدوات المطور', labelEn: 'Developer Tools', icon: 'DatabaseZap', href: '/manager/developer' },
 ];
 
 function getIcon(name: string, active: boolean) {
@@ -45,13 +47,18 @@ function getIcon(name: string, active: boolean) {
     case 'CheckSquare': return <svg className={cls} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" /></svg>;
     case 'CheckCircle2': return <svg className={cls} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>;
     case 'Bell': return <svg className={cls} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" /></svg>;
+    case 'DatabaseZap': return <svg className={cls} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>;
     default: return null;
   }
 }
 
 export default function ManagerLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const router = useRouter();
+  const user = useAuthStore(state => state.user);
+  
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [currentTime, setCurrentTime] = useState(new Date());
 
   useEffect(() => {
@@ -59,23 +66,62 @@ export default function ManagerLayout({ children }: { children: React.ReactNode 
     return () => clearInterval(timer);
   }, []);
 
+  // Close mobile menu on route change
+  useEffect(() => {
+    setMobileMenuOpen(false);
+  }, [pathname]);
+
+  const isCashier = user?.role === 'cashier';
+  const allowedNavItems = navItems.filter(item => {
+    if (!isCashier) return true;
+    return item.id === 'coding' || item.id === 'audit';
+  });
+
+  useEffect(() => {
+    if (isCashier && pathname) {
+      const allowedPaths = ['/manager/coding', '/manager/audit'];
+      const isAllowed = allowedPaths.some(p => pathname.startsWith(p));
+      if (!isAllowed) {
+        router.replace('/manager/coding');
+      }
+    }
+  }, [isCashier, pathname, router]);
+
   return (
-    <div className="min-h-screen bg-[#0A0A0C] text-white flex">
+    <div className="min-h-screen bg-gray-50 dark:bg-[#0A0A0C] text-gray-900 dark:text-white flex">
+      {/* Mobile Overlay */}
+      {mobileMenuOpen && (
+        <div 
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 md:hidden"
+          onClick={() => setMobileMenuOpen(false)}
+        />
+      )}
+
       {/* Sidebar */}
       <aside className={cn(
-        'fixed top-0 left-0 h-full bg-[#0A0A0C]/80 backdrop-blur-2xl border-r border-white/[0.06] z-40 transition-all duration-300 ease-out',
-        sidebarOpen ? 'w-64' : 'w-20'
-      )}>
+        'fixed top-0 right-0 md:left-0 md:right-auto h-full bg-white/90 dark:bg-[#0A0A0C]/90 backdrop-blur-2xl border-l md:border-l-0 md:border-r border-gray-200 dark:border-white/[0.06] z-50 transition-all duration-300 ease-out',
+        // Desktop sizing
+        sidebarOpen ? 'md:w-64' : 'md:w-20',
+        // Mobile sizing and toggle
+        'w-64 md:w-auto',
+        mobileMenuOpen ? 'translate-x-0' : 'translate-x-full md:translate-x-0'
+      )} dir="rtl">
         <div className="flex flex-col h-full">
           {/* Logo */}
-          <div className="h-16 flex items-center px-4 border-b border-white/[0.06]">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center font-bold text-sm">M</div>
-            {sidebarOpen && <span className="ml-3 font-semibold text-sm">Manager Dashboard</span>}
+          <div className="h-16 flex items-center px-4 border-b border-gray-200 dark:border-white/[0.06] justify-between">
+            <div className="flex items-center">
+              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center font-bold text-sm text-white shadow-sm">M</div>
+              {(sidebarOpen || mobileMenuOpen) && <span className="mr-3 font-semibold text-sm text-gray-800 dark:text-white">Manager Dashboard</span>}
+            </div>
+            {/* Close button on mobile */}
+            <button className="md:hidden text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white" onClick={() => setMobileMenuOpen(false)}>
+              <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+            </button>
           </div>
 
           {/* Navigation */}
           <nav className="flex-1 py-4 px-3 space-y-1 overflow-y-auto">
-            {navItems.map((item) => {
+            {allowedNavItems.map((item) => {
               const active = pathname === item.href || (item.href !== '/manager' && pathname?.startsWith(item.href));
               return (
                 <Link
@@ -84,17 +130,17 @@ export default function ManagerLayout({ children }: { children: React.ReactNode 
                   className={cn(
                     'flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 group',
                     active
-                      ? 'bg-white/[0.08] text-white'
-                      : 'text-gray-400 hover:bg-white/[0.04] hover:text-white'
+                      ? 'bg-emerald-50 dark:bg-white/[0.08] text-emerald-700 dark:text-white'
+                      : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-white/[0.04] hover:text-gray-900 dark:hover:text-white'
                   )}
                 >
-                  <span className="transition-transform duration-200 group-hover:scale-110">
+                  <span className="transition-transform duration-200 group-hover:scale-110 shrink-0">
                     {getIcon(item.icon, active)}
                   </span>
-                  {sidebarOpen && (
-                    <div className="flex flex-col">
-                      <span className="text-sm font-medium">{item.label}</span>
-                      <span className="text-[10px] text-gray-500">{item.labelEn}</span>
+                  {(sidebarOpen || mobileMenuOpen) && (
+                    <div className="flex flex-col min-w-0">
+                      <span className="text-sm font-medium truncate">{item.label}</span>
+                      <span className="text-[10px] text-gray-500 truncate">{item.labelEn}</span>
                     </div>
                   )}
                 </Link>
@@ -103,52 +149,64 @@ export default function ManagerLayout({ children }: { children: React.ReactNode 
           </nav>
 
           {/* Footer */}
-          <div className="p-3 border-t border-white/[0.06]">
+          <div className="p-3 border-t border-gray-200 dark:border-white/[0.06] hidden md:block">
             <button
               onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-xl text-gray-400 hover:bg-white/[0.04] hover:text-white transition-all duration-200"
+              className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-xl text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-white/[0.04] hover:text-gray-900 dark:hover:text-white transition-all duration-200"
             >
-              <svg className={cn('w-5 h-5 transition-transform duration-300', sidebarOpen && 'rotate-180')} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M11 19l-7-7 7-7m8 14l-7-7 7-7" /></svg>
+              <svg className={cn('w-5 h-5 transition-transform duration-300', !sidebarOpen && 'rotate-180')} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M11 19l-7-7 7-7m8 14l-7-7 7-7" /></svg>
               {sidebarOpen && <span className="text-sm">إخفاء القائمة</span>}
             </button>
           </div>
         </div>
       </aside>
 
-        {/* Main Content */}
-      <main className={cn('flex-1 transition-all duration-300', sidebarOpen ? 'ml-64' : 'ml-20')}>
+      {/* Main Content */}
+      <main className={cn('flex-1 transition-all duration-300 min-w-0', sidebarOpen ? 'md:mr-64' : 'md:mr-20')} dir="rtl">
         <NotificationProvider>
           {/* Top Bar */}
-          <header className="sticky top-0 z-30 h-16 bg-[#0A0A0C]/60 backdrop-blur-2xl border-b border-white/[0.06] flex items-center justify-between px-6">
-            <div className="flex items-center gap-4">
+          <header className="sticky top-0 z-30 h-16 bg-white/60 dark:bg-[#0A0A0C]/60 backdrop-blur-2xl border-b border-gray-200 dark:border-white/[0.06] flex items-center justify-between px-4 md:px-6">
+            <div className="flex items-center gap-3 md:gap-4">
+              <button 
+                onClick={() => setMobileMenuOpen(true)}
+                className="md:hidden h-9 w-9 flex items-center justify-center rounded-lg bg-gray-100 dark:bg-white/[0.06] text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-200 dark:hover:bg-white/[0.1] transition-colors"
+              >
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" /></svg>
+              </button>
+              
               {pathname !== '/manager' && (
                 <button 
                   onClick={() => window.history.back()} 
-                  className="h-8 w-8 flex items-center justify-center rounded-lg bg-white/[0.06] text-gray-400 hover:text-white hover:bg-white/[0.1] transition-colors"
+                  className="h-8 w-8 flex items-center justify-center rounded-lg bg-gray-100 dark:bg-white/[0.06] text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-200 dark:hover:bg-white/[0.1] transition-colors"
                   title="رجوع"
                 >
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                   </svg>
                 </button>
               )}
-              <h1 className="text-lg font-semibold">
-                {navItems.find(i => i.href === pathname || (i.href !== '/manager' && pathname?.startsWith(i.href)))?.label || 'لوحة التحكم'}
+              <h1 className="text-base md:text-lg font-semibold truncate max-w-[150px] sm:max-w-none text-gray-800 dark:text-white">
+                {allowedNavItems.find(i => i.href === pathname || (i.href !== '/manager' && pathname?.startsWith(i.href)))?.label || 'لوحة التحكم'}
               </h1>
             </div>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2 md:gap-4 shrink-0">
               <NotificationBell />
-              <span className="text-sm text-gray-400 font-mono">
+              <span className="hidden sm:inline text-sm text-gray-500 dark:text-gray-400 font-mono">
                 {currentTime.toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
               </span>
-              <Link href="/" className="px-3 py-1.5 rounded-lg bg-white/[0.06] text-sm text-gray-300 hover:bg-white/[0.1] transition-colors">
+              <Link href="/" className="px-2 py-1 md:px-3 md:py-1.5 rounded-lg bg-gray-100 dark:bg-white/[0.06] text-xs md:text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-white/[0.1] transition-colors text-center border border-gray-200 dark:border-transparent">
                 العودة للمتجر
               </Link>
             </div>
           </header>
 
           {/* Page Content */}
-          <div className="p-6">
+          <div className={cn(
+            "overflow-x-hidden",
+            (pathname === '/manager/coding' || pathname === '/manager/audit') 
+              ? "p-2 pb-24 md:pb-2 md:p-4 h-[calc(100vh-4rem)] flex flex-col" 
+              : "p-4 md:p-6 pb-24 md:pb-6"
+          )}>
             {children}
           </div>
         </NotificationProvider>

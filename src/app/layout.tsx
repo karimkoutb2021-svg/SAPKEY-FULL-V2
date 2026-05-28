@@ -29,11 +29,11 @@ export const metadata: Metadata = {
       { url: '/logo.jpg', sizes: '192x192' },
     ],
   },
-  appleWebApp: { capable: true, statusBarStyle: 'default', title: 'SAPKEY GROCERY' },
+  appleWebApp: { capable: true, statusBarStyle: 'black-translucent', title: 'SAPKEY GROCERY' },
 };
 
 export const viewport: Viewport = {
-  themeColor: '#FFFFFF',
+  themeColor: '#0A0A0C',
   width: 'device-width',
   initialScale: 1,
   maximumScale: 1,
@@ -45,20 +45,20 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   const buildId = getBuildId();
   
   return (
-    <html lang="ar" dir="rtl" suppressHydrationWarning data-scroll-behavior="smooth">
+    <html lang="ar" dir="rtl" suppressHydrationWarning data-scroll-behavior="smooth" className="dark">
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-        <meta name="theme-color" content="#FFFFFF" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="theme-color" content="#0A0A0C" />
         <meta name="build-id" content={buildId} />
-        <meta name="color-scheme" content="light" />
-        <script dangerouslySetInnerHTML={{ __html: 'document.documentElement.classList.remove("dark");' }} />
+        <meta name="color-scheme" content="dark" />
+        <script dangerouslySetInnerHTML={{ __html: 'document.documentElement.classList.add("dark");' }} />
         <DynamicFavicon />
       </head>
-      <body suppressHydrationWarning className="min-h-screen antialiased" style={{ fontFamily: '"Cairo", -apple-system, BlinkMacSystemFont, "SF Pro Arabic", "Segoe UI", Roboto, sans-serif' }}>
+      <body suppressHydrationWarning className="min-h-screen antialiased bg-[#0A0A0C] text-white selection:bg-emerald-500/30 selection:text-emerald-200" style={{ fontFamily: '"Cairo", -apple-system, BlinkMacSystemFont, "SF Pro Arabic", "Segoe UI", Roboto, sans-serif' }}>
         <PremiumLoader />
         <Providers>
           {children}

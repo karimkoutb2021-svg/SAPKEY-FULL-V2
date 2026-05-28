@@ -37,7 +37,7 @@ const supabase = createClient();
 
 export const categoryService = {
   async getAll(params?: { parent_id?: string; is_active?: boolean }) {
-    let query = supabase.from('product_categories').select('*', { count: 'exact' });
+    let query = supabase.from('product_categories').select('id, name_ar, name_en, slug, description, image_url, parent_id, sort_order, is_active, created_at', { count: 'exact' });
 
     if (params?.parent_id !== undefined) {
       query = query.eq('parent_id', params.parent_id);
@@ -128,7 +128,7 @@ export const categoryService = {
 
 export const bannerService = {
   async getAll(params?: { position?: string; is_active?: boolean }) {
-    let query = supabase.from('storefront_banners').select('*', { count: 'exact' });
+    let query = supabase.from('storefront_banners').select('id, title_ar, title_en, subtitle_ar, subtitle_en, image_url, link_url, link_type, target_id, position, sort_order, is_active, start_date, end_date, created_at', { count: 'exact' });
 
     if (params?.position) {
       query = query.eq('position', params.position);

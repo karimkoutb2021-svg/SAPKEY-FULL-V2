@@ -18,7 +18,7 @@ const supabase = createClient();
 
 export const customerService = {
   async getAll(params?: { is_active?: boolean; limit?: number }) {
-    let query = supabase.from('customers').select('*', { count: 'exact' });
+    let query = supabase.from('customers').select('id, name, phone, email, points, total_spent, total_orders, is_active, created_at', { count: 'exact' });
     if (params?.is_active !== undefined) query = query.eq('is_active', params.is_active);
     if (params?.limit) query = query.limit(params.limit);
     const { data, error, count } = await query.order('created_at', { ascending: false });
@@ -35,7 +35,7 @@ export const customerService = {
   async search(query: string) {
     const { data, error } = await supabase
       .from('customers')
-      .select('*')
+      .select('id, name, phone, email, points, total_spent, total_orders, is_active, created_at')
       .or(`name.ilike.%${query}%,phone.ilike.%${query}%,email.ilike.%${query}%`)
       .limit(20);
     if (error) throw error;

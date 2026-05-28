@@ -170,7 +170,7 @@ export interface PurchaseOrderItem {
 
 export const warehouseService = {
   async getAll() {
-    return supabase.from('warehouses').select('*').eq('is_active', true).order('name_ar');
+    return supabase.from('warehouses').select('id, name, name_ar, type, location, address, capacity, is_active').eq('is_active', true).order('name_ar');
   },
   async getById(id: string) {
     return supabase.from('warehouses').select('*').eq('id', id).single();
@@ -185,7 +185,7 @@ export const warehouseService = {
 
 export const codingDraftService = {
   async getAll(status?: string) {
-    let query = supabase.from('coding_drafts').select('*').order('created_at', { ascending: false });
+    let query = supabase.from('coding_drafts').select('id, product_code, product_name, category, unit, cost_price, selling_price, status, created_at').order('created_at', { ascending: false });
     if (status) query = query.eq('status', status);
     return query;
   },
@@ -212,7 +212,7 @@ export const codingDraftService = {
 
 export const auditItemService = {
   async getAll(sessionId?: string) {
-    let query = supabase.from('audit_items').select('*').order('created_at');
+    let query = supabase.from('audit_items').select('id, audit_session_id, stock_item_id, product_name, product_sku, system_qty, actual_qty, variance, variance_value, cost_price, status').order('created_at');
     if (sessionId) query = query.eq('audit_session_id', sessionId);
     return query;
   },
@@ -224,7 +224,7 @@ export const auditItemService = {
   },
   async getVarianceReport(sessionId: string) {
     return supabase.from('audit_items')
-      .select('*')
+      .select('id, product_name, product_sku, system_qty, actual_qty, variance, variance_value, status')
       .eq('audit_session_id', sessionId)
       .neq('variance', 0)
       .order('variance', { ascending: true });
@@ -270,7 +270,7 @@ export const transferService = {
 
 export const transferItemService = {
   async getAll(transferId: string) {
-    return supabase.from('transfer_items').select('*').eq('transfer_id', transferId).order('created_at');
+    return supabase.from('transfer_items').select('id, transfer_id, product_name, product_sku, requested_qty, approved_qty, received_qty, unit').eq('transfer_id', transferId).order('created_at');
   },
   async create(data: Partial<TransferItem>) {
     return supabase.from('transfer_items').insert(data).select().single();
@@ -282,7 +282,7 @@ export const transferItemService = {
 
 export const productHistoryService = {
   async getAll(stockItemId?: string, type?: string) {
-    let query = supabase.from('product_history').select('*').order('created_at', { ascending: false });
+    let query = supabase.from('product_history').select('id, product_name, type, quantity, price, total_value, created_at, performed_by_name').order('created_at', { ascending: false });
     if (stockItemId) query = query.eq('stock_item_id', stockItemId);
     if (type) query = query.eq('type', type);
     return query.limit(100);
@@ -302,7 +302,7 @@ export const productHistoryService = {
 
 export const auditOCRService = {
   async getAll(sessionId?: string) {
-    let query = supabase.from('audit_ocr_results').select('*').order('created_at', { ascending: false });
+    let query = supabase.from('audit_ocr_results').select('id, audit_session_id, image_url, processing_status, confidence_score, created_at').order('created_at', { ascending: false });
     if (sessionId) query = query.eq('audit_session_id', sessionId);
     return query;
   },
@@ -316,7 +316,7 @@ export const auditOCRService = {
 
 export const codingLabelService = {
   async getAll(printed?: boolean) {
-    let query = supabase.from('coding_labels').select('*').order('created_at', { ascending: false });
+    let query = supabase.from('coding_labels').select('id, product_name, product_sku, selling_price, label_type, printed, printed_at, created_at').order('created_at', { ascending: false });
     if (printed !== undefined) query = query.eq('printed', printed);
     return query;
   },
@@ -362,7 +362,7 @@ export const purchaseOrderService = {
 
 export const purchaseOrderItemService = {
   async getAll(orderId: string) {
-    return supabase.from('purchase_order_items').select('*').eq('purchase_order_id', orderId).order('created_at');
+    return supabase.from('purchase_order_items').select('id, purchase_order_id, product_name, product_sku, quantity, unit_price, total_price, received_qty, unit').eq('purchase_order_id', orderId).order('created_at');
   },
   async create(data: Partial<PurchaseOrderItem>) {
     return supabase.from('purchase_order_items').insert(data).select().single();

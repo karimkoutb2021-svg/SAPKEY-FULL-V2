@@ -74,24 +74,26 @@ export async function exportToPdf(
   filename: string
 ) {
   const container = document.createElement('div');
-  container.style.cssText = 'position:absolute;top:0;left:0;width:794px;background:#fff;font-family:Arial,Tahoma,sans-serif;direction:rtl;z-index:-1;visibility:hidden;pointer-events:none;';
+  // FIX: Instead of -9999px which causes blank captures on some browsers, use fixed positioning with opacity.
+  container.style.cssText = 'position:fixed;top:0;left:0;width:794px;background:#fff;font-family:"Cairo",Tahoma,sans-serif;direction:rtl;z-index:-9999;opacity:0.01;pointer-events:none;';
   document.body.appendChild(container);
 
   const totalsEntries = report.totals ? Object.entries(report.totals) : [];
   
-  // Apple/Binance style professional CSS
+  // Apple/Binance style professional CSS with Cairo Font injection
   container.innerHTML = `
-    <div style="padding:0; box-sizing: border-box; display: flex; flex-direction: column; min-height: 1122px; position: relative;">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800;900&display=swap" rel="stylesheet">
+    <div style="padding:0; box-sizing: border-box; display: flex; flex-direction: column; min-height: 1122px; position: relative; font-family: 'Cairo', sans-serif;">
       
       <!-- HEADER -->
-      <div style="background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%); padding: 30px 40px; display: flex; justify-content: space-between; align-items: center; color: white; border-bottom: 4px solid #3B82F6;">
+      <div style="background: linear-gradient(135deg, #0A0A0C 0%, #111114 100%); padding: 30px 40px; display: flex; justify-content: space-between; align-items: center; color: white; border-bottom: 4px solid #10B981;">
         <div style="text-align: right;">
-          <h1 style="font-size: 28px; font-weight: 900; margin: 0 0 6px 0; font-family: Tahoma, sans-serif;">${report.titleAr}</h1>
+          <h1 style="font-size: 28px; font-weight: 900; margin: 0 0 6px 0; font-family: 'Cairo', sans-serif;">${report.titleAr}</h1>
           ${report.subtitleAr ? `<p style="font-size: 13px; opacity: 0.8; margin: 0;">${report.subtitleAr}</p>` : ''}
         </div>
         <div style="text-align: left; display: flex; flex-direction: column; align-items: flex-start;">
-          <div style="width: 48px; height: 48px; background: rgba(255,255,255,0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 8px;">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: white;"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+          <div style="width: 48px; height: 48px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 8px;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
           </div>
           <span style="font-size: 14px; font-weight: 900; letter-spacing: 1px;">SAPKEY OS</span>
           <span style="font-size: 9px; opacity: 0.6; margin-top: 2px;">${new Date().toLocaleString('ar-EG')}</span>
@@ -99,7 +101,7 @@ export async function exportToPdf(
       </div>
 
       <!-- MAIN CONTENT -->
-      <div style="padding: 30px 40px; flex: 1;">
+      <div style="padding: 30px 40px; flex: 1; background: #FFFFFF;">
         
         <!-- Totals Cards -->
         ${totalsEntries.length > 0 ? `
@@ -107,9 +109,9 @@ export async function exportToPdf(
             ${totalsEntries.map(([key, val]) => {
               const col = report.columns.find((c) => c.key === key);
               return `
-                <div style="background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 16px; padding: 20px; text-align: right;">
-                  <div style="font-size: 11px; color: #64748B; font-weight: 600; margin-bottom: 6px;">${col?.labelAr || key}</div>
-                  <div style="font-size: 20px; font-weight: 900; color: #0F172A;">${formatCurrency(val)}</div>
+                <div style="background: #FAFAFA; border: 1px solid #E5E7EB; border-radius: 16px; padding: 20px; text-align: right;">
+                  <div style="font-size: 11px; color: #6B7280; font-weight: 600; margin-bottom: 6px;">${col?.labelAr || key}</div>
+                  <div style="font-size: 20px; font-weight: 900; color: #111827;">${formatCurrency(val as number)}</div>
                 </div>
               `;
             }).join('')}
@@ -117,12 +119,12 @@ export async function exportToPdf(
         ` : ''}
 
         <!-- Data Table -->
-        <div style="border-radius: 12px; overflow: hidden; border: 1px solid #E2E8F0;">
+        <div style="border-radius: 12px; overflow: hidden; border: 1px solid #E5E7EB;">
           <table style="width: 100%; border-collapse: collapse; font-size: 12px;" dir="rtl">
             <thead>
-              <tr style="background: #F1F5F9; border-bottom: 2px solid #CBD5E1;">
+              <tr style="background: #F9FAFB; border-bottom: 2px solid #D1D5DB;">
                 ${report.columns.map(col => `
-                  <th style="padding: 14px 16px; text-align: ${col.type === 'number' || col.type === 'currency' ? 'center' : 'right'}; font-weight: 800; color: #334155; text-transform: uppercase;">
+                  <th style="padding: 14px 16px; text-align: ${col.type === 'number' || col.type === 'currency' ? 'center' : 'right'}; font-weight: 800; color: #374151; text-transform: uppercase;">
                     ${col.labelAr}
                   </th>
                 `).join('')}
@@ -130,12 +132,12 @@ export async function exportToPdf(
             </thead>
             <tbody>
               ${report.rows.map((row, i) => `
-                <tr style="background: ${i % 2 === 0 ? '#FFFFFF' : '#FAFAF9'}; border-bottom: 1px solid #F1F5F9;">
+                <tr style="background: ${i % 2 === 0 ? '#FFFFFF' : '#F9FAFB'}; border-bottom: 1px solid #F3F4F6;">
                   ${report.columns.map(col => {
                     const val = formatCellValue(row[col.key], col);
                     const isNum = col.type === 'number' || col.type === 'currency';
                     return `
-                      <td style="padding: 12px 16px; text-align: ${isNum ? 'center' : 'right'}; color: #475569; ${isNum ? 'font-weight: 600; font-variant-numeric: tabular-nums;' : ''}">
+                      <td style="padding: 12px 16px; text-align: ${isNum ? 'center' : 'right'}; color: #4B5563; ${isNum ? 'font-weight: 600; font-variant-numeric: tabular-nums;' : ''}">
                         ${val}
                       </td>
                     `;
@@ -145,11 +147,11 @@ export async function exportToPdf(
             </tbody>
             ${report.totals ? `
               <tfoot>
-                <tr style="background: #F8FAFC; border-top: 2px solid #CBD5E1;">
+                <tr style="background: #F3F4F6; border-top: 2px solid #D1D5DB;">
                   ${report.columns.map((col, j) => {
-                    const val = report.totals![col.key] !== undefined ? formatCurrency(report.totals![col.key]) : (j === 0 ? 'الإجمالي الكلي' : '');
+                    const val = report.totals![col.key] !== undefined ? formatCurrency(report.totals![col.key] as number) : (j === 0 ? 'الإجمالي الكلي' : '');
                     return `
-                      <td style="padding: 16px; text-align: ${col.type === 'number' || col.type === 'currency' ? 'center' : 'right'}; font-weight: 900; color: #0F172A;">
+                      <td style="padding: 16px; text-align: ${col.type === 'number' || col.type === 'currency' ? 'center' : 'right'}; font-weight: 900; color: #111827;">
                         ${val}
                       </td>
                     `;
@@ -162,7 +164,7 @@ export async function exportToPdf(
       </div>
 
       <!-- FOOTER -->
-      <div style="margin-top: auto; padding: 20px 40px; border-top: 1px solid #E2E8F0; display: flex; justify-content: space-between; align-items: center; color: #94A3B8; font-size: 10px;">
+      <div style="margin-top: auto; padding: 20px 40px; border-top: 1px solid #E5E7EB; background: #FAFAFA; display: flex; justify-content: space-between; align-items: center; color: #9CA3AF; font-size: 10px;">
         <div>تم الإنشاء بواسطة نظام SAPKEY - جميع الحقوق محفوظة © ${new Date().getFullYear()}</div>
         <div style="font-weight: 600;">تقرير رسمي معتمد</div>
       </div>
@@ -170,7 +172,9 @@ export async function exportToPdf(
   `;
 
   try {
-    await new Promise((r) => setTimeout(r, 500));
+    // Wait for fonts to load
+    await document.fonts.ready;
+    await new Promise((r) => setTimeout(r, 1000)); // Give it an extra second to render fully
 
     const canvas = await html2canvas(container, {
       scale: 2,
@@ -182,7 +186,7 @@ export async function exportToPdf(
       height: container.scrollHeight,
     });
 
-    const imgData = canvas.toDataURL('image/png');
+    const imgData = canvas.toDataURL('image/png', 1.0);
     const pdf = new jsPDF('p', 'mm', 'a4');
     const pdfWidth = pdf.internal.pageSize.getWidth();
     const pdfHeight = pdf.internal.pageSize.getHeight();
@@ -194,13 +198,13 @@ export async function exportToPdf(
     let heightLeft = scaledHeight;
     let position = 0;
 
-    pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, scaledHeight);
+    pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, scaledHeight, '', 'FAST');
     heightLeft -= pdfHeight;
 
     while (heightLeft > 0) {
       position -= pdfHeight;
       pdf.addPage();
-      pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, scaledHeight);
+      pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, scaledHeight, '', 'FAST');
       heightLeft -= pdfHeight;
     }
 

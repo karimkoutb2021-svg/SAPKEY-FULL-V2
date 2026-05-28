@@ -100,7 +100,7 @@ export const deliveryService = {
   },
 
   async getByDriver(driverId: string, status?: string) {
-    let query = supabase.from('deliveries').select('*').eq('driver_id', driverId);
+    let query = supabase.from('deliveries').select('id, order_id, driver_id, customer_name, customer_phone, customer_address, status, estimated_minutes, actual_minutes, delivery_fee, dispatched_at, picked_at, delivered_at, created_at').eq('driver_id', driverId);
     if (status) query = query.eq('status', status);
     const { data, error } = await query.order('created_at', { ascending: false });
     if (error) throw error;
@@ -108,7 +108,7 @@ export const deliveryService = {
   },
 
   async getAll(status?: string, limit = 50) {
-    let query = supabase.from('deliveries').select('*', { count: 'exact' }).limit(limit);
+    let query = supabase.from('deliveries').select('id, order_id, driver_id, customer_name, customer_phone, customer_address, status, estimated_minutes, actual_minutes, delivery_fee, dispatched_at, picked_at, delivered_at, created_at', { count: 'exact' }).limit(limit);
     if (status) query = query.eq('status', status);
     const { data, error, count } = await query.order('created_at', { ascending: false });
     if (error) throw error;
@@ -118,7 +118,7 @@ export const deliveryService = {
   async getPendingDeliveries() {
     const { data, error } = await supabase
       .from('deliveries')
-      .select('*')
+      .select('id, order_id, driver_id, customer_name, customer_phone, customer_address, status, estimated_minutes, delivery_fee, created_at')
       .eq('status', 'pending')
       .order('created_at', { ascending: true });
     if (error) throw error;

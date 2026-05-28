@@ -210,7 +210,7 @@ export default function ManagerDashboard() {
     { label: 'رصيد الخزينة', labelEn: 'Treasury Balance', value: stats.treasuryBalance.toLocaleString('ar-EG'), unit: 'ج.م', icon: '🏦', color: 'from-green-500/20 to-emerald-500/20', borderColor: 'border-green-500/30', href: '/manager/treasury', sparkColor: '#22c55e', sparkData: trends.balance },
     { label: 'موظفين نشطين', labelEn: 'Active Employees', value: stats.activeEmployees, unit: 'موظف', icon: '👥', color: 'from-cyan-500/20 to-blue-500/20', borderColor: 'border-cyan-500/30', href: '/manager/time-control', sparkColor: '#06b6d4', sparkData: [] },
     { label: 'مصروفات اليوم', labelEn: "Today's Expenses", value: stats.todayExpenses.toLocaleString('ar-EG'), unit: 'ج.م', icon: '💳', color: 'from-red-500/20 to-rose-500/20', borderColor: 'border-red-500/30', href: '/manager/expenses', sparkColor: '#ef4444', sparkData: [] },
-    { label: 'تحويلات معلقة', labelEn: 'Pending Transfers', value: stats.pendingTransfers, unit: 'تحويلة', icon: '🔄', color: 'from-violet-500/20 to-purple-500/20', borderColor: 'border-violet-500/30', href: '/manager/inventory?tab=transfers', sparkColor: '#8b5cf6', sparkData: [] },
+    { label: 'تحويلات معلقة', labelEn: 'Pending Transfers', value: stats.pendingTransfers, unit: 'تحويلة', icon: '🔄', color: 'from-violet-500/20 to-purple-500/20', borderColor: 'border-violet-500/30', href: '/manager/transfers', sparkColor: '#8b5cf6', sparkData: [] },
   ];
 
   const activityIcons: Record<string, string> = {

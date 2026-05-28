@@ -17,7 +17,7 @@ export interface Leave {
 
 export const leaveService = {
   async getAll(params?: { status?: string; employee_id?: string }) {
-    let query = supabase.from('leaves').select('*').order('created_at', { ascending: false });
+    let query = supabase.from('leaves').select('id, employee_id, employee_name, type, reason, from_date, to_date, status, approved_by, created_at').order('created_at', { ascending: false });
     if (params?.status) query = query.eq('status', params.status);
     if (params?.employee_id) query = query.eq('employee_id', params.employee_id);
     return query;

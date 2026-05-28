@@ -20,6 +20,7 @@ import toast from 'react-hot-toast';
 import { Footer } from '@/components/layout/footer';
 import { Ticker } from '@/components/layout/ticker';
 import { AdminCodeModal } from '@/components/auth/admin-code-modal';
+import { PushNotification } from '@/components/layout/push-notification';
 
 interface ShopProduct {
   id: string;
@@ -430,7 +431,7 @@ export default function SupermarketLandingPage() {
     async function loadData() {
       try {
         const [prodRes, catRes, banRes] = await Promise.allSettled([
-          productService.getAll({ is_active: true, limit: 200 }),
+          productService.getAll({ is_active: true, limit: 2000 }),
           loadCategories(),
           bannerService.getAll({ is_active: true }),
         ]);
@@ -468,6 +469,8 @@ export default function SupermarketLandingPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-[#020617]" dir="rtl">
+
+      <PushNotification />
 
       {/* ───── Premium Header (Noon/Amazon-style: full-width) ───── */}
       <header className="sticky top-0 z-50 bg-white dark:bg-slate-950 border-b border-gray-100 dark:border-slate-800 shadow-sm">
@@ -510,6 +513,8 @@ export default function SupermarketLandingPage() {
           </div>
         </div>
       </header>
+
+      <Ticker />
 
       {/* ───── Hero Slider (Noon-Style, full-width on desktop) ───── */}
       <section className="px-3 sm:px-4 lg:px-8 py-4 sm:py-6">

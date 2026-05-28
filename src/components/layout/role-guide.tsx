@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useAuthStore } from '@/lib/store/auth-store';
 import { ROLES } from '@/types';
 import { Book, X } from 'lucide-react';
+import { DynamicInfographic } from '@/components/guides/dynamic-infographic';
 
 const GUIDES: Record<string, { title: string; steps: string[] }> = {
   admin: {
@@ -125,22 +126,14 @@ export function RoleGuideButton() {
       <AnimatePresence>
         {show && (
           <>
-            <motion.div initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}} className="fixed inset-0 bg-black/50 z-50" onClick={() => setShow(false)} />
-            <motion.div initial={{opacity:0, scale:0.9}} animate={{opacity:1, scale:1}} exit={{opacity:0, scale:0.9}} className="fixed inset-0 z-50 flex items-center justify-center p-4" onClick={() => setShow(false)}>
-              <div className="bg-white dark:bg-[#0F172A] rounded-3xl p-6 max-w-sm w-full shadow-2xl max-h-[80vh] overflow-y-auto" onClick={(e) => e.stopPropagation()} dir="rtl">
-                <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-lg font-bold text-gray-900 dark:text-white">{guide.title}</h2>
-                  <button onClick={() => setShow(false)} className="p-1 rounded-full hover:bg-gray-100 dark:hover:bg-slate-800"><X className="h-5 w-5 text-gray-400" /></button>
-                </div>
-                <div className="space-y-3">
-                  {guide.steps.map((step, i) => (
-                    <div key={i} className="flex items-start gap-3">
-                      <div className="h-6 w-6 rounded-full bg-[#22C55E]/10 flex items-center justify-center shrink-0 mt-0.5">
-                        <span className="text-xs font-bold text-[#22C55E]">{i + 1}</span>
-                      </div>
-                      <p className="text-sm text-gray-700 dark:text-gray-300">{step}</p>
-                    </div>
-                  ))}
+            <motion.div initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}} className="fixed inset-0 bg-black/60 backdrop-blur-md z-50" onClick={() => setShow(false)} />
+            <motion.div initial={{opacity:0, scale:0.95, y:20}} animate={{opacity:1, scale:1, y:0}} exit={{opacity:0, scale:0.95, y:20}} className="fixed inset-0 z-50 flex items-center justify-center p-4 md:p-10 pointer-events-none">
+              <div className="bg-[#fbfbfd] rounded-[3rem] w-full max-w-5xl h-full max-h-[90vh] shadow-[0_40px_100px_rgba(0,0,0,0.3)] overflow-hidden relative pointer-events-auto flex flex-col">
+                <button onClick={() => setShow(false)} className="absolute top-6 left-6 z-50 w-12 h-12 bg-black/10 hover:bg-black/20 backdrop-blur-md rounded-full flex items-center justify-center transition-all duration-300">
+                  <X className="h-6 w-6 text-[#1d1d1f]" />
+                </button>
+                <div className="flex-1 overflow-y-auto scrollbar-hide">
+                  <DynamicInfographic role={user.role} />
                 </div>
               </div>
             </motion.div>

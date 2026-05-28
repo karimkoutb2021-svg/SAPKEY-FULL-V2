@@ -176,6 +176,7 @@ export default function AdminDashboard() {
             { title: 'البراندينج', href: '/admin/branding', icon: Palette, color: 'from-violet-500 to-purple-600', desc: 'الهوية البصرية' },
             { title: 'النسخ الاحتياطي', href: '/admin/backup', icon: Database, color: 'from-slate-600 to-gray-700', desc: 'تصدير البيانات' },
             { title: 'دليل المطور', href: '/guides/developer', icon: BookOpen, color: 'from-red-500 to-rose-600', desc: 'الدليل التقني' },
+            { title: 'مشاركة وتصدير الأدلة', href: '/admin/guide-export', icon: BookOpen, color: 'from-emerald-500 to-teal-600', desc: 'PDF و WhatsApp' },
             { title: 'إدارة الأدلة', href: '/admin/guides', icon: BookOpen, color: 'from-violet-500 to-purple-600', desc: 'تحرير الأدلة' },
           ].map((f) => {
             const Icon = f.icon;
@@ -195,7 +196,7 @@ export default function AdminDashboard() {
 
       {/* Recent Platform Events */}
       {recentEvents.length > 0 && (
-        <div>
+        <div className="mb-6">
           <div className="flex items-center gap-1.5 md:gap-2 mb-2 md:mb-3">
             <Activity className="h-3.5 w-3.5 md:h-4 md:w-4 text-gray-500" />
             <h2 className="text-[11px] md:text-sm font-bold text-gray-900 dark:text-white">أحداث المنصة</h2>
@@ -216,6 +217,71 @@ export default function AdminDashboard() {
           </div>
         </div>
       )}
+
+      {/* Danger Zone: Factory Reset & Seed Data */}
+      <div className="mt-12 bg-red-500/5 border border-red-500/20 rounded-2xl p-6 relative overflow-hidden group">
+        <div className="absolute inset-0 bg-red-500/5 translate-y-full group-hover:translate-y-0 transition-transform duration-500" />
+        <div className="relative z-10 flex flex-col items-start gap-6">
+          <div>
+            <h2 className="text-lg font-black text-red-500 flex items-center gap-2">
+              <HardDrive className="h-5 w-5" /> منطقة الخطر (المطور فقط)
+            </h2>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1 max-w-xl">
+              ضبط المصنع: سيقوم بمسح كافة حركات البيع، الفواتير، المخازن، والطلبات. 
+              استعادة البيانات: سيقوم بتوليد بيانات وهمية مكتملة (طلبات، فواتير، خزينة) للتجربة والمحاكاة.
+            </p>
+          </div>
+          
+          <div className="flex flex-col md:flex-row gap-3 w-full md:w-auto">
+            <button 
+              onClick={async () => {
+                if (confirm('هل أنت متأكد من مسح كافة الحركات والبيانات التشغيلية؟')) {
+                  if (confirm('تأكيد أخير: هل تريد الاستمرار في ضبط المصنع؟')) {
+                    try {
+                      const { error } = await supabase.rpc('factory_reset');
+                      if (error) throw error;
+                      alert('تم إعادة ضبط المصنع بنجاح!');
+                      window.location.reload();
+                    } catch (err) {
+                      console.error(err);
+                      alert('حدث خطأ أثناء محاولة ضبط المصنع. تأكد من رفع ملف SQL أولاً.');
+                    }
+                  }
+                }
+              }}
+              className="px-6 py-3 rounded-xl bg-red-500/10 border border-red-500/20 hover:bg-red-500 hover:text-white text-red-500 font-bold shadow-lg transition-all active:scale-95 flex items-center justify-center gap-2"
+            >
+              <RefreshCw className="h-4 w-4" /> ضبط المصنع (مسح الحركات)
+            </button>
+
+            <button 
+              onClick={async (e) => {
+                if (confirm('هل أنت متأكد من توليد بيانات تجريبية جديدة (طلبات، فواتير، حركات خزينة)؟')) {
+                  const btn = e.currentTarget;
+                  const originalText = btn.innerHTML;
+                  btn.innerHTML = '<span class="animate-pulse">جاري التوليد...</span>';
+                  btn.disabled = true;
+                  try {
+                    const res = await fetch('/api/system/seed-demo', { method: 'POST' });
+                    const data = await res.json();
+                    if (!res.ok) throw new Error(data.error || 'فشل التوليد');
+                    alert('تم توليد البيانات التجريبية بنجاح!');
+                    window.location.reload();
+                  } catch (err: any) {
+                    alert(err.message || 'حدث خطأ غير معروف');
+                  } finally {
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                  }
+                }
+              }}
+              className="px-6 py-3 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white font-bold shadow-lg shadow-emerald-500/30 transition-all active:scale-95 flex items-center justify-center gap-2"
+            >
+              <Database className="h-4 w-4" /> استعادة البيانات التجريبية
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

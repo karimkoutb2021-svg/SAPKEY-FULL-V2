@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 /**
  * ═══════════════════════════════════════════════════════════
@@ -325,7 +325,7 @@ export function ShiftModal({ isOpen, onClose, cashierId, onShiftChange }: ShiftM
                         value={startingCash}
                         onChange={(e) => setStartingCash(e.target.value)}
                         placeholder={previousClosingCash > 0 ? previousClosingCash.toString() : '0.00'}
-                        className="w-full h-14 pr-11 pl-4 rounded-xl bg-gray-50 dark:bg-slate-900 border border-gray-200 dark:border-slate-700 text-xl font-bold text-center focus:outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 transition-all"
+                        className="w-full h-14 pr-11 pl-4 rounded-xl bg-gray-50 dark:bg-slate-900 border border-gray-200 dark:border-slate-700 text-gray-900 dark:text-white text-xl font-bold text-center focus:outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 transition-all"
                       />
                     </div>
                   </div>
@@ -506,9 +506,9 @@ export function ShiftModal({ isOpen, onClose, cashierId, onShiftChange }: ShiftM
                   {/* لا توجد مبيعات بعد */}
                   {shiftSummary && shiftSummary.orderCount === 0 && (
                     <div className="text-center py-8">
-                      <Receipt className="h-12 w-12 text-gray-300 dark:text-slate-700 mx-auto mb-3" />
-                      <p className="text-sm text-gray-400 dark:text-gray-500">لا توجد مبيعات بعد</p>
-                      <p className="text-xs text-gray-300 dark:text-slate-600 mt-1">ابدأ البيع وسيظهر الملخص هنا</p>
+                       <Receipt className="h-12 w-12 text-gray-300 dark:text-slate-700 mx-auto mb-3" />
+                       <p className="text-sm text-gray-400 dark:text-gray-500">لا توجد مبيعات بعد</p>
+                       <p className="text-xs text-gray-300 dark:text-slate-600 mt-1">ابدأ البيع وسيظهر الملخص هنا</p>
                     </div>
                   )}
 
@@ -575,7 +575,7 @@ export function ShiftModal({ isOpen, onClose, cashierId, onShiftChange }: ShiftM
                         value={actualCash}
                         onChange={(e) => setActualCash(e.target.value)}
                         placeholder={shiftSummary.expectedCash.toString()}
-                        className="w-full h-14 pr-11 pl-4 rounded-xl bg-gray-50 dark:bg-slate-900 border-2 border-emerald-200 dark:border-emerald-800 text-xl font-bold text-center focus:outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 transition-all"
+                        className="w-full h-14 pr-11 pl-4 rounded-xl bg-gray-50 dark:bg-slate-900 border-2 border-emerald-200 dark:border-emerald-800 text-gray-900 dark:text-white text-xl font-bold text-center focus:outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 transition-all"
                       />
                     </div>
                   </div>
@@ -592,7 +592,7 @@ export function ShiftModal({ isOpen, onClose, cashierId, onShiftChange }: ShiftM
                         value={actualCard}
                         onChange={(e) => setActualCard(e.target.value)}
                         placeholder={shiftSummary.cardSales > 0 ? shiftSummary.cardSales.toString() : '0.00'}
-                        className="w-full h-14 pr-11 pl-4 rounded-xl bg-gray-50 dark:bg-slate-900 border border-gray-200 dark:border-slate-700 text-lg font-bold text-center focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500 transition-all"
+                        className="w-full h-14 pr-11 pl-4 rounded-xl bg-gray-50 dark:bg-slate-900 border border-gray-200 dark:border-slate-700 text-gray-900 dark:text-white text-lg font-bold text-center focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500 transition-all"
                       />
                     </div>
                   </div>
@@ -609,7 +609,7 @@ export function ShiftModal({ isOpen, onClose, cashierId, onShiftChange }: ShiftM
                         value={actualNetwork}
                         onChange={(e) => setActualNetwork(e.target.value)}
                         placeholder={shiftSummary.walletSales > 0 ? shiftSummary.walletSales.toString() : '0.00'}
-                        className="w-full h-14 pr-11 pl-4 rounded-xl bg-gray-50 dark:bg-slate-900 border border-gray-200 dark:border-slate-700 text-lg font-bold text-center focus:outline-none focus:ring-2 focus:ring-purple-500/30 focus:border-purple-500 transition-all"
+                        className="w-full h-14 pr-11 pl-4 rounded-xl bg-gray-50 dark:bg-slate-900 border border-gray-200 dark:border-slate-700 text-gray-900 dark:text-white text-lg font-bold text-center focus:outline-none focus:ring-2 focus:ring-purple-500/30 focus:border-purple-500 transition-all"
                       />
                     </div>
                   </div>

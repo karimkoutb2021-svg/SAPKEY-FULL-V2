@@ -121,96 +121,96 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
 
   if (!isAuthenticated || !user) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-white">
+      <div className="min-h-screen flex items-center justify-center bg-[#0A0A0C]">
         <div className="text-center space-y-3">
-          <div className="h-12 w-12 rounded-2xl mx-auto bg-gradient-to-br from-[#10B981] to-[#059669] flex items-center justify-center shadow-[0_0_15px_rgba(16,185,129,0.2)]">
-            <Home className="h-6 w-6 text-white" />
+          <div className="h-12 w-12 rounded-2xl mx-auto bg-gradient-to-br from-emerald-500/20 to-teal-500/10 flex items-center justify-center shadow-lg shadow-emerald-500/10 border border-emerald-500/30">
+            <Home className="h-6 w-6 text-emerald-400 animate-pulse" />
           </div>
-          <p className="text-sm text-gray-500">جاري التحميل...</p>
+          <p className="text-sm font-bold text-gray-400">جاري التحميل...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-dvh bg-white">
+    <div className="min-h-dvh bg-[#0A0A0C]">
       <Sidebar />
       <MobileBottomNav />
 
       <div className={cn('main-content-area transition-[margin] duration-300', !sidebarOpen && 'sidebar-collapsed')}>
         <Header />
 
-        <div className="sticky top-16 z-20 bg-white/95 backdrop-blur-[25px] border-b border-gray-200/50">
+        <div className="sticky top-16 z-20 bg-[#111114]/80 backdrop-blur-3xl border-b border-white/[0.06]">
           <div className="content-container flex items-center justify-between h-14 px-4">
             <div className="flex items-center gap-1">
               <button onClick={goBack} disabled={history.length <= 1}
-                className="h-9 w-9 rounded-xl flex items-center justify-center text-gray-500 hover:text-gray-900 hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed transition-all" title="رجوع">
+                className="h-9 w-9 rounded-xl flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/[0.04] disabled:opacity-30 disabled:cursor-not-allowed transition-all border border-transparent hover:border-white/[0.04]" title="رجوع">
                 <ChevronRight className="h-4 w-4" />
               </button>
               <button onClick={goForward} disabled={future.length === 0}
-                className="h-9 w-9 rounded-xl flex items-center justify-center text-gray-500 hover:text-gray-900 hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed transition-all" title="للأمام">
+                className="h-9 w-9 rounded-xl flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/[0.04] disabled:opacity-30 disabled:cursor-not-allowed transition-all border border-transparent hover:border-white/[0.04]" title="للأمام">
                 <ChevronLeft className="h-4 w-4" />
               </button>
               <button onClick={() => router.push('/dashboard')}
-                className="h-9 w-9 rounded-xl flex items-center justify-center text-gray-500 hover:text-gray-900 hover:bg-gray-100 transition-all" title="الرئيسية">
+                className="h-9 w-9 rounded-xl flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/[0.04] transition-all border border-transparent hover:border-white/[0.04]" title="الرئيسية">
                 <Home className="h-4 w-4" />
               </button>
               
               {/* Manager Quick Tools: Coding and Audit */}
               {(user.role === 'manager' || user.role === 'admin') && (
                 <>
-                  <div className="w-px h-5 bg-gray-200 mx-1"></div>
+                  <div className="w-px h-5 bg-white/[0.08] mx-1"></div>
                   <button onClick={() => router.push('/manager/coding')}
-                    className="h-9 w-9 rounded-xl flex items-center justify-center text-[#10B981] bg-[rgba(16,185,129,0.1)] hover:bg-[rgba(16,185,129,0.2)] transition-all" title="التكويـد">
+                    className="h-9 w-9 rounded-xl flex items-center justify-center text-emerald-400 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/20 hover:border-emerald-500/30 transition-all" title="التكويـد">
                     <QrCode className="h-4 w-4" />
                   </button>
                   <button onClick={() => router.push('/manager/audit')}
-                    className="h-9 w-9 rounded-xl flex items-center justify-center text-blue-500 bg-blue-500/10 hover:bg-blue-500/20 transition-all" title="الجـرد">
+                    className="h-9 w-9 rounded-xl flex items-center justify-center text-blue-400 bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/20 hover:border-blue-500/30 transition-all" title="الجـرد">
                     <ScanLine className="h-4 w-4" />
                   </button>
                 </>
               )}
             </div>
 
-            <div className="hidden sm:flex items-center gap-2 text-xs text-gray-500">
+            <div className="hidden sm:flex items-center gap-2 text-xs font-medium text-gray-500">
               {breadcrumb ? (
                 breadcrumb.split(' > ').map((crumb, i, arr) => (
                   <span key={i} className="flex items-center gap-1.5">
-                    {i > 0 && <span className="text-gray-300">/</span>}
-                    <span className={i === arr.length - 1 ? 'font-bold text-gray-900' : ''}>{crumb}</span>
+                    {i > 0 && <span className="text-gray-600">/</span>}
+                    <span className={i === arr.length - 1 ? 'font-bold text-white' : 'text-gray-400 hover:text-gray-300 transition-colors cursor-default'}>{crumb}</span>
                   </span>
                 ))
               ) : (
-                <span className="text-gray-400">...</span>
+                <span className="text-gray-500">...</span>
               )}
             </div>
 
             <div className="flex items-center gap-2">
-              <div className="hidden md:flex items-center gap-3 px-3 py-2 rounded-xl bg-gray-50 border border-gray-200">
-                <div className="h-8 w-8 rounded-full bg-gradient-to-br from-[#10B981] to-[#059669] flex items-center justify-center text-white text-xs font-bold">
+              <div className="hidden md:flex items-center gap-3 px-3 py-2 rounded-xl bg-white/[0.02] border border-white/[0.06] shadow-inner">
+                <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-emerald-500/20 to-teal-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400 text-xs font-bold shadow-lg">
                   {user.name?.charAt(0) || user.email?.charAt(0) || 'U'}
                 </div>
                 <div className="flex flex-col">
-                  <span className="text-xs font-bold text-gray-900 leading-tight">{user.name || user.email}</span>
+                  <span className="text-xs font-bold text-white leading-tight">{user.name || user.email}</span>
                   {roleInfo && (
-                    <span className="text-[9px] px-1.5 py-0.5 rounded-full w-fit font-medium text-[#10B981] bg-[rgba(16,185,129,0.12)]">{roleInfo.labelAr}</span>
+                    <span className="text-[9px] px-1.5 py-0.5 rounded-full w-fit font-bold text-emerald-400 bg-emerald-500/10 mt-0.5 border border-emerald-500/20">{roleInfo.labelAr}</span>
                   )}
                 </div>
               </div>
-              <button onClick={clearCache} className="h-9 w-9 rounded-xl flex items-center justify-center text-gray-500 hover:text-amber-600 hover:bg-amber-50 transition-all" title="مسح الذاكرة المؤقتة وإعادة التحميل">
+              <button onClick={clearCache} className="h-9 w-9 rounded-xl flex items-center justify-center text-gray-400 hover:text-amber-400 hover:bg-amber-500/10 border border-transparent hover:border-amber-500/20 transition-all" title="مسح الذاكرة المؤقتة وإعادة التحميل">
                 <Trash2 className="h-4 w-4" />
               </button>
               <button onClick={() => {
                 useAuthStore.getState().logout();
                 window.location.href = '/login';
-              }} className="h-9 px-3 rounded-xl flex items-center gap-1.5 text-xs text-red-500 hover:bg-red-50 transition-all font-medium">
-                <LogOut className="h-4 w-4" /> <span className="hidden sm:inline">خروج</span>
+              }} className="h-9 px-3 rounded-xl flex items-center gap-1.5 text-xs text-red-400 hover:text-red-300 hover:bg-red-500/10 border border-transparent hover:border-red-500/20 transition-all font-bold group">
+                <LogOut className="h-4 w-4 group-hover:-translate-x-0.5 transition-transform" /> <span className="hidden sm:inline">خروج</span>
               </button>
             </div>
           </div>
         </div>
 
-        <main className="px-4 pb-8 md:px-6 lg:px-8">
+        <main className="px-4 pb-8 md:px-6 lg:px-8 mt-6">
           <AnimatePresence mode="wait">
             <PageTransition key={pathname}>
               <SubscriptionGuard>
@@ -220,12 +220,12 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
           </AnimatePresence>
         </main>
 
-        <footer className="border-t border-gray-200 bg-gray-50">
+        <footer className="border-t border-white/[0.04] bg-[#0A0A0C]">
           <div className="content-container flex items-center justify-between h-12 px-4">
-            <p className="text-[10px] text-gray-500 tracking-wider">
+            <p className="text-[10px] text-gray-500 tracking-wider font-medium">
               SAPKEY SOLUTIONS <sup>TM</sup> &copy; {new Date().getFullYear()} — جميع الحقوق محفوظة
             </p>
-            <p className="text-[9px] text-gray-400">v2.0.0</p>
+            <p className="text-[9px] text-gray-600 font-mono font-bold">v2.0.0</p>
           </div>
         </footer>
       </div>

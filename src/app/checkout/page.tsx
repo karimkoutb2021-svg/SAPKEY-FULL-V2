@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ShoppingCart, MapPin, CreditCard, CheckCircle, Truck, Wallet, ArrowRight, Loader2, Home, User, Mail, Lock, UserPlus, Printer, Share2 } from 'lucide-react';
+import { ShoppingCart, MapPin, CreditCard, CheckCircle, Truck, Wallet, ArrowRight, Loader2, Home, User, Mail, Lock, UserPlus, Printer, Share2, Smartphone, Landmark, ArrowRightLeft, Building2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { formatCurrency } from '@/lib/utils';
@@ -400,22 +400,42 @@ export default function CheckoutPage() {
                       <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} className="mt-2 p-4 bg-gray-50 dark:bg-slate-800/50 rounded-xl border border-gray-200 dark:border-slate-700 space-y-4">
                         <div>
                           <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-2">اختر المحفظة الإلكترونية</label>
-                          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                          <div className="grid grid-cols-2 gap-3">
                             {[
-                              { id: 'vodafone', name: 'فودافون كاش', color: 'bg-red-50 text-red-600 border-red-200' },
-                              { id: 'etisalat', name: 'اتصالات كاش', color: 'bg-emerald-50 text-emerald-600 border-emerald-200' },
-                              { id: 'orange', name: 'أورانج كاش', color: 'bg-orange-50 text-orange-600 border-orange-200' },
-                              { id: 'we', name: 'وي باي (WE)', color: 'bg-purple-50 text-purple-600 border-purple-200' },
-                              { id: 'other', name: 'أخرى', color: 'bg-gray-100 text-gray-600 border-gray-200' },
-                            ].map(w => (
-                              <button
-                                key={w.id}
-                                onClick={() => setSelectedWallet(w.id)}
-                                className={`p-2 rounded-lg text-xs font-bold border transition-all ${selectedWallet === w.id ? w.color + ' ring-2 ring-emerald-500/50' : 'bg-white dark:bg-slate-900 border-gray-200 dark:border-slate-700 text-gray-600 dark:text-gray-400 hover:border-emerald-300'}`}
-                              >
-                                {w.name}
-                              </button>
-                            ))}
+                              { id: 'vodafone', name: 'فودافون كاش', color: 'from-red-500 to-red-600', icon: Smartphone },
+                              { id: 'orange', name: 'أورانج كاش', color: 'from-orange-500 to-orange-600', icon: Smartphone },
+                              { id: 'etisalat', name: 'اتصالات كاش', color: 'from-emerald-500 to-emerald-600', icon: Smartphone },
+                              { id: 'we', name: 'وي باي (WE)', color: 'from-purple-600 to-purple-700', icon: Smartphone },
+                              { id: 'instapay', name: 'إنستاباي', color: 'from-indigo-600 to-indigo-700', icon: ArrowRightLeft },
+                              { id: 'other', name: 'أخرى', color: 'from-gray-500 to-gray-600', icon: Wallet },
+                            ].map(w => {
+                              const Icon = w.icon;
+                              return (
+                                <button
+                                  key={w.id}
+                                  onClick={() => setSelectedWallet(w.id)}
+                                  className={`p-3 rounded-2xl border-2 text-right transition-all duration-300 flex items-center gap-3 relative overflow-hidden group ${
+                                    selectedWallet === w.id
+                                      ? 'border-emerald-500 bg-emerald-50/50 dark:bg-emerald-900/20 shadow-sm'
+                                      : 'border-transparent bg-white dark:bg-slate-900 shadow-sm hover:border-gray-200 dark:hover:border-slate-700'
+                                  }`}
+                                >
+                                  <div className={`h-10 w-10 shrink-0 rounded-xl flex items-center justify-center text-white bg-gradient-to-br shadow-sm ${w.color}`}>
+                                    <Icon className="h-5 w-5" />
+                                  </div>
+                                  <div className="flex-1 min-w-0">
+                                    <span className={`block text-xs font-semibold whitespace-normal ${selectedWallet === w.id ? 'text-emerald-700 dark:text-emerald-400' : 'text-gray-700 dark:text-gray-300'}`}>
+                                      {w.name}
+                                    </span>
+                                  </div>
+                                  {selectedWallet === w.id && (
+                                    <motion.div layoutId="check-wallet" className="absolute top-2 left-2 bg-emerald-500 text-white rounded-full p-0.5 shadow-sm">
+                                      <CheckCircle className="h-3 w-3" />
+                                    </motion.div>
+                                  )}
+                                </button>
+                              );
+                            })}
                           </div>
                         </div>
                         <Input type="tel" label="رقم المحفظة" placeholder="01XXXXXXXXX" value={walletPhone} onChange={(e) => setWalletPhone(e.target.value)} />
@@ -425,18 +445,43 @@ export default function CheckoutPage() {
                       <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} className="mt-2 p-4 bg-gray-50 dark:bg-slate-800/50 rounded-xl border border-gray-200 dark:border-slate-700 space-y-4">
                         <div>
                           <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-2">اختر البنك</label>
-                          <select 
-                            className="w-full h-11 px-3 border border-gray-200 dark:border-slate-700 rounded-xl text-sm bg-white dark:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500/30"
-                            value={selectedBank}
-                            onChange={(e) => setSelectedBank(e.target.value)}
-                          >
-                            <option value="nbe">البنك الأهلي المصري (NBE)</option>
-                            <option value="banque_misr">بنك مصر (Banque Misr)</option>
-                            <option value="cib">البنك التجاري الدولي (CIB)</option>
-                            <option value="qnb">بنك قطر الوطني الأهلي (QNB)</option>
-                            <option value="alex">بنك الإسكندرية (AlexBank)</option>
-                            <option value="other">أخرى</option>
-                          </select>
+                          <div className="grid grid-cols-2 gap-3">
+                            {[
+                              { id: 'nbe', name: 'البنك الأهلي', color: 'from-green-600 to-green-800', icon: Landmark },
+                              { id: 'banque_misr', name: 'بنك مصر', color: 'from-red-600 to-red-800', icon: Landmark },
+                              { id: 'cib', name: 'CIB البنك التجاري', color: 'from-blue-600 to-blue-800', icon: Landmark },
+                              { id: 'qnb', name: 'QNB قطر الوطني', color: 'from-blue-800 to-blue-950', icon: Landmark },
+                              { id: 'alex', name: 'الإسكندرية', color: 'from-cyan-600 to-cyan-800', icon: Landmark },
+                              { id: 'other', name: 'بنك آخر', color: 'from-gray-500 to-gray-600', icon: Building2 },
+                            ].map(b => {
+                              const Icon = b.icon;
+                              return (
+                                <button
+                                  key={b.id}
+                                  onClick={() => setSelectedBank(b.id)}
+                                  className={`p-3 rounded-2xl border-2 text-right transition-all duration-300 flex items-center gap-3 relative overflow-hidden group ${
+                                    selectedBank === b.id
+                                      ? 'border-emerald-500 bg-emerald-50/50 dark:bg-emerald-900/20 shadow-sm'
+                                      : 'border-transparent bg-white dark:bg-slate-900 shadow-sm hover:border-gray-200 dark:hover:border-slate-700'
+                                  }`}
+                                >
+                                  <div className={`h-10 w-10 shrink-0 rounded-xl flex items-center justify-center text-white bg-gradient-to-br shadow-sm ${b.color}`}>
+                                    <Icon className="h-5 w-5" />
+                                  </div>
+                                  <div className="flex-1 min-w-0">
+                                    <span className={`block text-xs font-semibold whitespace-normal ${selectedBank === b.id ? 'text-emerald-700 dark:text-emerald-400' : 'text-gray-700 dark:text-gray-300'}`}>
+                                      {b.name}
+                                    </span>
+                                  </div>
+                                  {selectedBank === b.id && (
+                                    <motion.div layoutId="check-bank" className="absolute top-2 left-2 bg-emerald-500 text-white rounded-full p-0.5 shadow-sm">
+                                      <CheckCircle className="h-3 w-3" />
+                                    </motion.div>
+                                  )}
+                                </button>
+                              );
+                            })}
+                          </div>
                         </div>
                         <Input type="tel" label="رقم الهاتف المسجل بالبطاقة" placeholder="01XXXXXXXXX" value={cardPhone} onChange={(e) => setCardPhone(e.target.value)} />
                       </motion.div>

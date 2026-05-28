@@ -87,13 +87,13 @@ export const refundService = {
   },
 
   async getByOrderId(orderId: string) {
-    const { data, error } = await supabase.from('refunds').select('*').eq('order_id', orderId);
+    const { data, error } = await supabase.from('refunds').select('id, order_id, refund_number, reason, items, total, refund_method, status, created_at').eq('order_id', orderId);
     if (error) throw error;
     return data as Refund[];
   },
 
   async getAll(cashierId?: string, status?: string, limit = 50) {
-    let query = supabase.from('refunds').select('*', { count: 'exact' }).limit(limit);
+    let query = supabase.from('refunds').select('id, order_id, refund_number, cashier_id, reason, total, refund_method, status, created_at', { count: 'exact' }).limit(limit);
     if (cashierId) query = query.eq('cashier_id', cashierId);
     if (status) query = query.eq('status', status);
     const { data, error, count } = await query.order('created_at', { ascending: false });
@@ -104,7 +104,7 @@ export const refundService = {
   async getPendingRefunds() {
     const { data, error } = await supabase
       .from('refunds')
-      .select('*')
+      .select('id, order_id, refund_number, cashier_id, reason, total, refund_method, status, created_at')
       .eq('status', 'pending')
       .order('created_at', { ascending: false });
     if (error) throw error;

@@ -119,45 +119,53 @@ export default function ExpensesPage() {
   const filteredExpenses = statusFilter === 'all' ? expenses : expenses.filter(e => e.status === statusFilter);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" dir="rtl">
       {/* Smart Custodian Card */}
-      <div className="rounded-2xl bg-gradient-to-br from-emerald-500/10 to-teal-500/10 border border-emerald-500/20 p-6">
-        <div className="flex items-center justify-between mb-4">
-          <div>
-            <p className="text-sm text-gray-400">عهدة المصروفات النثرية</p>
-            <p className="text-2xl font-bold mt-1">{custodianBalance.remaining.toLocaleString('ar-EG')} <span className="text-base text-gray-400">ج.م</span></p>
+      <div className="rounded-[2rem] bg-[#111114]/90 backdrop-blur-3xl border border-emerald-500/20 p-8 shadow-2xl shadow-emerald-500/5 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-teal-500/5 pointer-events-none" />
+        <div className="relative">
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <p className="text-sm font-bold text-emerald-500 mb-1">عهدة المصروفات النثرية</p>
+              <p className="text-3xl font-black text-white">{custodianBalance.remaining.toLocaleString('ar-EG')} <span className="text-base text-gray-400 font-bold">ج.م</span></p>
+            </div>
+            {isWarning && (
+              <span className="text-xs px-4 py-2 rounded-xl bg-red-500/20 text-red-400 border border-red-500/30 font-bold flex items-center gap-2 animate-pulse">
+                <span>⚠️</span>
+                تنبيه: العهدة تقترب من الحد الأدنى
+              </span>
+            )}
           </div>
-          {isWarning && (
-            <span className="text-xs px-3 py-1 rounded-full bg-red-500/20 text-red-400 border border-red-500/30">
-              تنبيه: العهدة تقترب من الحد الأدنى
-            </span>
-          )}
-        </div>
-        <div className="grid grid-cols-3 gap-4 mb-4">
-          <div className="rounded-xl bg-white/[0.04] p-3">
-            <p className="text-xs text-gray-500">الحد الأقصى</p>
-            <p className="text-sm font-semibold mt-1">{custodianBalance.limit.toLocaleString('ar-EG')} ج.م</p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <div className="rounded-2xl bg-white/[0.02] border border-white/[0.04] p-5">
+              <p className="text-xs font-bold text-gray-500 mb-2">الحد الأقصى للعهدة</p>
+              <p className="text-lg font-black text-white">{custodianBalance.limit.toLocaleString('ar-EG')} <span className="text-sm text-gray-400">ج.م</span></p>
+            </div>
+            <div className="rounded-2xl bg-white/[0.02] border border-white/[0.04] p-5">
+              <p className="text-xs font-bold text-gray-500 mb-2">إجمالي المصروفات</p>
+              <p className="text-lg font-black text-amber-400">{custodianBalance.spent.toLocaleString('ar-EG')} <span className="text-sm opacity-50">ج.م</span></p>
+            </div>
+            <div className="rounded-2xl bg-emerald-500/10 border border-emerald-500/20 p-5">
+              <p className="text-xs font-bold text-emerald-500/80 mb-2">الرصيد المتاح</p>
+              <p className="text-lg font-black text-emerald-400">{custodianBalance.remaining.toLocaleString('ar-EG')} <span className="text-sm opacity-50">ج.م</span></p>
+            </div>
           </div>
-          <div className="rounded-xl bg-white/[0.04] p-3">
-            <p className="text-xs text-gray-500">المصروف</p>
-            <p className="text-sm font-semibold mt-1 text-amber-400">{custodianBalance.spent.toLocaleString('ar-EG')} ج.م</p>
+          <div className="w-full h-3 rounded-full bg-white/[0.04] overflow-hidden border border-white/[0.02] shadow-inner">
+            <div className={cn('h-full rounded-full transition-all duration-1000 shadow-lg', progressColor, 
+              progressColor === 'bg-emerald-500' ? 'shadow-emerald-500/50' : 
+              progressColor === 'bg-amber-500' ? 'shadow-amber-500/50' : 'shadow-red-500/50'
+            )} style={{ width: `${Math.max(0, remainingPercent)}%` }} />
           </div>
-          <div className="rounded-xl bg-white/[0.04] p-3">
-            <p className="text-xs text-gray-500">المتبقي</p>
-            <p className="text-sm font-semibold mt-1 text-emerald-400">{custodianBalance.remaining.toLocaleString('ar-EG')} ج.م</p>
-          </div>
-        </div>
-        <div className="w-full h-2 rounded-full bg-white/[0.06] overflow-hidden">
-          <div className={cn('h-full rounded-full transition-all duration-500', progressColor)} style={{ width: `${Math.max(0, remainingPercent)}%` }} />
         </div>
       </div>
 
       {/* Add Expense Button + Filter */}
-      <div className="flex items-center justify-between">
-        <button onClick={() => setShowModal(true)} className="px-4 py-2 rounded-xl bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30 transition-colors text-sm font-medium">
-          + إضافة مصروف
+      <div className="flex flex-col md:flex-row items-center justify-between gap-4 bg-[#111114]/90 backdrop-blur-3xl border border-white/[0.06] p-4 rounded-[2rem] shadow-xl">
+        <button onClick={() => setShowModal(true)} className="w-full md:w-auto px-6 py-3 rounded-xl bg-gradient-to-l from-emerald-600 to-emerald-500 text-white hover:from-emerald-500 hover:to-emerald-400 transition-all font-bold shadow-lg shadow-emerald-500/25 flex items-center justify-center gap-2">
+          <span>+</span>
+          إضافة مصروف جديد
         </button>
-        <div className="flex gap-2">
+        <div className="flex gap-2 w-full md:w-auto overflow-x-auto pb-2 md:pb-0 scrollbar-hide">
           {[
             { key: 'all', label: 'الكل' },
             { key: 'pending', label: 'معلق' },
@@ -167,10 +175,10 @@ export default function ExpensesPage() {
             <button
               key={f.key}
               onClick={() => setStatusFilter(f.key)}
-              className={cn('px-3 py-1.5 rounded-lg text-xs font-medium transition-colors',
+              className={cn('flex-shrink-0 px-5 py-2.5 rounded-xl text-sm font-bold transition-all duration-300',
                 statusFilter === f.key
-                  ? 'bg-emerald-500/20 text-emerald-400'
-                  : 'bg-white/[0.04] text-gray-400 hover:bg-white/[0.08]'
+                  ? 'bg-white/10 text-white shadow-inner'
+                  : 'text-gray-400 hover:text-white hover:bg-white/[0.04]'
               )}
             >
               {f.label}
@@ -180,72 +188,83 @@ export default function ExpensesPage() {
       </div>
 
       {/* Expenses Table */}
-      <div className="rounded-2xl bg-white/[0.03] border border-white/[0.06] p-6">
-        <h2 className="text-lg font-semibold mb-4">المصروفات</h2>
+      <div className="rounded-[2rem] bg-[#111114]/90 backdrop-blur-3xl border border-white/[0.06] p-8 shadow-2xl overflow-hidden">
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-xl font-bold text-white">سجل المصروفات</h2>
+        </div>
+        
         {loading ? (
-          <div className="text-center py-8 text-gray-500">جاري التحميل...</div>
+          <div className="flex flex-col items-center justify-center py-16 text-emerald-500/50">
+            <span className="w-10 h-10 border-4 border-current border-t-transparent rounded-full animate-spin mb-4" />
+            <p className="text-gray-400 font-medium">جاري تحميل المصروفات...</p>
+          </div>
         ) : filteredExpenses.length === 0 ? (
-          <div className="text-center py-8 text-gray-500">لا توجد مصروفات</div>
+          <div className="flex flex-col items-center justify-center py-16 text-gray-500">
+            <p className="text-lg font-medium">لا توجد مصروفات</p>
+          </div>
         ) : (
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto -mx-8 px-8">
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-white/[0.06]">
-                  <th className="text-right py-3 px-2 text-gray-400 font-medium">المبلغ</th>
-                  <th className="text-right py-3 px-2 text-gray-400 font-medium">البيان</th>
-                  <th className="text-right py-3 px-2 text-gray-400 font-medium">القسم</th>
-                  <th className="text-right py-3 px-2 text-gray-400 font-medium">المسؤول</th>
-                  <th className="text-right py-3 px-2 text-gray-400 font-medium">الحالة</th>
-                  <th className="text-right py-3 px-2 text-gray-400 font-medium">المرفق</th>
-                  <th className="text-right py-3 px-2 text-gray-400 font-medium">الإجراءات</th>
+                  <th className="text-right py-4 px-4 text-gray-400 font-bold whitespace-nowrap">المبلغ</th>
+                  <th className="text-right py-4 px-4 text-gray-400 font-bold whitespace-nowrap">البيان</th>
+                  <th className="text-right py-4 px-4 text-gray-400 font-bold whitespace-nowrap">القسم</th>
+                  <th className="text-right py-4 px-4 text-gray-400 font-bold whitespace-nowrap">المسؤول</th>
+                  <th className="text-right py-4 px-4 text-gray-400 font-bold whitespace-nowrap">الحالة</th>
+                  <th className="text-right py-4 px-4 text-gray-400 font-bold whitespace-nowrap">المرفق</th>
+                  <th className="text-right py-4 px-4 text-gray-400 font-bold whitespace-nowrap">الإجراءات</th>
                 </tr>
               </thead>
               <tbody>
                 {filteredExpenses.map((exp) => (
-                  <tr key={exp.id} className="border-b border-white/[0.04] hover:bg-white/[0.02] transition-colors">
-                    <td className="py-3 px-2 font-semibold">{exp.amount.toLocaleString('ar-EG')}</td>
-                    <td className="py-3 px-2 text-gray-300">{exp.description}</td>
-                    <td className="py-3 px-2">
-                      <span className="text-xs px-2 py-0.5 rounded-full bg-white/[0.06] text-gray-300">{exp.category}</span>
+                  <tr key={exp.id} className="border-b border-white/[0.04] hover:bg-white/[0.02] transition-colors group">
+                    <td className="py-4 px-4 whitespace-nowrap">
+                      <span className="font-black text-white text-base">{exp.amount.toLocaleString('ar-EG')}</span>
+                      <span className="text-xs text-gray-500 mr-1">ج.م</span>
                     </td>
-                    <td className="py-3 px-2 text-gray-300">{exp.responsible}</td>
-                    <td className="py-3 px-2">
-                      <span className={cn('text-xs px-2 py-0.5 rounded-full border', statusColors[exp.status])}>
+                    <td className="py-4 px-4 text-gray-300 font-medium min-w-[200px]">{exp.description}</td>
+                    <td className="py-4 px-4 whitespace-nowrap">
+                      <span className="text-xs px-3 py-1 rounded-xl bg-white/[0.04] border border-white/[0.06] text-gray-300 font-bold">{exp.category}</span>
+                    </td>
+                    <td className="py-4 px-4 text-gray-300 font-bold whitespace-nowrap">{exp.responsible}</td>
+                    <td className="py-4 px-4 whitespace-nowrap">
+                      <span className={cn('text-xs px-3 py-1.5 rounded-xl font-bold border', statusColors[exp.status])}>
                         {statusLabels[exp.status]}
                       </span>
                     </td>
-                    <td className="py-3 px-2">
+                    <td className="py-4 px-4 whitespace-nowrap">
                       {exp.attachment_url ? (
                         <a
                           href={exp.attachment_url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-xs px-2 py-1 rounded-lg bg-blue-500/20 text-blue-400 hover:bg-blue-500/30 transition-colors"
+                          className="inline-flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-xl bg-blue-500/10 text-blue-400 border border-blue-500/20 hover:bg-blue-500 hover:text-white transition-all font-bold"
                         >
-                          عرض
+                          عرض المرفق
                         </a>
                       ) : (
-                        <span className="text-xs text-gray-500">—</span>
+                        <span className="text-xs text-gray-600 font-bold px-3">بدون مرفق</span>
                       )}
                     </td>
-                    <td className="py-3 px-2">
+                    <td className="py-4 px-4 whitespace-nowrap">
                       {exp.status === 'pending' ? (
-                        <div className="flex gap-1">
+                        <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                           <button
                             onClick={() => handleStatusChange(exp.id, 'approved')}
-                            className="px-2 py-1 rounded-lg bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30 transition-colors text-xs font-medium"
+                            className="px-4 py-2 rounded-xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500 hover:text-white transition-all text-xs font-bold shadow-lg shadow-transparent hover:shadow-emerald-500/25"
                           >
                             اعتماد
                           </button>
                           <button
                             onClick={() => handleStatusChange(exp.id, 'rejected')}
-                            className="px-2 py-1 rounded-lg bg-red-500/20 text-red-400 hover:bg-red-500/30 transition-colors text-xs font-medium"
+                            className="px-4 py-2 rounded-xl bg-red-500/20 text-red-400 border border-red-500/30 hover:bg-red-500 hover:text-white transition-all text-xs font-bold shadow-lg shadow-transparent hover:shadow-red-500/25"
                           >
                             رفض
                           </button>
                         </div>
                       ) : (
-                        <span className="text-xs text-gray-500">—</span>
+                        <span className="text-xs text-gray-600 font-bold px-3 opacity-0 group-hover:opacity-100 transition-opacity">مكتمل</span>
                       )}
                     </td>
                   </tr>
@@ -258,54 +277,57 @@ export default function ExpensesPage() {
 
       {/* Replenishment Button */}
       <div className="flex justify-center">
-        <button className="px-6 py-3 rounded-xl bg-gradient-to-r from-emerald-500/20 to-teal-500/20 border border-emerald-500/30 text-emerald-400 hover:from-emerald-500/30 hover:to-teal-500/30 transition-all text-sm font-medium">
-          طلب تعويض العهدة
+        <button className="px-8 py-4 rounded-2xl bg-gradient-to-r from-emerald-500/10 to-teal-500/10 border border-emerald-500/30 text-emerald-400 hover:from-emerald-500/20 hover:to-teal-500/20 transition-all font-bold shadow-lg shadow-emerald-500/5 hover:shadow-emerald-500/20 hover:-translate-y-0.5 duration-300">
+          طلب تعويض / استعاضة العهدة
         </button>
       </div>
 
       {/* Add Expense Modal */}
       {showModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={() => { setShowModal(false); setAttachmentUrl(''); }} />
-          <div className="relative w-full max-w-lg rounded-2xl bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border border-white/20 shadow-2xl overflow-hidden">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-[#0A0A0C]/80 backdrop-blur-sm" onClick={() => { setShowModal(false); setAttachmentUrl(''); }} />
+          <div className="relative w-full max-w-lg rounded-[2rem] bg-[#111114]/95 backdrop-blur-3xl border border-white/[0.08] shadow-2xl shadow-emerald-500/10 overflow-hidden" dir="rtl">
             {/* Modal Header */}
-            <div className="px-6 py-4 border-b border-gray-100 dark:border-slate-800 flex justify-between items-center bg-gray-50/50 dark:bg-slate-800/50">
-              <h3 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
-                <div className="p-2 rounded-lg bg-emerald-500/10 text-emerald-500">
-                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6" /></svg>
+            <div className="px-8 py-6 border-b border-white/[0.06] flex justify-between items-center bg-white/[0.02]">
+              <div className="flex items-center gap-4">
+                <div className="h-12 w-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-500">
+                  <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6" /></svg>
                 </div>
-                إضافة مصروف جديد
-              </h3>
-              <button onClick={() => { setShowModal(false); setAttachmentUrl(''); }} className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-slate-700 transition-colors">
-                <svg className="w-5 h-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+                <div>
+                  <h3 className="text-xl font-bold text-white mb-1">إضافة مصروف جديد</h3>
+                  <p className="text-sm text-gray-400">سجل مصروفاً جديداً لاعتماده من الإدارة</p>
+                </div>
+              </div>
+              <button onClick={() => { setShowModal(false); setAttachmentUrl(''); }} className="w-10 h-10 rounded-full bg-white/[0.04] flex items-center justify-center text-gray-400 hover:bg-white/[0.08] hover:text-white transition-colors">
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
               </button>
             </div>
 
             {/* Modal Body */}
-            <div className="p-6 space-y-4">
+            <div className="p-8 space-y-6">
               <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-1.5">
-                  <label className="text-xs font-semibold text-gray-600 dark:text-gray-400">المبلغ</label>
+                <div className="space-y-2">
+                  <label className="text-sm font-bold text-gray-400">المبلغ <span className="text-emerald-500">*</span></label>
                   <div className="relative">
-                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm font-medium">ج.م</span>
+                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 text-sm font-bold">ج.م</span>
                     <input
                       type="number"
                       value={amount}
                       onChange={(e) => setAmount(e.target.value)}
                       placeholder="0.00"
-                      className="w-full pr-10 pl-3 py-2.5 rounded-xl bg-gray-50 dark:bg-slate-800/50 border border-gray-200 dark:border-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500/50 transition-all font-semibold"
+                      className="w-full pl-12 pr-4 py-3.5 rounded-2xl bg-white/[0.02] border border-white/[0.08] text-white font-bold text-lg focus:outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/50 transition-all placeholder-gray-600"
                     />
                   </div>
                 </div>
 
-                <div className="space-y-1.5">
-                  <label className="text-xs font-semibold text-gray-600 dark:text-gray-400">التصنيف</label>
+                <div className="space-y-2">
+                  <label className="text-sm font-bold text-gray-400">القسم المستفيد <span className="text-emerald-500">*</span></label>
                   <select
                     value={category}
                     onChange={(e) => setCategory(e.target.value)}
-                    className="w-full px-3 py-2.5 rounded-xl bg-gray-50 dark:bg-slate-800/50 border border-gray-200 dark:border-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500/50 transition-all font-medium"
+                    className="w-full px-4 py-3.5 rounded-2xl bg-white/[0.02] border border-white/[0.08] text-white text-sm focus:outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/50 transition-all [&>option]:bg-[#111114]"
                   >
-                    <option value="">اختر القسم المستفيد</option>
+                    <option value="">اختر القسم...</option>
                     {categoryOptions.map((c) => (
                       <option key={c} value={c}>{c}</option>
                     ))}
@@ -313,41 +335,31 @@ export default function ExpensesPage() {
                 </div>
               </div>
 
-              <div className="space-y-1.5">
-                <label className="text-xs font-semibold text-gray-600 dark:text-gray-400">البيان / الوصف</label>
+              <div className="space-y-2">
+                <label className="text-sm font-bold text-gray-400">البيان / الوصف <span className="text-emerald-500">*</span></label>
                 <input
                   type="text"
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
-                  placeholder="اكتب تفاصيل المصروف هنا..."
-                  className="w-full px-3 py-2.5 rounded-xl bg-gray-50 dark:bg-slate-800/50 border border-gray-200 dark:border-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500/50 transition-all"
+                  placeholder="اكتب تفاصيل أو سبب المصروف..."
+                  className="w-full px-4 py-3.5 rounded-2xl bg-white/[0.02] border border-white/[0.08] text-white text-sm focus:outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/50 transition-all placeholder-gray-600"
                 />
               </div>
 
-              <div className="space-y-1.5">
-                <label className="text-xs font-semibold text-gray-600 dark:text-gray-400">المسؤول عن الصرف</label>
+              <div className="space-y-2">
+                <label className="text-sm font-bold text-gray-400">المسؤول عن الصرف <span className="text-emerald-500">*</span></label>
                 <input
                   type="text"
                   value={responsible}
                   onChange={(e) => setResponsible(e.target.value)}
                   placeholder="اسم الشخص المسؤول"
-                  className="w-full px-3 py-2.5 rounded-xl bg-gray-50 dark:bg-slate-800/50 border border-gray-200 dark:border-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500/50 transition-all"
+                  className="w-full px-4 py-3.5 rounded-2xl bg-white/[0.02] border border-white/[0.08] text-white text-sm focus:outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/50 transition-all placeholder-gray-600"
                 />
               </div>
 
-              <div className="space-y-1.5">
-                <label className="text-xs font-semibold text-gray-600 dark:text-gray-400">مرفق (فاتورة / إيصال)</label>
-                <div className="flex items-center gap-3">
-                  <button
-                    type="button"
-                    onClick={() => fileInputRef.current?.click()}
-                    className="flex-1 py-2.5 border-2 border-dashed border-gray-300 dark:border-slate-700 rounded-xl text-sm text-gray-500 hover:bg-gray-50 dark:hover:bg-slate-800/50 hover:border-emerald-500/50 transition-all flex items-center justify-center gap-2 font-medium"
-                  >
-                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
-                    </svg>
-                    {attachmentUrl ? 'تغيير المرفق' : 'رفع إيصال (اختياري)'}
-                  </button>
+              <div className="space-y-2">
+                <label className="text-sm font-bold text-gray-400">مرفق أو فاتورة</label>
+                <div>
                   <input
                     type="file"
                     ref={fileInputRef}
@@ -355,32 +367,46 @@ export default function ExpensesPage() {
                     className="hidden"
                     accept="image/*,.pdf"
                   />
-                  {attachmentUrl && (
-                    <div className="w-12 h-12 rounded-lg border border-gray-200 dark:border-slate-700 overflow-hidden shrink-0 relative group">
-                      <img src={attachmentUrl} alt="مرفق" className="w-full h-full object-cover" />
-                      <div className="absolute inset-0 bg-black/50 hidden group-hover:flex items-center justify-center cursor-pointer" onClick={() => { setAttachmentUrl(''); if (fileInputRef.current) fileInputRef.current.value = ''; }}>
-                        <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
-                      </div>
-                    </div>
-                  )}
+                  <button
+                    type="button"
+                    onClick={() => fileInputRef.current?.click()}
+                    className={cn(
+                      "w-full py-4 border-2 border-dashed rounded-2xl text-sm font-bold transition-all flex items-center justify-center gap-3",
+                      attachmentUrl 
+                        ? "border-emerald-500/50 bg-emerald-500/10 text-emerald-400" 
+                        : "border-white/[0.1] bg-white/[0.02] text-gray-400 hover:border-emerald-500/30 hover:bg-white/[0.04]"
+                    )}
+                  >
+                    {attachmentUrl ? (
+                      <>
+                        <span className="text-xl">✅</span>
+                        تم إرفاق المستند بنجاح (انقر للتغيير)
+                      </>
+                    ) : (
+                      <>
+                        <span className="text-xl">📷</span>
+                        إرفاق صورة الفاتورة أو الإيصال (اختياري)
+                      </>
+                    )}
+                  </button>
                 </div>
               </div>
             </div>
 
             {/* Modal Footer */}
-            <div className="p-6 pt-0 flex gap-3">
+            <div className="p-8 pt-4 flex gap-3">
               <button
                 onClick={() => { setShowModal(false); setAttachmentUrl(''); }}
-                className="flex-1 py-3 rounded-xl bg-gray-100 dark:bg-slate-800 text-gray-700 dark:text-gray-300 text-sm hover:bg-gray-200 dark:hover:bg-slate-700 transition-colors font-bold"
+                className="flex-1 py-4 rounded-2xl bg-white/[0.04] border border-white/[0.04] text-gray-400 hover:text-white hover:bg-white/[0.08] transition-colors font-bold"
               >
-                إلغاء
+                إلغاء الأمر
               </button>
               <button
                 onClick={handleCreate}
                 disabled={!amount || !description || !category || !responsible}
-                className="flex-1 py-3 rounded-xl bg-gradient-to-l from-emerald-600 to-emerald-500 text-white text-sm hover:from-emerald-500 hover:to-emerald-400 transition-all font-bold shadow-lg shadow-emerald-500/25 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex-[2] py-4 rounded-2xl bg-gradient-to-l from-emerald-600 to-emerald-500 text-white font-bold hover:from-emerald-500 hover:to-emerald-400 transition-all shadow-lg shadow-emerald-500/25 disabled:opacity-50 disabled:shadow-none"
               >
-                حفظ المصروف
+                حفظ وإرسال للاعتماد
               </button>
             </div>
           </div>

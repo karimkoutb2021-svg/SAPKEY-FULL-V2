@@ -320,7 +320,7 @@ export default function ShopPage() {
     async function loadData() {
       try {
         const [prodRes, catRes] = await Promise.allSettled([
-          productService.getAll({ is_active: true, limit: 500 }),
+          productService.getAll({ is_active: true, limit: 2000 }),
           loadCategories(),
         ]);
 
@@ -667,10 +667,12 @@ export default function ShopPage() {
                      ))}
                    </div>
                  </div>
-               </motion.div>
-             )}
-            </AnimatePresence>
+                </motion.div>
+              )}
+             </AnimatePresence>
       </header>
+
+      <Ticker />
 
       {/* ───── Content (Full-width on desktop like Noon/Amazon) ───── */}
       <div className="flex">

@@ -12,8 +12,9 @@ export const productService = {
     low_stock?: boolean;
     limit?: number;
     offset?: number;
+    fields?: string;
   }) {
-    let query = supabase.from('products').select('*', { count: 'exact' });
+    let query = supabase.from('products').select(params?.fields || '*', { count: 'exact' });
 
     if (params?.category_id) {
       query = query.eq('category_id', params.category_id);

@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useEffect, useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
@@ -318,15 +318,16 @@ export default function ReconciliationPage() {
   return (
     <div dir="rtl" className="space-y-6">
       {/* Section 1: Session Header */}
-      <div className="rounded-2xl bg-white/[0.03] border border-white/[0.06] p-6">
-        <div className="flex flex-wrap items-center justify-between gap-4">
+      <div className="rounded-[2rem] bg-[#111114]/90 backdrop-blur-3xl border border-white/[0.06] p-8 shadow-2xl relative overflow-hidden group">
+        <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/10 to-teal-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+        <div className="relative z-10 flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-xl bg-emerald-500/20 flex items-center justify-center">
-              <CheckCircle className="w-6 h-6 text-emerald-400" />
+            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-500/20 to-teal-500/20 flex items-center justify-center border border-emerald-500/30 shadow-lg shadow-emerald-500/10">
+              <CheckCircle className="w-7 h-7 text-emerald-400" />
             </div>
             <div>
-              <h1 className="text-xl font-bold">المطابقة اليومية</h1>
-              <p className="text-sm text-gray-400">
+              <h1 className="text-2xl font-black text-white">المطابقة اليومية</h1>
+              <p className="text-sm font-medium text-gray-400 mt-1">
                 {new Date().toLocaleDateString('ar-EG', {
                   weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
                 })}
@@ -336,8 +337,8 @@ export default function ReconciliationPage() {
           <div className="flex items-center gap-3">
             {session && (
               <span className={cn(
-                'text-xs px-3 py-1 rounded-full border',
-                STATUS_CONFIG[session.status]?.color || 'bg-gray-500/20 text-gray-400',
+                'text-sm font-bold px-4 py-2 rounded-xl border shadow-lg',
+                STATUS_CONFIG[session.status]?.color || 'bg-gray-500/20 text-gray-400 border-gray-500/30',
               )}>
                 {STATUS_CONFIG[session.status]?.label || session.status}
               </span>
@@ -345,19 +346,19 @@ export default function ReconciliationPage() {
             {!session ? (
               <button
                 onClick={handleStartSession}
-                className="px-4 py-2 rounded-xl bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30 transition-colors text-sm font-medium"
+                className="px-6 py-3 rounded-xl bg-gradient-to-l from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-white shadow-lg shadow-emerald-500/25 transition-all text-sm font-bold"
               >
                 بدء جلسة مطابقة جديدة
               </button>
             ) : session.status === 'completed' ? (
-              <span className="text-sm text-gray-400 flex items-center gap-2">
-                <CheckCircle className="w-4 h-4 text-emerald-400" />
+              <span className="text-sm font-bold text-gray-400 flex items-center gap-2 bg-white/[0.04] px-4 py-2 rounded-xl border border-white/[0.06]">
+                <CheckCircle className="w-5 h-5 text-emerald-400" />
                 اكتملت المطابقة لهذا اليوم
               </span>
             ) : (
               <button
                 onClick={handleReopenSession}
-                className="px-4 py-2 rounded-xl bg-amber-500/20 text-amber-400 hover:bg-amber-500/30 transition-colors text-sm font-medium"
+                className="px-6 py-3 rounded-xl bg-gradient-to-l from-amber-600 to-amber-500 hover:from-amber-500 hover:to-amber-400 text-white shadow-lg shadow-amber-500/25 transition-all text-sm font-bold"
               >
                 استئناف / إعادة فتح
               </button>
@@ -367,36 +368,36 @@ export default function ReconciliationPage() {
       </div>
 
       {/* Section 2: Main Reconciliation Formula */}
-      <div className="rounded-2xl bg-white/[0.03] border border-white/[0.06] p-6">
-        <h2 className="text-lg font-semibold mb-4">معادلة المطابقة</h2>
-        <div className="space-y-3 font-mono text-base">
-          <div className="flex items-center justify-between p-3 rounded-xl bg-white/[0.04]">
-            <span className="text-gray-400">الرصيد الدفتري للنظام:</span>
-            <span className="font-bold text-white">{totalSystemBalance.toLocaleString('ar-EG')} ج.م</span>
+      <div className="rounded-[2rem] bg-gradient-to-br from-[#111114] to-[#1A1A1F] border border-white/[0.06] p-8 shadow-2xl relative overflow-hidden">
+        <h2 className="text-xl font-black text-white mb-6">معادلة المطابقة</h2>
+        <div className="space-y-4 font-mono text-lg">
+          <div className="flex items-center justify-between p-4 rounded-2xl bg-white/[0.02] border border-white/[0.04] hover:bg-white/[0.04] transition-colors">
+            <span className="text-gray-400 font-bold">الرصيد الدفتري للنظام:</span>
+            <span className="font-black text-white">{totalSystemBalance.toLocaleString('ar-EG')} <span className="text-sm text-gray-500 font-normal">ج.م</span></span>
           </div>
-          <div className="flex items-center justify-between p-3 rounded-xl bg-white/[0.04]">
-            <span className="text-gray-400">الرصيد الفعلي (يدوياً):</span>
+          <div className="flex items-center justify-between p-4 rounded-2xl bg-white/[0.02] border border-white/[0.04] hover:bg-white/[0.04] transition-colors">
+            <span className="text-gray-400 font-bold">الرصيد الفعلي (يدوياً):</span>
             <input
               type="text"
               value={totalActualBalance.toLocaleString('ar-EG')}
               readOnly
-              className="bg-transparent text-left font-bold text-white w-40 text-base outline-none"
+              className="bg-transparent text-left font-black text-white w-48 outline-none"
             />
           </div>
-          <div className="border-t border-white/[0.08] my-1" />
+          <div className="border-t border-white/[0.08] my-4" />
           <div className={cn(
-            'flex items-center justify-between p-3 rounded-xl font-bold',
+            'flex items-center justify-between p-5 rounded-2xl font-bold border shadow-xl',
             totalDifference === 0
-              ? 'bg-emerald-500/10 text-emerald-400'
-              : 'bg-red-500/10 text-red-400',
+              ? 'bg-gradient-to-br from-emerald-500/20 to-teal-500/10 border-emerald-500/30 text-emerald-400'
+              : 'bg-gradient-to-br from-red-500/20 to-rose-500/10 border-red-500/30 text-red-400',
           )}>
-            <span>الفرق:</span>
-            <span>
-              {totalDifference >= 0 ? '+' : ''}{totalDifference.toLocaleString('ar-EG')} ج.م
+            <span className="text-lg">الفرق:</span>
+            <span className="text-2xl font-black flex items-center gap-3">
+              {totalDifference >= 0 ? '+' : ''}{totalDifference.toLocaleString('ar-EG')} <span className="text-sm opacity-60">ج.م</span>
               {totalDifference === 0 ? (
-                <CheckCircle className="w-4 h-4 inline mr-2 text-emerald-400" />
+                <CheckCircle className="w-8 h-8 text-emerald-400" />
               ) : (
-                <XCircle className="w-4 h-4 inline mr-2 text-red-400" />
+                <XCircle className="w-8 h-8 text-red-400" />
               )}
             </span>
           </div>
@@ -404,27 +405,27 @@ export default function ReconciliationPage() {
       </div>
 
       {/* Section 3: Account-by-Account Table */}
-      <div className="rounded-2xl bg-white/[0.03] border border-white/[0.06] p-6">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-semibold">أرصدة الحسابات</h2>
+      <div className="rounded-[2rem] bg-[#111114]/90 backdrop-blur-3xl border border-white/[0.06] p-8 shadow-2xl">
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-xl font-black text-white">أرصدة الحسابات</h2>
           {session && session.status !== 'completed' && (
             <button
               onClick={handleSaveBalances}
-              className="px-4 py-2 rounded-xl bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30 transition-colors text-sm font-medium flex items-center gap-2"
+              className="px-5 py-2.5 rounded-xl bg-gradient-to-l from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-white shadow-lg shadow-emerald-500/25 transition-all text-sm font-bold flex items-center gap-2"
             >
               <Save className="w-4 h-4" />
               حفظ الأرصدة
             </button>
           )}
         </div>
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto -mx-8 px-8">
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-white/[0.06] text-gray-400">
-                <th className="text-right py-3 px-2 font-medium">الحساب</th>
-                <th className="text-right py-3 px-2 font-medium">الرصيد الدفتري</th>
-                <th className="text-right py-3 px-2 font-medium">الرصيد الفعلي يدوياً</th>
-                <th className="text-right py-3 px-2 font-medium">الفرق</th>
+                <th className="text-right py-4 px-4 font-bold">الحساب</th>
+                <th className="text-right py-4 px-4 font-bold">الرصيد الدفتري</th>
+                <th className="text-right py-4 px-4 font-bold">الرصيد الفعلي يدوياً</th>
+                <th className="text-right py-4 px-4 font-bold">الفرق</th>
               </tr>
             </thead>
             <tbody>
@@ -432,25 +433,25 @@ export default function ReconciliationPage() {
                 const diff = getAccountDiff(account.id);
                 const actual = parseFloat(actualBalances[account.id]) || 0;
                 return (
-                  <tr key={account.id} className="border-b border-white/[0.04] hover:bg-white/[0.02] transition-colors">
-                    <td className="py-3 px-2 font-medium">{account.name_ar}</td>
-                    <td className="py-3 px-2 text-gray-300 font-mono">
+                  <tr key={account.id} className="border-b border-white/[0.04] hover:bg-white/[0.02] transition-colors group">
+                    <td className="py-4 px-4 font-bold text-white">{account.name_ar}</td>
+                    <td className="py-4 px-4 text-gray-300 font-mono text-base">
                       {account.current_balance.toLocaleString('ar-EG')}
                     </td>
-                    <td className="py-3 px-2">
+                    <td className="py-4 px-4">
                       {session && session.status !== 'completed' ? (
                         <input
                           type="number"
                           value={actualBalances[account.id] || ''}
                           onChange={(e) => setActualBalances((prev) => ({ ...prev, [account.id]: e.target.value }))}
-                          className="w-32 px-2 py-1.5 rounded-lg bg-white/[0.04] border border-white/[0.08] text-sm text-left font-mono outline-none focus:border-emerald-500/50"
+                          className="w-32 px-4 py-2 rounded-xl bg-white/[0.02] border border-white/[0.08] text-sm text-left font-mono font-bold text-white outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500/50 transition-all"
                         />
                       ) : (
-                        <span className="font-mono text-gray-300">{actual.toLocaleString('ar-EG')}</span>
+                        <span className="font-mono font-bold text-white text-base">{actual.toLocaleString('ar-EG')}</span>
                       )}
                     </td>
                     <td className={cn(
-                      'py-3 px-2 font-mono font-semibold',
+                      'py-4 px-4 font-mono font-black text-base',
                       diff === 0 ? 'text-emerald-400' : 'text-red-400',
                     )}>
                       {diff >= 0 ? '+' : ''}{diff.toLocaleString('ar-EG')}
@@ -458,11 +459,11 @@ export default function ReconciliationPage() {
                   </tr>
                 );
               })}
-              <tr className="border-t border-white/[0.08] font-bold">
-                <td className="py-3 px-2">الإجمالي</td>
-                <td className="py-3 px-2 font-mono">{totalSystemBalance.toLocaleString('ar-EG')}</td>
-                <td className="py-3 px-2 font-mono">{totalActualBalance.toLocaleString('ar-EG')}</td>
-                <td className={cn('py-3 px-2 font-mono', totalDifference === 0 ? 'text-emerald-400' : 'text-red-400')}>
+              <tr className="border-t border-white/[0.08] font-bold bg-white/[0.02]">
+                <td className="py-4 px-4 text-white">الإجمالي</td>
+                <td className="py-4 px-4 font-mono text-base text-gray-300">{totalSystemBalance.toLocaleString('ar-EG')}</td>
+                <td className="py-4 px-4 font-mono text-base text-white">{totalActualBalance.toLocaleString('ar-EG')}</td>
+                <td className={cn('py-4 px-4 font-mono text-base', totalDifference === 0 ? 'text-emerald-400' : 'text-red-400')}>
                   {totalDifference >= 0 ? '+' : ''}{totalDifference.toLocaleString('ar-EG')}
                 </td>
               </tr>
@@ -472,75 +473,81 @@ export default function ReconciliationPage() {
       </div>
 
       {/* Section 4: Pending Operations */}
-      <div className="rounded-2xl bg-white/[0.03] border border-white/[0.06] p-6">
-        <h2 className="text-lg font-semibold mb-4">العمليات المعلقة وقيد التحصيل</h2>
+      <div className="rounded-[2rem] bg-[#111114]/90 backdrop-blur-3xl border border-white/[0.06] p-8 shadow-2xl">
+        <h2 className="text-xl font-black text-white mb-6">العمليات المعلقة وقيد التحصيل</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="rounded-xl bg-white/[0.04] p-4 border border-white/[0.06]">
-            <div className="flex items-center justify-between mb-2">
-              <div className="flex items-center gap-2">
-                <Clock className="w-4 h-4 text-amber-400" />
-                <span className="text-sm font-medium">العمليات المعلقة</span>
+          <div className="rounded-2xl bg-white/[0.02] p-5 border border-white/[0.04] hover:bg-white/[0.04] transition-colors">
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-amber-500/10 flex items-center justify-center border border-amber-500/20">
+                  <Clock className="w-5 h-5 text-amber-400" />
+                </div>
+                <span className="font-bold text-gray-300">العمليات المعلقة</span>
               </div>
-              <span className="text-xs px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30">
+              <span className="text-sm font-black px-3 py-1 rounded-lg bg-amber-500/20 text-amber-400 border border-amber-500/30">
                 {pendingTransactions.length}
               </span>
             </div>
-            <div className="space-y-1 max-h-32 overflow-y-auto">
+            <div className="space-y-2 max-h-32 overflow-y-auto pr-2 custom-scrollbar">
               {pendingTransactions.length === 0 ? (
-                <p className="text-xs text-gray-500 py-2">لا توجد عمليات معلقة</p>
+                <p className="text-sm text-gray-500 py-2">لا توجد عمليات معلقة</p>
               ) : (
                 pendingTransactions.slice(0, 5).map((tx) => (
-                  <div key={tx.id} className="flex items-center justify-between text-xs text-gray-400 py-1">
-                    <span className="truncate">{tx.description || 'عملية'}</span>
-                    <span className="font-mono">{tx.amount.toLocaleString('ar-EG')} ج.م</span>
+                  <div key={tx.id} className="flex items-center justify-between text-sm py-1.5 border-b border-white/[0.04] last:border-0">
+                    <span className="text-gray-400 truncate max-w-[120px]">{tx.description || 'عملية'}</span>
+                    <span className="font-mono font-bold text-amber-400/80">{tx.amount.toLocaleString('ar-EG')} ج.م</span>
                   </div>
                 ))
               )}
             </div>
           </div>
 
-          <div className="rounded-xl bg-white/[0.04] p-4 border border-white/[0.06]">
-            <div className="flex items-center justify-between mb-2">
-              <div className="flex items-center gap-2">
-                <ArrowRightLeft className="w-4 h-4 text-blue-400" />
-                <span className="text-sm font-medium">التحويلات التي لم تصل</span>
+          <div className="rounded-2xl bg-white/[0.02] p-5 border border-white/[0.04] hover:bg-white/[0.04] transition-colors">
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center border border-blue-500/20">
+                  <ArrowRightLeft className="w-5 h-5 text-blue-400" />
+                </div>
+                <span className="font-bold text-gray-300">التحويلات العالقة</span>
               </div>
-              <span className="text-xs px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30">
+              <span className="text-sm font-black px-3 py-1 rounded-lg bg-blue-500/20 text-blue-400 border border-blue-500/30">
                 {pendingTransfers.length}
               </span>
             </div>
-            <div className="space-y-1 max-h-32 overflow-y-auto">
+            <div className="space-y-2 max-h-32 overflow-y-auto pr-2 custom-scrollbar">
               {pendingTransfers.length === 0 ? (
-                <p className="text-xs text-gray-500 py-2">لا توجد تحويلات معلقة</p>
+                <p className="text-sm text-gray-500 py-2">لا توجد تحويلات معلقة</p>
               ) : (
                 pendingTransfers.slice(0, 5).map((tr) => (
-                  <div key={tr.id} className="flex items-center justify-between text-xs text-gray-400 py-1">
-                    <span className="truncate">{tr.transfer_number}</span>
-                    <span className="font-mono">{tr.total_items} أصناف</span>
+                  <div key={tr.id} className="flex items-center justify-between text-sm py-1.5 border-b border-white/[0.04] last:border-0">
+                    <span className="text-gray-400 truncate max-w-[120px]">{tr.transfer_number}</span>
+                    <span className="font-mono font-bold text-blue-400/80">{tr.total_items} أصناف</span>
                   </div>
                 ))
               )}
             </div>
           </div>
 
-          <div className="rounded-xl bg-white/[0.04] p-4 border border-white/[0.06]">
-            <div className="flex items-center justify-between mb-2">
-              <div className="flex items-center gap-2">
-                <Wallet className="w-4 h-4 text-orange-400" />
-                <span className="text-sm font-medium">التحصيلات المؤجلة</span>
+          <div className="rounded-2xl bg-white/[0.02] p-5 border border-white/[0.04] hover:bg-white/[0.04] transition-colors">
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-orange-500/10 flex items-center justify-center border border-orange-500/20">
+                  <Wallet className="w-5 h-5 text-orange-400" />
+                </div>
+                <span className="font-bold text-gray-300">التحصيلات المؤجلة</span>
               </div>
-              <span className="text-xs px-2 py-0.5 rounded-full bg-orange-500/20 text-orange-400 border border-orange-500/30">
+              <span className="text-sm font-black px-3 py-1 rounded-lg bg-orange-500/20 text-orange-400 border border-orange-500/30">
                 {delayedTransactions.length}
               </span>
             </div>
-            <div className="space-y-1 max-h-32 overflow-y-auto">
+            <div className="space-y-2 max-h-32 overflow-y-auto pr-2 custom-scrollbar">
               {delayedTransactions.length === 0 ? (
-                <p className="text-xs text-gray-500 py-2">لا توجد تحصيلات مؤجلة</p>
+                <p className="text-sm text-gray-500 py-2">لا توجد تحصيلات مؤجلة</p>
               ) : (
                 delayedTransactions.slice(0, 5).map((tx) => (
-                  <div key={tx.id} className="flex items-center justify-between text-xs text-gray-400 py-1">
-                    <span className="truncate">{tx.description || 'تحصيل'}</span>
-                    <span className="font-mono">{tx.amount.toLocaleString('ar-EG')} ج.م</span>
+                  <div key={tx.id} className="flex items-center justify-between text-sm py-1.5 border-b border-white/[0.04] last:border-0">
+                    <span className="text-gray-400 truncate max-w-[120px]">{tx.description || 'تحصيل'}</span>
+                    <span className="font-mono font-bold text-orange-400/80">{tx.amount.toLocaleString('ar-EG')} ج.م</span>
                   </div>
                 ))
               )}
@@ -551,22 +558,27 @@ export default function ReconciliationPage() {
 
       {/* Section 5: Mismatch Alerts */}
       {session && totalDifference !== 0 && session.status !== 'completed' && (
-        <div className="rounded-2xl bg-red-500/10 border border-red-500/30 p-6">
-          <div className="flex items-start gap-3">
-            <AlertTriangle className="w-6 h-6 text-red-400 shrink-0 mt-0.5" />
+        <div className="rounded-[2rem] bg-gradient-to-br from-red-500/10 to-rose-500/5 border border-red-500/30 p-8 shadow-2xl shadow-red-500/10 relative overflow-hidden">
+          <div className="absolute top-0 right-0 p-8 opacity-10">
+             <AlertTriangle className="w-48 h-48 text-red-500" />
+          </div>
+          <div className="relative z-10 flex flex-col md:flex-row items-start gap-6">
+            <div className="w-16 h-16 rounded-2xl bg-red-500/20 flex items-center justify-center border border-red-500/30 shrink-0 shadow-lg shadow-red-500/20">
+              <AlertTriangle className="w-8 h-8 text-red-400" />
+            </div>
             <div className="flex-1">
-              <h3 className="font-semibold text-red-400 mb-2">⚠️ وجود فروقات في المطابقة!</h3>
-              <p className="text-sm text-red-300 mb-3">
+              <h3 className="text-2xl font-black text-red-400 mb-2">تنبيه: وجود فروقات في المطابقة!</h3>
+              <p className="text-lg font-bold text-red-300 mb-4">
                 إجمالي الفروقات: {totalDifference.toLocaleString('ar-EG')} ج.م
               </p>
-              <div className="space-y-1 mb-4">
+              <div className="space-y-2 mb-6 max-w-md bg-black/20 p-4 rounded-2xl border border-red-500/20">
                 {accounts.map((account) => {
                   const diff = getAccountDiff(account.id);
                   if (diff === 0) return null;
                   return (
-                    <div key={account.id} className="flex items-center justify-between text-sm text-red-300 py-1">
+                    <div key={account.id} className="flex items-center justify-between text-sm font-bold text-red-300 py-1.5 border-b border-red-500/10 last:border-0">
                       <span>{account.name_ar}</span>
-                      <span className="font-mono">{diff >= 0 ? '+' : ''}{diff.toLocaleString('ar-EG')} ج.م</span>
+                      <span className="font-mono text-base">{diff >= 0 ? '+' : ''}{diff.toLocaleString('ar-EG')} ج.م</span>
                     </div>
                   );
                 })}
@@ -576,9 +588,9 @@ export default function ReconciliationPage() {
                   setSettleAmount(Math.abs(totalDifference).toString());
                   setShowSettleModal(true);
                 }}
-                className="px-4 py-2 rounded-xl bg-red-500/20 text-red-400 hover:bg-red-500/30 transition-colors text-sm font-medium"
+                className="px-6 py-3 rounded-xl bg-gradient-to-l from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 text-white shadow-lg shadow-red-500/25 transition-all text-sm font-bold"
               >
-                تسوية الفروقات
+                تسوية الفروقات الآن
               </button>
             </div>
           </div>
@@ -586,16 +598,16 @@ export default function ReconciliationPage() {
       )}
 
       {/* Tabs */}
-      <div className="flex gap-1 p-1 rounded-xl bg-white/[0.04] w-fit">
+      <div className="flex gap-2 p-1.5 rounded-2xl bg-white/[0.02] border border-white/[0.04] w-fit">
         {(['overview', 'discrepancies', 'log'] as const).map((tab) => (
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
             className={cn(
-              'px-4 py-2 rounded-lg text-sm transition-colors',
+              'px-6 py-2.5 rounded-xl text-sm font-bold transition-all duration-300',
               activeTab === tab
-                ? 'bg-emerald-500/20 text-emerald-400'
-                : 'text-gray-400 hover:text-gray-300',
+                ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/25'
+                : 'text-gray-400 hover:text-white hover:bg-white/[0.04]',
             )}
           >
             {tab === 'overview' ? 'نظرة عامة' : tab === 'discrepancies' ? 'الفروقات' : 'سجل النشاط'}
@@ -605,49 +617,53 @@ export default function ReconciliationPage() {
 
       {/* Section 7: Discrepancies Tab */}
       {activeTab === 'discrepancies' && (
-        <div className="rounded-2xl bg-white/[0.03] border border-white/[0.06] p-6">
-          <h2 className="text-lg font-semibold mb-4">سجل الفروقات</h2>
+        <div className="rounded-[2rem] bg-[#111114]/90 backdrop-blur-3xl border border-white/[0.06] p-8 shadow-2xl">
+          <h2 className="text-xl font-black text-white mb-6">سجل الفروقات</h2>
           {discrepancies.length === 0 ? (
-            <div className="text-center py-8 text-gray-500">لا توجد فروقات مسجلة</div>
+            <div className="flex flex-col items-center justify-center py-16 text-gray-500">
+              <span className="text-5xl mb-4">✨</span>
+              <p className="text-lg font-bold text-white mb-2">لا توجد فروقات مسجلة</p>
+              <p className="text-sm">الأرصدة متطابقة بالكامل ولا توجد أي ملاحظات</p>
+            </div>
           ) : (
-            <div className="space-y-2">
+            <div className="space-y-4">
               {discrepancies.map((disc) => (
-                <div key={disc.id} className="flex flex-wrap items-center justify-between p-4 rounded-xl bg-white/[0.02] hover:bg-white/[0.04] transition-colors gap-3">
-                  <div className="flex items-center gap-3">
+                <div key={disc.id} className="flex flex-wrap items-center justify-between p-5 rounded-2xl bg-white/[0.02] border border-white/[0.04] hover:bg-white/[0.04] transition-colors gap-4">
+                  <div className="flex items-center gap-4">
                     <span className={cn(
-                      'text-xs px-2 py-0.5 rounded-full border',
-                      disc.type === 'treasury' ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30' :
-                      disc.type === 'inventory' ? 'bg-blue-500/20 text-blue-400 border-blue-500/30' :
-                      disc.type === 'transfer' ? 'bg-amber-500/20 text-amber-400 border-amber-500/30' :
-                      'bg-orange-500/20 text-orange-400 border-orange-500/30',
+                      'text-sm font-bold px-4 py-1.5 rounded-xl border',
+                      disc.type === 'treasury' ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30 shadow-emerald-500/10' :
+                      disc.type === 'inventory' ? 'bg-blue-500/20 text-blue-400 border-blue-500/30 shadow-blue-500/10' :
+                      disc.type === 'transfer' ? 'bg-amber-500/20 text-amber-400 border-amber-500/30 shadow-amber-500/10' :
+                      'bg-orange-500/20 text-orange-400 border-orange-500/30 shadow-orange-500/10',
                     )}>
                       {DISCREPANCY_TYPE_LABELS[disc.type] || disc.type}
                     </span>
                     <div>
-                      <p className="text-sm font-medium">{disc.source_name}</p>
-                      <p className="text-xs text-gray-500">
-                        النظام: {disc.system_value.toLocaleString('ar-EG')} | الفعلي: {disc.actual_value.toLocaleString('ar-EG')}
+                      <p className="text-base font-bold text-white">{disc.source_name}</p>
+                      <p className="text-sm font-medium text-gray-400 mt-1">
+                        النظام: <span className="font-mono text-gray-300">{disc.system_value.toLocaleString('ar-EG')}</span> | الفعلي: <span className="font-mono text-gray-300">{disc.actual_value.toLocaleString('ar-EG')}</span>
                       </p>
                     </div>
                   </div>
-                  <div className="flex items-center gap-3">
-                    <span className="text-sm font-semibold text-red-400 font-mono">
+                  <div className="flex items-center gap-4">
+                    <span className="text-lg font-black text-red-400 font-mono">
                       {disc.difference >= 0 ? '+' : ''}{disc.difference.toLocaleString('ar-EG')}
                     </span>
                     <span className={cn(
-                      'text-xs px-2 py-0.5 rounded-full border',
+                      'text-xs font-bold px-3 py-1.5 rounded-lg border',
                       disc.resolved
                         ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30'
-                        : 'bg-red-500/20 text-red-400 border-red-500/30',
+                        : 'bg-red-500/20 text-red-400 border-red-500/30 animate-pulse',
                     )}>
                       {disc.resolved ? 'تم الحل' : 'مفتوح'}
                     </span>
                     {!disc.resolved && session && session.status !== 'completed' && (
                       <button
                         onClick={() => handleResolveDiscrepancy(disc.id)}
-                        className="px-3 py-1.5 rounded-lg bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30 transition-colors text-xs"
+                        className="px-4 py-2 rounded-xl bg-gradient-to-l from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-white shadow-lg shadow-emerald-500/25 transition-all text-xs font-bold"
                       >
-                        حل
+                        حل الفرق
                       </button>
                     )}
                   </div>
@@ -660,37 +676,45 @@ export default function ReconciliationPage() {
 
       {/* Section 8: Activity Log Tab */}
       {activeTab === 'log' && (
-        <div className="rounded-2xl bg-white/[0.03] border border-white/[0.06] p-6">
-          <h2 className="text-lg font-semibold mb-4">سجل النشاط</h2>
+        <div className="rounded-[2rem] bg-[#111114]/90 backdrop-blur-3xl border border-white/[0.06] p-8 shadow-2xl">
+          <h2 className="text-xl font-black text-white mb-6">سجل النشاط والتعديلات</h2>
           {logs.length === 0 ? (
-            <div className="text-center py-8 text-gray-500">لا توجد نشاطات مسجلة</div>
+            <div className="flex flex-col items-center justify-center py-16 text-gray-500">
+              <span className="text-5xl mb-4">📝</span>
+              <p className="text-lg font-bold text-white mb-2">لا توجد نشاطات مسجلة</p>
+            </div>
           ) : (
-            <div className="space-y-0">
+            <div className="space-y-0 pl-2">
               {logs.map((log, idx) => (
-                <div key={log.id} className="flex gap-4 pb-4 relative">
+                <div key={log.id} className="flex gap-6 pb-6 relative">
                   {idx < logs.length - 1 && (
-                    <div className="absolute right-[11px] top-6 bottom-0 w-0.5 bg-white/[0.06]" />
+                    <div className="absolute right-[15px] top-8 bottom-0 w-0.5 bg-white/[0.06]" />
                   )}
                   <div className={cn(
-                    'w-6 h-6 rounded-full flex items-center justify-center shrink-0 mt-0.5',
-                    log.action === 'started' ? 'bg-blue-500/20 text-blue-400' :
-                    log.action === 'completed' ? 'bg-emerald-500/20 text-emerald-400' :
-                    log.action === 'settlement_recorded' ? 'bg-amber-500/20 text-amber-400' :
-                    log.action === 'discrepancy_found' ? 'bg-red-500/20 text-red-400' :
-                    log.action === 'discrepancy_resolved' ? 'bg-emerald-500/20 text-emerald-400' :
-                    'bg-gray-500/20 text-gray-400',
+                    'w-8 h-8 rounded-xl flex items-center justify-center shrink-0 mt-0.5 border shadow-lg z-10',
+                    log.action === 'started' ? 'bg-blue-500/20 text-blue-400 border-blue-500/30' :
+                    log.action === 'completed' ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30' :
+                    log.action === 'settlement_recorded' ? 'bg-amber-500/20 text-amber-400 border-amber-500/30' :
+                    log.action === 'discrepancy_found' ? 'bg-red-500/20 text-red-400 border-red-500/30' :
+                    log.action === 'discrepancy_resolved' ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30' :
+                    'bg-gray-500/20 text-gray-400 border-gray-500/30',
                   )}>
                     <div className="w-2 h-2 rounded-full bg-current" />
                   </div>
-                  <div className="flex-1">
-                    <p className="text-sm font-medium">
-                      {SESSION_ACTION_LABELS[log.action] || log.action}
-                    </p>
-                    <p className="text-xs text-gray-400">{log.description}</p>
-                    <p className="text-xs text-gray-500 mt-0.5">
-                      {log.performed_by_name && `${log.performed_by_name} • `}
-                      {new Date(log.created_at).toLocaleString('ar-EG')}
-                    </p>
+                  <div className="flex-1 bg-white/[0.02] border border-white/[0.04] p-4 rounded-2xl hover:bg-white/[0.04] transition-colors">
+                    <div className="flex justify-between items-start mb-2">
+                      <p className="text-base font-bold text-white">
+                        {SESSION_ACTION_LABELS[log.action] || log.action}
+                      </p>
+                      <p className="text-xs font-mono text-gray-500 bg-[#111114] px-2 py-1 rounded-lg border border-white/[0.04]">
+                        {new Date(log.created_at).toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' })}
+                      </p>
+                    </div>
+                    <p className="text-sm text-gray-400 font-medium mb-3">{log.description}</p>
+                    <div className="flex items-center gap-2 text-xs font-bold text-gray-500">
+                      <span className="w-5 h-5 rounded-full bg-white/[0.06] flex items-center justify-center">🧑‍💻</span>
+                      {log.performed_by_name || 'مدير النظام'}
+                    </div>
                   </div>
                 </div>
               ))}
@@ -701,20 +725,21 @@ export default function ReconciliationPage() {
 
       {/* Section 9: Complete Session Button */}
       {session && session.status !== 'completed' && (
-        <div className="rounded-2xl bg-gradient-to-r from-emerald-500/10 to-teal-500/10 border border-emerald-500/20 p-6">
-          <div className="flex flex-wrap items-center justify-between gap-4">
+        <div className="rounded-[2rem] bg-gradient-to-br from-emerald-500/10 to-teal-500/5 border border-emerald-500/20 p-8 shadow-2xl shadow-emerald-500/10 relative overflow-hidden group">
+          <div className="absolute inset-0 bg-gradient-to-l from-emerald-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+          <div className="relative z-10 flex flex-wrap items-center justify-between gap-6">
             <div>
-              <h3 className="font-semibold">إتمام المطابقة اليومية</h3>
-              <p className="text-sm text-gray-400 mt-1">
-                بعد التأكد من صحة جميع الأرصدة، قم بإتمام جلسة المطابقة
+              <h3 className="text-2xl font-black text-emerald-400 mb-2">إتمام المطابقة اليومية</h3>
+              <p className="text-base font-medium text-emerald-300/80">
+                بعد التأكد من صحة جميع الأرصدة ومعالجة الفروقات، يمكنك إغلاق جلسة المطابقة
               </p>
             </div>
             <button
               onClick={handleCompleteSession}
-              className="px-6 py-3 rounded-xl bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30 transition-colors font-medium flex items-center gap-2"
+              className="px-8 py-4 rounded-2xl bg-gradient-to-l from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-white shadow-xl shadow-emerald-500/25 transition-all font-black text-lg flex items-center gap-3 hover:-translate-y-1"
             >
-              <CheckCircle className="w-5 h-5" />
-              إتمام المطابقة
+              <CheckCircle className="w-6 h-6" />
+              تأكيد وإتمام المطابقة
             </button>
           </div>
         </div>
@@ -722,54 +747,62 @@ export default function ReconciliationPage() {
 
       {/* Section 6: Settlement Modal */}
       {showSettleModal && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="w-full max-w-2xl max-h-[85vh] overflow-y-auto rounded-2xl bg-[#111114] border border-white/[0.08] p-6 space-y-4">
-            <h3 className="text-lg font-semibold">تسوية الفروقات</h3>
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-[#0A0A0C]/80 backdrop-blur-sm p-4">
+          <div className="w-full max-w-lg rounded-[2rem] bg-[#111114]/95 backdrop-blur-3xl border border-white/[0.08] p-8 shadow-2xl shadow-emerald-500/10 space-y-6" dir="rtl">
+            <div>
+              <h3 className="text-2xl font-black text-white mb-2">تسوية الفروقات يدوياً</h3>
+              <p className="text-sm font-medium text-gray-400">قم بتسجيل التسوية مع توضيح السبب لإغلاق الفروقات</p>
+            </div>
 
-            <div className="rounded-xl bg-red-500/10 border border-red-500/20 p-4">
-              <p className="text-sm text-red-400">
+            <div className="rounded-2xl bg-gradient-to-br from-red-500/10 to-rose-500/5 border border-red-500/20 p-5">
+              <p className="text-sm font-bold text-red-400 mb-1">
                 إجمالي الفروقات المطلوب تسويتها:
               </p>
-              <p className="text-2xl font-bold text-red-400 mt-1 font-mono">
-                {Math.abs(totalDifference).toLocaleString('ar-EG')} ج.م
+              <p className="text-3xl font-black text-red-400 font-mono">
+                {Math.abs(totalDifference).toLocaleString('ar-EG')} <span className="text-sm opacity-70">ج.م</span>
               </p>
             </div>
 
-            <div>
-              <label className="block text-sm text-gray-400 mb-1.5">مبلغ التسوية</label>
-              <input
-                type="number"
-                value={settleAmount}
-                onChange={(e) => setSettleAmount(e.target.value)}
-                placeholder="مبلغ التسوية"
-                className="w-full px-3 py-2.5 rounded-xl bg-white/[0.04] border border-white/[0.08] text-sm outline-none focus:border-emerald-500/50"
-              />
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <label className="block text-sm font-bold text-gray-300">مبلغ التسوية الفعلي</label>
+                <div className="relative">
+                  <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 font-bold">ج.م</span>
+                  <input
+                    type="number"
+                    value={settleAmount}
+                    onChange={(e) => setSettleAmount(e.target.value)}
+                    placeholder="مبلغ التسوية"
+                    className="w-full pr-12 pl-4 py-4 rounded-2xl bg-white/[0.02] border border-white/[0.08] text-base font-mono font-bold text-white focus:outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500/50 transition-all"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <label className="block text-sm font-bold text-gray-300">ملاحظات / سبب التسوية والتبرير</label>
+                <textarea
+                  value={settleReason}
+                  onChange={(e) => setSettleReason(e.target.value)}
+                  placeholder="أدخل ملاحظات التسوية بالتفصيل..."
+                  rows={4}
+                  className="w-full px-4 py-4 rounded-2xl bg-white/[0.02] border border-white/[0.08] text-sm text-white focus:outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500/50 transition-all resize-none"
+                />
+              </div>
             </div>
 
-            <div>
-              <label className="block text-sm text-gray-400 mb-1.5">ملاحظات / سبب التسوية</label>
-              <textarea
-                value={settleReason}
-                onChange={(e) => setSettleReason(e.target.value)}
-                placeholder="أدخل ملاحظات التسوية..."
-                rows={3}
-                className="w-full px-3 py-2.5 rounded-xl bg-white/[0.04] border border-white/[0.08] text-sm outline-none focus:border-emerald-500/50 resize-none"
-              />
-            </div>
-
-            <div className="flex gap-2">
+            <div className="flex gap-3 pt-4">
               <button
                 onClick={() => setShowSettleModal(false)}
-                className="flex-1 py-2.5 rounded-xl bg-white/[0.06] text-sm hover:bg-white/[0.1] transition-colors"
+                className="flex-1 py-4 rounded-2xl bg-white/[0.04] border border-white/[0.04] text-gray-300 hover:text-white hover:bg-white/[0.08] transition-colors font-bold"
               >
-                إلغاء
+                إلغاء التراجع
               </button>
               <button
                 onClick={handleSettle}
                 disabled={loading || !settleAmount}
-                className="flex-1 py-2.5 rounded-xl bg-red-500/20 text-red-400 hover:bg-red-500/30 transition-colors text-sm font-medium disabled:opacity-50"
+                className="flex-[2] py-4 rounded-2xl bg-gradient-to-l from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 text-white font-black shadow-lg shadow-red-500/25 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {loading ? 'جاري...' : 'تسجيل التسوية في السجل'}
+                {loading ? 'جاري التنفيذ...' : 'تأكيد التسوية وحفظ'}
               </button>
             </div>
           </div>
