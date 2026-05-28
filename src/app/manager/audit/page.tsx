@@ -13,6 +13,7 @@ import { Mic, MicOff, Camera, FileText, Check, X, AlertTriangle, TrendingUp, Tre
 import * as XLSX from 'xlsx';
 import toast from 'react-hot-toast';
 import { loadCategories } from '@/lib/category-utils';
+import { Tooltip } from '@/components/ui/tooltip';
 
 const supabase = createClient();
 
@@ -176,7 +177,7 @@ export default function AuditPage() {
     });
     
     if (res.error) {
-      toast.error('خطأ في بدء الجلسة: ' + res.error.message);
+      toast.error('خطأ في بدء الجلسة: ' + ((res.error as any)?.message || 'Unknown error'));
       return;
     }
     
@@ -256,6 +257,18 @@ export default function AuditPage() {
         current_qty: actual,
         last_audit_date: new Date().toISOString(),
       }).eq('id', selectedProduct.id);
+
+      // Log into product_history
+      await supabase.from('product_history').insert({
+        stock_item_id: selectedProduct.id,
+        product_name: selectedProduct.product_name,
+        type: 'audit',
+        quantity: variance,
+        price: selectedProduct.cost_price,
+        total_value: varianceValue,
+        reference_id: activeSession.id,
+        performed_by_name: (user as any)?.nameAr || (user as any)?.name || 'مدير'
+      });
     }
 
     if (variance === 0) {
@@ -421,12 +434,16 @@ export default function AuditPage() {
               className="w-full pr-10 pl-4 py-2.5 rounded-xl bg-white/50 dark:bg-slate-900/50 border-none text-sm focus:ring-2 focus:ring-emerald-500/50"
             />
           </div>
-          <button onClick={toggleVoice} className={cn("h-10 w-10 flex items-center justify-center rounded-xl transition-colors", isRecording ? "bg-red-500 text-white" : "bg-white/50 dark:bg-slate-900/50 text-gray-500 hover:bg-white/80")}>
-            <Mic className="w-4 h-4" />
-          </button>
-          <button onClick={() => { setScannerMode('barcode'); setScannerOpen(true); }} className="h-10 w-10 flex items-center justify-center rounded-xl bg-white/50 dark:bg-slate-900/50 text-gray-500 hover:bg-white/80 transition-colors">
-            <ScanLine className="w-4 h-4" />
-          </button>
+          <Tooltip text="المساعد الصوتي">
+            <button onClick={toggleVoice} className={cn("h-10 w-10 flex items-center justify-center rounded-xl transition-colors", isRecording ? "bg-red-500 text-white" : "bg-white/50 dark:bg-slate-900/50 text-gray-500 hover:bg-white/80")}>
+              <Mic className="w-4 h-4" />
+            </button>
+          </Tooltip>
+          <Tooltip text="مسح باركود">
+            <button onClick={() => { setScannerMode('barcode'); setScannerOpen(true); }} className="h-10 w-10 flex items-center justify-center rounded-xl bg-white/50 dark:bg-slate-900/50 text-gray-500 hover:bg-white/80 transition-colors">
+              <ScanLine className="w-4 h-4" />
+            </button>
+          </Tooltip>
         </div>
 
         {/* Categories */}
@@ -463,6 +480,106 @@ export default function AuditPage() {
 
       <UnifiedScanner isOpen={scannerOpen} onClose={() => setScannerOpen(false)} onScan={handleScanResult} mode={scannerMode} />
       <ProductMasterCard isOpen={productCardOpen} onClose={() => setProductCardOpen(false)} barcode={scannedCode} />
+
+      {/* ─── Modals ─── */}
+      {showStartModal && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+          <div className="bg-white dark:bg-slate-900 rounded-3xl w-full max-w-md overflow-hidden shadow-2xl border border-gray-100 dark:border-slate-800">
+            <div className="p-6 border-b border-gray-100 dark:border-slate-800 flex items-center justify-between">
+              <h3 className="text-xl font-bold">بدء جلسة جرد جديدة</h3>
+              <button onClick={() => setShowStartModal(false)} className="p-2 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-xl transition-colors">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            <div className="p-6 space-y-4">
+              <p className="text-sm text-gray-500 mb-4">اختر طريقة الجرد المناسبة لك:</p>
+              
+              <button onClick={() => startAudit('manual')} className="w-full p-4 rounded-2xl border-2 border-emerald-500/20 hover:border-emerald-500 bg-emerald-500/5 hover:bg-emerald-500/10 transition-all text-right group">
+                <div className="flex items-center gap-4">
+                  <div className="h-12 w-12 rounded-xl bg-emerald-500 text-white flex items-center justify-center group-hover:scale-110 transition-transform shadow-md">
+                    <FileText className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-gray-900 dark:text-white text-lg">جرد يدوي</h4>
+                    <p className="text-xs text-gray-500 mt-1">البحث عن المنتجات وتحديث كمياتها يدوياً</p>
+                  </div>
+                </div>
+              </button>
+
+              <button onClick={() => startAudit('voice')} className="w-full p-4 rounded-2xl border-2 border-blue-500/20 hover:border-blue-500 bg-blue-500/5 hover:bg-blue-500/10 transition-all text-right group">
+                <div className="flex items-center gap-4">
+                  <div className="h-12 w-12 rounded-xl bg-blue-500 text-white flex items-center justify-center group-hover:scale-110 transition-transform shadow-md">
+                    <Mic className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-gray-900 dark:text-white text-lg">جرد بالصوت</h4>
+                    <p className="text-xs text-gray-500 mt-1">نطق اسم المنتج وسيتم البحث عنه فوراً</p>
+                  </div>
+                </div>
+              </button>
+
+              <button onClick={() => startAudit('ocr')} className="w-full p-4 rounded-2xl border-2 border-purple-500/20 hover:border-purple-500 bg-purple-500/5 hover:bg-purple-500/10 transition-all text-right group">
+                <div className="flex items-center gap-4">
+                  <div className="h-12 w-12 rounded-xl bg-purple-500 text-white flex items-center justify-center group-hover:scale-110 transition-transform shadow-md">
+                    <ScanLine className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-gray-900 dark:text-white text-lg">جرد بالكاميرا / باركود</h4>
+                    <p className="text-xs text-gray-500 mt-1">مسح الباركود للوصول للمنتج بدقة</p>
+                  </div>
+                </div>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showReportModal && reportData && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+          <div className="bg-white dark:bg-slate-900 rounded-3xl w-full max-w-lg overflow-hidden shadow-2xl border border-gray-100 dark:border-slate-800">
+            <div className="bg-gradient-to-l from-emerald-500 to-teal-600 p-6 text-white text-center">
+              <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-3 backdrop-blur-sm">
+                <Check className="w-8 h-8 text-white" />
+              </div>
+              <h3 className="text-2xl font-black mb-1">تم إغلاق الجرد بنجاح</h3>
+              <p className="text-emerald-100 text-sm">تم تسجيل جميع التسويات وحفظ التقرير</p>
+            </div>
+            
+            <div className="p-6">
+              <h4 className="font-bold text-gray-900 dark:text-white mb-4">ملخص نتائج الجرد</h4>
+              <div className="grid grid-cols-2 gap-3 mb-6">
+                <div className="p-4 rounded-2xl bg-gray-50 dark:bg-slate-800/50 border border-gray-100 dark:border-slate-700/50 text-center">
+                  <span className="block text-3xl font-black text-gray-900 dark:text-white mb-1">{reportData.total}</span>
+                  <span className="text-xs text-gray-500 font-bold uppercase">إجمالي الأصناف المجردة</span>
+                </div>
+                <div className="p-4 rounded-2xl bg-emerald-50 dark:bg-emerald-900/10 border border-emerald-100 dark:border-emerald-900/30 text-center">
+                  <span className="block text-3xl font-black text-emerald-600 dark:text-emerald-400 mb-1">{reportData.matched}</span>
+                  <span className="text-xs text-emerald-600/70 dark:text-emerald-400/70 font-bold uppercase">أصناف مطابقة</span>
+                </div>
+                <div className="p-4 rounded-2xl bg-red-50 dark:bg-red-900/10 border border-red-100 dark:border-red-900/30 text-center">
+                  <span className="block text-3xl font-black text-red-600 dark:text-red-400 mb-1">{reportData.shortage}</span>
+                  <span className="text-xs text-red-600/70 dark:text-red-400/70 font-bold uppercase">أصناف بها عجز</span>
+                </div>
+                <div className="p-4 rounded-2xl bg-amber-50 dark:bg-amber-900/10 border border-amber-100 dark:border-amber-900/30 text-center">
+                  <span className="block text-3xl font-black text-amber-600 dark:text-amber-400 mb-1">{reportData.overage}</span>
+                  <span className="text-xs text-amber-600/70 dark:text-amber-400/70 font-bold uppercase">أصناف بها زيادة</span>
+                </div>
+              </div>
+
+              <div className="p-4 rounded-xl bg-gray-100 dark:bg-slate-800 flex justify-between items-center mb-6">
+                <span className="font-bold text-gray-600 dark:text-gray-300">القيمة الإجمالية للتسوية:</span>
+                <span className={`text-xl font-black ${reportData.value < 0 ? 'text-red-500' : reportData.value > 0 ? 'text-amber-500' : 'text-emerald-500'}`}>
+                  {reportData.value} ج.م
+                </span>
+              </div>
+
+              <button onClick={closeReportAndReset} className="w-full py-4 rounded-2xl bg-gray-900 dark:bg-white text-white dark:text-gray-900 font-bold hover:opacity-90 transition-opacity">
+                إغلاق والعودة
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { FileDown, Share2, Mail, Download, ArrowRight, Printer } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -12,6 +12,7 @@ export default function GuideExportPage() {
   const router = useRouter();
   const [selectedRole, setSelectedRole] = useState('cashier');
   const [isExporting, setIsExporting] = useState(false);
+  const pdfRef = useRef<HTMLDivElement>(null);
 
   const roles = [
     { id: 'admin', name: 'المدير العام' },
@@ -32,9 +33,9 @@ export default function GuideExportPage() {
       const opt = {
         margin: 10,
         filename: `guide-${selectedRole}.pdf`,
-        image: { type: 'jpeg', quality: 0.98 },
+        image: { type: 'jpeg' as const, quality: 0.98 },
         html2canvas: { scale: 2, useCORS: true, letterRendering: true },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        jsPDF: { unit: 'mm' as const, format: 'a4' as const, orientation: 'portrait' as const }
       };
 
       await html2pdf().set(opt).from(element).save();
@@ -114,7 +115,7 @@ export default function GuideExportPage() {
               <span className="text-xs font-bold text-gray-500">المعاينة الحية للطباعة</span>
             </div>
             <div className="h-[750px] overflow-y-auto overflow-x-hidden bg-white scrollbar-hide">
-              <div className="transform scale-90 origin-top">
+              <div ref={pdfRef} className="transform scale-90 origin-top">
                 <DynamicInfographic role={selectedRole} />
               </div>
             </div>

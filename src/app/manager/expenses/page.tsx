@@ -56,8 +56,8 @@ export default function ExpensesPage() {
 
   async function fetchData() {
     const [expensesRes, balanceRes] = await Promise.all([
-      supabase.from('expenses').select('*').order('created_at', { ascending: false }),
-      supabase.from('custodian_settings').select('*').single(),
+      supabase.from('expenses').select('id, amount, description, category, responsible, attachment_url, status, created_at').order('created_at', { ascending: false }),
+      supabase.from('custodian_settings').select('id, limit').single(),
     ]);
 
     if (expensesRes.data) setExpenses(expensesRes.data);

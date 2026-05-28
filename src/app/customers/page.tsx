@@ -43,7 +43,7 @@ export default function CustomersPage() {
 
   async function loadData() {
     try {
-      const { data } = await supabase.from('customers').select('*').order('created_at', { ascending: false });
+      const { data } = await supabase.from('customers').select('id, name, phone, email, address, type, total_spent, total_orders, is_active, created_at').order('created_at', { ascending: false }).limit(200);
       if (data) setCustomers(data);
     } catch { /* silent */ }
     finally { setLoading(false); }

@@ -6,7 +6,7 @@ import { cn } from '@/lib/utils'
 import { useAuthStore } from '@/lib/store/auth-store'
 import { transferService, transferItemService, warehouseService, productHistoryService } from '@/lib/supabase/services/procurement'
 import { inventoryService } from '@/lib/supabase/services/inventory'
-import { ArrowRightLeft, Building2, Package, Search, ArrowRight, CheckCircle, Loader2, AlertTriangle, Plus, X, Clock, Eye, ChevronLeft, Warehouse, Scale } from 'lucide-react'
+import { ArrowRightLeft, Building2, Package, Search, ArrowRight, CheckCircle, Loader2, AlertTriangle, Plus, X, Clock, Eye, ChevronLeft, Warehouse, Scale, FileText } from 'lucide-react'
 import toast from 'react-hot-toast'
 
 const supabase = createClient()
@@ -287,23 +287,23 @@ export default function TransferPage() {
     const itemsRes = await transferItemService.getAll(transfer.id)
     if (itemsRes.data) {
       for (const item of itemsRes.data) {
-        if (item.stock_item_id) {
-          const srcRes = await supabase.from('stock_items').select('*').eq('id', item.stock_item_id).single()
+        if ((item as any).stock_item_id) {
+          const srcRes = await supabase.from('stock_items').select('*').eq('id', (item as any).stock_item_id).single();
           if (srcRes.data) {
             await supabase.from('stock_items').update({
               current_qty: srcRes.data.current_qty - item.requested_qty,
               updated_at: new Date().toISOString(),
-            }).eq('id', item.stock_item_id)
+            }).eq('id', (item as any).stock_item_id)
 
             await productHistoryService.create({
-              stock_item_id: item.stock_item_id,
+              stock_item_id: (item as any).stock_item_id,
               product_name: item.product_name,
               type: 'transfer_out',
               quantity: item.requested_qty,
               from_warehouse_id: transfer.from_warehouse_id,
               to_warehouse_id: transfer.to_warehouse_id,
               performed_by: user?.id,
-              performed_by_name: user?.nameAr || user?.name,
+              performed_by_name: (user as any)?.nameAr || (user as any)?.name,
               notes: `تحويل إلى ${warehouses.find(w => w.id === transfer.to_warehouse_id)?.name_ar}`,
             })
           }
@@ -327,7 +327,7 @@ export default function TransferPage() {
     const itemsRes = await transferItemService.getAll(transfer.id)
     if (itemsRes.data) {
       for (const item of itemsRes.data) {
-        if (item.stock_item_id) {
+        if ((item as any).stock_item_id) {
           const destRes = await supabase.from('stock_items')
             .select('*')
             .eq('product_name', item.product_name)
@@ -342,14 +342,14 @@ export default function TransferPage() {
           }
 
           await productHistoryService.create({
-            stock_item_id: item.stock_item_id,
+            stock_item_id: (item as any).stock_item_id,
             product_name: item.product_name,
             type: 'transfer_in',
             quantity: item.requested_qty,
             from_warehouse_id: transfer.from_warehouse_id,
             to_warehouse_id: transfer.to_warehouse_id,
             performed_by: user?.id,
-            performed_by_name: user?.nameAr || user?.name,
+            performed_by_name: (user as any)?.nameAr || (user as any)?.name,
             notes: `استلام من ${warehouses.find(w => w.id === transfer.from_warehouse_id)?.name_ar}`,
           })
         }

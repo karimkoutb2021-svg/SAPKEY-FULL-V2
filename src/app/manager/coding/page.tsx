@@ -114,7 +114,7 @@ export default function CodingPage() {
 
   // Scanner
   const [scannerOpen, setScannerOpen] = useState(false);
-  const [scannerMode, setScannerMode] = useState<'qr' | 'barcode' | 'form-barcode'>('barcode');
+  const [scannerMode, setScannerMode] = useState<'qr' | 'barcode'>('barcode');
 
   // Excel
   const [excelFile, setExcelFile] = useState<File | null>(null);
@@ -138,19 +138,21 @@ export default function CodingPage() {
       loadCategories()
     ]);
     if (stockRes.data) setStockItems(stockRes.data);
-    if (draftsRes.data) setDrafts(draftsRes.data);
+    if (draftsRes.data) setDrafts(draftsRes.data as any);
     if (catRes) setCategories([{id: 'all', name: 'الكل', image: ''} as any, ...catRes.map((c: any) => ({id: c.id, name: c.name_ar, image: c.image_url || ''}))]);
     setLoading(false);
   }
 
-  // Edit existing
+  // Edit existing product
   function handleEditProduct(p: StockItem) {
     setPanelTab('single');
+    // Find category ID by matching the category name string
+    const catObj = categories.find(c => c.name === p.category);
     setForm({
       id: p.id,
       product_code: p.sku,
       product_name: p.product_name,
-      category: p.category || '',
+      category: catObj ? catObj.id : '',
       unit: p.unit || 'قطعة',
       shelf_number: p.location || '',
       cost_price: String(p.cost_price),
@@ -219,14 +221,38 @@ export default function CodingPage() {
         toast.success('تم التكويد بنجاح');
       } else {
         await codingDraftService.create({
+          request_type: form.id ? 'update' : 'create',
           product_code: code, product_name: form.product_name, category: form.category, unit: form.unit,
           shelf_number: form.shelf_number, cost_price: parseFloat(form.cost_price) || 0,
           selling_price: parseFloat(form.selling_price) || 0, min_stock: parseFloat(form.min_stock) || 10,
-          status: 'pending', submitted_by: user?.id, submitted_by_name: user?.nameAr || user?.name,
+          status: 'pending', submitted_by: user?.id, submitted_by_name: (user as any)?.nameAr || (user as any)?.name,
           image_url: form.image_url
-        });
-        toast.success('تم الإرسال للمراجعة');
+        } as any);
+        toast.success(form.id ? 'تم إرسال طلب التعديل للمراجعة' : 'تم الإرسال للمراجعة');
       }
+    }
+    setForm({ id: '', product_code: '', product_name: '', category: '', unit: 'قطعة', shelf_number: '', cost_price: '', selling_price: '', min_stock: '10', image_url: '' });
+    setSaving(false);
+    fetchData();
+  }
+
+  async function submitDeleteDraft() {
+    if (!form.id || !form.product_code) return;
+    setSaving(true);
+    if (isManager) {
+      await supabase.from('stock_items').delete().eq('id', form.id);
+      await supabase.from('products').delete().eq('sku', form.product_code);
+      toast.success('تم حذف المنتج بنجاح');
+    } else {
+      await codingDraftService.create({
+        request_type: 'delete',
+        product_code: form.product_code, product_name: form.product_name, category: form.category, unit: form.unit,
+        shelf_number: form.shelf_number, cost_price: parseFloat(form.cost_price) || 0,
+        selling_price: parseFloat(form.selling_price) || 0, min_stock: parseFloat(form.min_stock) || 10,
+        status: 'pending', submitted_by: user?.id, submitted_by_name: (user as any)?.nameAr || (user as any)?.name,
+        image_url: form.image_url
+      } as any);
+      toast.success('تم إرسال طلب الحذف للمراجعة');
     }
     setForm({ id: '', product_code: '', product_name: '', category: '', unit: 'قطعة', shelf_number: '', cost_price: '', selling_price: '', min_stock: '10', image_url: '' });
     setSaving(false);
@@ -257,6 +283,7 @@ export default function CodingPage() {
         await supabase.from('stock_items').insert({ sku: code, product_name: row['اسم الصنف'], selling_price: row['سعر البيع'] || 0, unit: row['الوحدة'] || 'قطعة' });
       } else {
         await codingDraftService.create({
+          request_type: 'create',
           product_code: code, product_name: row['اسم الصنف'] || 'منتج جديد',
           selling_price: row['سعر البيع'] || 0,
           status: 'pending'
@@ -273,18 +300,38 @@ export default function CodingPage() {
 
   async function handleApprove(draft: any) {
     await codingDraftService.approve(draft.id, user?.id || '');
-    await supabase.from('products').insert({
-      sku: draft.product_code, barcode: draft.product_code, name_ar: draft.product_name, name_en: draft.product_name,
-      category_id: draft.category, unit: draft.unit, sale_price: draft.selling_price || 0,
-      cost_price: draft.cost_price || 0, image_url: draft.image_url
-    });
-    await supabase.from('stock_items').insert({
-      sku: draft.product_code, barcode: draft.product_code, product_name: draft.product_name, category: draft.category, unit: draft.unit,
-      location: draft.shelf_number, cost_price: draft.cost_price || 0,
-      selling_price: draft.selling_price || 0, min_qty: draft.min_stock || 10,
-      image_url: draft.image_url
-    });
-    toast.success('تم الاعتماد وإضافة المنتج');
+    
+    if (draft.request_type === 'delete') {
+      await supabase.from('stock_items').delete().eq('sku', draft.product_code);
+      await supabase.from('products').delete().eq('sku', draft.product_code);
+      toast.success('تم الاعتماد وحذف المنتج');
+    } else if (draft.request_type === 'update') {
+      await supabase.from('products').update({
+        name_ar: draft.product_name, name_en: draft.product_name,
+        category_id: draft.category, unit: draft.unit, sale_price: draft.selling_price || 0,
+        cost_price: draft.cost_price || 0, image_url: draft.image_url
+      }).eq('sku', draft.product_code);
+      await supabase.from('stock_items').update({
+        product_name: draft.product_name, category: draft.category, unit: draft.unit,
+        location: draft.shelf_number, cost_price: draft.cost_price || 0,
+        selling_price: draft.selling_price || 0, min_qty: draft.min_stock || 10,
+        image_url: draft.image_url
+      }).eq('sku', draft.product_code);
+      toast.success('تم الاعتماد وتحديث المنتج');
+    } else {
+      await supabase.from('products').insert({
+        sku: draft.product_code, barcode: draft.product_code, name_ar: draft.product_name, name_en: draft.product_name,
+        category_id: draft.category, unit: draft.unit, sale_price: draft.selling_price || 0,
+        cost_price: draft.cost_price || 0, image_url: draft.image_url
+      });
+      await supabase.from('stock_items').insert({
+        sku: draft.product_code, barcode: draft.product_code, product_name: draft.product_name, category: draft.category, unit: draft.unit,
+        location: draft.shelf_number, cost_price: draft.cost_price || 0,
+        selling_price: draft.selling_price || 0, min_qty: draft.min_stock || 10,
+        image_url: draft.image_url
+      });
+      toast.success('تم الاعتماد وإضافة المنتج');
+    }
     fetchData();
   }
 
@@ -399,9 +446,16 @@ export default function CodingPage() {
                 </div>
               </div>
 
-              <button onClick={submitSingle} disabled={saving} className="w-full mt-4 py-3 rounded-2xl bg-gradient-to-l from-emerald-500 to-teal-600 text-white font-bold hover:opacity-90 transition-all shadow-lg flex items-center justify-center gap-2">
-                <Check className="w-5 h-5" /> {saving ? 'جاري الحفظ...' : isManager ? (form.id ? 'حفظ التعديلات' : 'اعتماد التكويد') : 'إرسال للمراجعة'}
-              </button>
+              <div className="flex gap-2 mt-4">
+                <button onClick={submitSingle} disabled={saving} className="flex-1 py-3 rounded-2xl bg-gradient-to-l from-emerald-500 to-teal-600 text-white font-bold hover:opacity-90 transition-all shadow-lg flex items-center justify-center gap-2">
+                  <Check className="w-5 h-5" /> {saving ? 'جاري الحفظ...' : isManager ? (form.id ? 'حفظ التعديلات' : 'اعتماد التكويد') : (form.id ? 'إرسال طلب تعديل' : 'إرسال للمراجعة')}
+                </button>
+                {form.id && (
+                  <button onClick={submitDeleteDraft} disabled={saving} className="flex-none px-6 py-3 rounded-2xl bg-red-500/10 text-red-600 font-bold hover:bg-red-500/20 transition-all shadow-sm flex items-center justify-center gap-2 border border-red-500/20">
+                    <Trash2 className="w-5 h-5" /> {isManager ? 'حذف مباشر' : 'طلب حذف'}
+                  </button>
+                )}
+              </div>
             </div>
           )}
 
@@ -449,7 +503,12 @@ export default function CodingPage() {
                           <p className="font-bold">{draft.product_name}</p>
                           <p className="text-xs text-gray-500">{draft.product_code} • {draft.category || 'بدون'}</p>
                         </div>
-                        <span className="text-[10px] bg-amber-500/20 text-amber-600 px-2 py-0.5 rounded-full font-bold">معلق</span>
+                        <div className="flex flex-col items-end gap-1">
+                          <span className="text-[10px] bg-amber-500/20 text-amber-600 px-2 py-0.5 rounded-full font-bold">معلق</span>
+                          <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold ${draft.request_type === 'delete' ? 'bg-red-500/20 text-red-600' : draft.request_type === 'update' ? 'bg-blue-500/20 text-blue-600' : 'bg-emerald-500/20 text-emerald-600'}`}>
+                            {draft.request_type === 'delete' ? 'طلب حذف' : draft.request_type === 'update' ? 'طلب تعديل' : 'منتج جديد'}
+                          </span>
+                        </div>
                       </div>
                       <div className="flex justify-between text-xs mb-3">
                         <span>سعر البيع: {draft.selling_price}</span>

@@ -18,7 +18,7 @@ export default function CatalogPage() {
   useEffect(() => {
     const userId = 'customer-demo';
     Promise.all([
-      supabase.from('product_categories').select('*').order('name_ar'),
+      supabase.from('product_categories').select('id, name_ar, name_en, image_url').order('name_ar'),
       productViewService.getSmartCatalog(userId),
     ]).then(([cats, prods]) => {
       setCategories(cats.data || []);

@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useEffect, useState, useCallback } from 'react';
 import { createClient } from '@/lib/supabase/client';
@@ -315,7 +315,7 @@ export default function ReportsPage() {
 
   async function fetchTreasury(startStr: string) {
     try {
-      let accountsQuery = supabase.from('treasury_accounts').select('*').eq('is_active', true);
+      let accountsQuery = supabase.from('treasury_accounts').select('id, name_ar, type, opening_balance, current_balance, wallet_provider').eq('is_active', true);
       if (walletTypeFilter !== 'all') accountsQuery = accountsQuery.eq('type', walletTypeFilter);
       const accountsRes = await accountsQuery;
       const accounts = (accountsRes.data || []) as TreasuryAccount[];
@@ -445,7 +445,7 @@ export default function ReportsPage() {
     try {
       const { data: loanData } = await supabase
         .from('internal_loans')
-        .select('*')
+        .select('id, borrower_name, borrower_role, loan_type, amount, remaining_amount, status, issue_date')
         .in('status', ['active', 'partial'])
         .order('issue_date', { ascending: false });
       const loanList = (loanData || []) as LoanItem[];
@@ -468,7 +468,7 @@ export default function ReportsPage() {
   async function fetchReconciliation(startStr: string) {
     try {
       const [sessionsRes, discRes] = await Promise.all([
-        supabase.from('reconciliation_sessions').select('*').gte('created_at', startStr).order('session_date', { ascending: false }),
+        supabase.from('reconciliation_sessions').select('id, session_date, status, total_system_balance, total_actual_balance, total_difference, pending_operations_count, pending_transfers_count, pending_collections_count').gte('created_at', startStr).order('session_date', { ascending: false }),
         supabase.from('discrepancy_entries').select('difference, resolved').gte('created_at', startStr),
       ]);
       const sessions = (sessionsRes.data || []) as ReconSession[];

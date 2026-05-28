@@ -108,12 +108,12 @@ export default function DashboardPage() {
 
       // Fetch Orders
       const { data: orders } = await supabase.from('orders')
-        .select('*, order_items(*, products(*, product_categories(name_ar)))')
+        .select('id, total, status, customer_name, customer_phone, created_at, cashier_name, order_number, payment_method, order_items(quantity, total_price, product_name, products(name_ar, product_categories(name_ar)))')
         .gte('created_at', sevenDaysAgo.toISOString())
         .order('created_at', { ascending: false });
 
       // Fetch Stock
-      const { data: stock } = await supabase.from('stock_items').select('*');
+      const { data: stock } = await supabase.from('stock_items').select('id, product_name, sku, current_qty, min_qty, unit');
 
       if (orders) {
         // Today's Stats

@@ -101,7 +101,10 @@ export default function OrdersPage() {
   }, [orders]);
 
   async function fetchOrders() {
-    const res = await supabase.from('orders').select('*').order('created_at', { ascending: false });
+    const res = await supabase.from('orders')
+      .select('id, customer_name, customer_phone, total, status, payment_status, payment_method, created_at, updated_at, delivery_driver, preparing_started_at, items, notes, order_number')
+      .order('created_at', { ascending: false })
+      .limit(200);
     if (res.data) setOrders(res.data);
     setLoading(false);
   }

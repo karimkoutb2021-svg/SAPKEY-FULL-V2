@@ -4,7 +4,7 @@ import { useEffect, useState, useRef } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { cn } from '@/lib/utils';
 import { treasuryService, treasuryTransactionService, internalLoanService, STATUS_CONFIG, type TreasuryAccount, type TreasuryTransaction, type InternalLoan } from '@/lib/supabase/services/treasury';
-import { Plus, Wallet, ArrowRightLeft, Search, Filter, Clock, CheckCircle, XCircle, RotateCcw, User, Truck, Briefcase, Camera, FileText, Download } from 'lucide-react';
+import { Plus, Wallet, ArrowRightLeft, Search, Filter, Clock, CheckCircle, XCircle, RotateCcw, User, Truck, Briefcase, Camera, FileText, Download, AlertTriangle } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 const supabase = createClient();

@@ -33,7 +33,7 @@ const ROLE_INFO: Record<string, { title: string; subtitle: string; color: string
   }
 };
 
-export function DynamicInfographic({ role = 'customer' }: { role?: string }) {
+export function DynamicInfographic({ role = 'customer', lang = 'ar' }: { role?: string; lang?: 'ar' | 'en' }) {
   const info = ROLE_INFO[role] || ROLE_INFO['customer'];
   
   // Dynamic features generated from actual allowed routes
@@ -57,9 +57,13 @@ export function DynamicInfographic({ role = 'customer' }: { role?: string }) {
           <h1 className={cn("text-5xl md:text-7xl font-black tracking-tight mb-6 bg-clip-text text-transparent bg-gradient-to-r", info.color)}>
             {info.title}
           </h1>
-          <p className="text-xl md:text-3xl font-medium text-gray-300 leading-relaxed max-w-3xl mx-auto">
+          <p className="text-xl md:text-3xl font-medium text-gray-300 leading-relaxed max-w-3xl mx-auto mb-10">
             {info.subtitle}
           </p>
+          <div className="relative mx-auto max-w-2xl rounded-2xl overflow-hidden shadow-2xl border-4 border-white/10 group">
+            <img src={`/guides/${role || 'customer'}_${lang}.png`} alt={`Infographic for ${role}`} className="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-700" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent pointer-events-none" />
+          </div>
         </motion.div>
       </div>
 

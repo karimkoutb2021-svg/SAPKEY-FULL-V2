@@ -194,8 +194,11 @@ export default function ManagerLayout({ children }: { children: React.ReactNode 
               <span className="hidden sm:inline text-sm text-gray-500 dark:text-gray-400 font-mono">
                 {currentTime.toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
               </span>
-              <Link href="/" className="px-2 py-1 md:px-3 md:py-1.5 rounded-lg bg-gray-100 dark:bg-white/[0.06] text-xs md:text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-white/[0.1] transition-colors text-center border border-gray-200 dark:border-transparent">
-                العودة للمتجر
+              <Link href="/pos" className="px-2 py-1 md:px-3 md:py-1.5 rounded-lg bg-gray-100 dark:bg-white/[0.06] text-xs md:text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-white/[0.1] transition-colors text-center border border-gray-200 dark:border-transparent group relative">
+                <span>العودة إلى نقاط البيع (POS)</span>
+                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 px-2 py-1 bg-gray-900 text-white text-[10px] rounded opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all whitespace-nowrap z-50 shadow-xl">
+                  شاشة نقاط البيع الرئيسية
+                </div>
               </Link>
             </div>
           </header>

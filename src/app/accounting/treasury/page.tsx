@@ -35,7 +35,7 @@ export default function TreasuryPage() {
 
       const { data: txns } = await supabase
         .from('treasury_transactions')
-        .select('*')
+        .select('id, amount, type, description, created_by, created_at')
         .order('created_at', { ascending: false })
         .limit(50);
       setTransactions(txns || []);

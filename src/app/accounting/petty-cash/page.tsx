@@ -57,7 +57,7 @@ export default function PettyCashPage() {
 
   async function loadData() {
     try {
-      const { data } = await supabase.from('petty_cash_entries').select('*').order('created_at', { ascending: false });
+      const { data } = await supabase.from('petty_cash_entries').select('id, date, description, amount, account_id, paid_by, status, approved_by, approved_at').order('created_at', { ascending: false });
       if (data) setEntries(data);
     } catch { /* silent */ }
     finally { setLoading(false); }

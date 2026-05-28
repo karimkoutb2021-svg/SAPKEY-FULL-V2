@@ -6,8 +6,8 @@ import Link from 'next/link';
 
 export default function GuidePage() {
   return (
-    <PageTransition className="min-h-screen bg-gray-50 dark:bg-[#0f172a] text-gray-900 dark:text-white p-6 sm:p-10" dir="rtl">
-      <div className="max-w-5xl mx-auto space-y-12">
+    <PageTransition className="min-h-screen bg-gray-50 dark:bg-[#0f172a] text-gray-900 dark:text-white p-6 sm:p-10">
+      <div dir="rtl" className="max-w-5xl mx-auto space-y-12">
         {/* Header */}
         <div className="text-center space-y-4">
           <div className="inline-flex items-center justify-center p-4 bg-emerald-100 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 rounded-full mb-4">

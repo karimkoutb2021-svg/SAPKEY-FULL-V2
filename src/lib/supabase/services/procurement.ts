@@ -16,6 +16,7 @@ export interface Warehouse {
 
 export interface CodingDraft {
   id: string;
+  request_type?: 'create' | 'update' | 'delete';
   product_code: string;
   product_name: string;
   category?: string;
@@ -185,7 +186,7 @@ export const warehouseService = {
 
 export const codingDraftService = {
   async getAll(status?: string) {
-    let query = supabase.from('coding_drafts').select('id, product_code, product_name, category, unit, cost_price, selling_price, status, created_at').order('created_at', { ascending: false });
+    let query = supabase.from('coding_drafts').select('id, request_type, product_code, product_name, category, unit, cost_price, selling_price, status, created_at').order('created_at', { ascending: false });
     if (status) query = query.eq('status', status);
     return query;
   },

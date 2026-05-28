@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useState, useEffect, useMemo } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
@@ -48,7 +48,7 @@ export default function InvoicesPage() {
 
   async function loadData() {
     try {
-      const { data } = await supabase.from('invoices').select('*').order('created_at', { ascending: false });
+      const { data } = await supabase.from('invoices').select('id, invoice_number, customer_name, date, items, subtotal, tax, total, paid, remaining, status, payment_method, notes').order('created_at', { ascending: false }).limit(200);
       if (data) setInvoices(data);
     } catch { /* silent */ }
     finally { setLoading(false); }

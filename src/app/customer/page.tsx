@@ -85,15 +85,15 @@ export default function CustomerProfilePage() {
     if (!user?.id) return;
     try {
       const [walletRes, ordersRes, notifRes] = await Promise.allSettled([
-        supabase.from('customer_wallets').select('*').eq('user_id', user.id).single(),
-        supabase.from('orders').select('*').eq('customer_id', user.id).order('created_at', { ascending: false }).limit(5),
+        supabase.from('customer_wallets').select('id, user_id, balance, loyalty_points').eq('user_id', user.id).single(),
+        supabase.from('orders').select('id, order_number, total, status, created_at, items, customer_name').eq('customer_id', user.id).order('created_at', { ascending: false }).limit(5),
         supabase.from('customer_notifications').select('id', { count: 'exact', head: true }).eq('customer_id', user.id).eq('is_read', false),
       ]);
 
       if (walletRes.status === 'fulfilled' && walletRes.value.data) {
         const w = walletRes.value.data;
         setWalletData(prev => ({ ...prev, balance: w.balance || 0, points: w.loyalty_points || 0 }));
-        const txRes = await supabase.from('wallet_transactions').select('*').eq('wallet_id', w.id).order('created_at', { ascending: false }).limit(10);
+        const txRes = await supabase.from('wallet_transactions').select('id, amount, type, description, created_at').eq('wallet_id', w.id).order('created_at', { ascending: false }).limit(10);
         if (txRes.data) setWalletData(prev => ({ ...prev, transactions: txRes.data }));
       }
       if (ordersRes.status === 'fulfilled' && ordersRes.value.data) {

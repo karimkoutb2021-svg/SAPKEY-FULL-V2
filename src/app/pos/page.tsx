@@ -23,6 +23,7 @@ import { ProfileModal } from '@/components/profile/profile-modal';
 import { CashierReportsModal } from '@/components/pos/cashier-reports-modal';
 import { UnifiedScanner } from '@/components/scanner/unified-scanner';
 import { SyncManager } from '@/components/scanner/sync-manager';
+import { Tooltip } from '@/components/ui/tooltip';
 import { cacheProducts, findProductByBarcode, addOfflineSale, LocalProduct } from '@/lib/offline/db';
 import { productService } from '@/lib/supabase/services/products';
 import { type ProductCategory } from '@/lib/supabase/services/categories';
@@ -419,6 +420,70 @@ function POSContent({ primaryColor, userRole, userName, userId }: { primaryColor
     toast.success(`${p.nameAr} تمت الإضافة`);
   }, [addToCart]);
 
+  // Global physical barcode scanner listener (capturing phase)
+  useEffect(() => {
+    let barcodeBuffer = '';
+    let lastKeyTime = Date.now();
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      const now = Date.now();
+      const diff = now - lastKeyTime;
+      lastKeyTime = now;
+
+      // If typed slower than 50ms, it's typed by a human, so reset buffer
+      if (diff > 50) {
+        barcodeBuffer = '';
+      }
+
+      if (e.key.length === 1 && /^[a-zA-Z0-9]$/.test(e.key)) {
+        barcodeBuffer += e.key;
+      } else if (e.key === 'Enter') {
+        if (barcodeBuffer.length >= 3) {
+          e.preventDefault();
+          e.stopPropagation();
+          const code = barcodeBuffer;
+          barcodeBuffer = '';
+          
+          const triggerScan = async () => {
+            try {
+              const localProduct = await findProductByBarcode(code);
+              if (localProduct) {
+                const posProduct: POSProduct = {
+                  id: localProduct.id,
+                  name: localProduct.nameEn || localProduct.nameAr,
+                  nameAr: localProduct.nameAr,
+                  price: localProduct.price,
+                  baseUnit: localProduct.unit,
+                  categoryId: localProduct.categoryId || undefined,
+                  barcode: localProduct.barcode || undefined,
+                  stock: localProduct.stock,
+                };
+                handleProductClick(posProduct);
+                return;
+              }
+            } catch (err) {
+              console.error(err);
+            }
+
+            const p = products.find(x => x.barcode === code);
+            if (p) {
+              handleProductClick(p);
+            } else {
+              toast.error(`باركود غير مسجل: ${code}`);
+            }
+          };
+
+          triggerScan();
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown, true);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown, true);
+    };
+  }, [products, handleProductClick]);
+
   // Update ref for scanner
   handleProductClickRef.current = handleProductClick;
 
@@ -517,13 +582,14 @@ function POSContent({ primaryColor, userRole, userName, userId }: { primaryColor
           <div className="flex items-center gap-1.5 md:gap-2">
             {/* Back Button (Manager/Admin) */}
             {(userRole === 'manager' || userRole === 'admin') && (
-              <button
-                onClick={() => router.push(userRole === 'admin' ? '/admin' : '/dashboard')}
-                className="h-9 w-9 md:h-11 md:w-11 rounded-lg md:rounded-xl flex items-center justify-center shrink-0 transition-all bg-gray-100/80 dark:bg-slate-800/80 text-gray-500 hover:bg-gray-200/80 dark:hover:bg-slate-700/80 backdrop-blur-sm"
-                title="رجوع للوحة التحكم"
-              >
-                <ChevronRight className="h-4 w-4 md:h-5 md:w-5" />
-              </button>
+              <Tooltip text="رجوع للوحة التحكم">
+                <button
+                  onClick={() => router.push(userRole === 'admin' ? '/admin' : '/dashboard')}
+                  className="h-9 w-9 md:h-11 md:w-11 rounded-lg md:rounded-xl flex items-center justify-center shrink-0 transition-all bg-gray-100/80 dark:bg-slate-800/80 text-gray-500 hover:bg-gray-200/80 dark:hover:bg-slate-700/80 backdrop-blur-sm"
+                >
+                  <ChevronRight className="h-4 w-4 md:h-5 md:w-5" />
+                </button>
+              </Tooltip>
             )}
             {/* Search Input - Apple Style */}
             <div className="flex-1 relative">
@@ -536,22 +602,22 @@ function POSContent({ primaryColor, userRole, userName, userId }: { primaryColor
                 className="w-full h-9 md:h-11 pr-8 md:pr-10 pl-3 md:pl-4 rounded-lg md:rounded-xl bg-gray-100/80 dark:bg-slate-800/80 border border-transparent focus:border-blue-500/50 focus:bg-white/90 dark:focus:bg-slate-800/90 text-[11px] md:text-sm font-medium placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all backdrop-blur-sm"
               />
             </div>
-            {/* Voice Button */}
-            <button
-              onClick={toggleListening}
-              className={`h-9 w-9 md:h-11 md:w-11 rounded-lg md:rounded-xl flex items-center justify-center shrink-0 transition-all ${
-                isListening
-                  ? 'bg-red-500 text-white'
-                  : 'bg-gray-100/80 dark:bg-slate-800/80 text-gray-500 hover:bg-gray-200/80 dark:hover:bg-slate-700/80 backdrop-blur-sm'
-              }`}
-              title="المساعد الصوتي"
-            >
-              {isListening ? (
-                <Loader2 className="h-4 w-4 md:h-5 md:w-5 animate-spin" />
-              ) : (
-                <Mic className="h-4 w-4 md:h-5 md:w-5" />
-              )}
-            </button>
+            <Tooltip text="المساعد الصوتي">
+              <button
+                onClick={toggleListening}
+                className={`h-9 w-9 md:h-11 md:w-11 rounded-lg md:rounded-xl flex items-center justify-center shrink-0 transition-all ${
+                  isListening
+                    ? 'bg-red-500 text-white'
+                    : 'bg-gray-100/80 dark:bg-slate-800/80 text-gray-500 hover:bg-gray-200/80 dark:hover:bg-slate-700/80 backdrop-blur-sm'
+                }`}
+              >
+                {isListening ? (
+                  <Loader2 className="h-4 w-4 md:h-5 md:w-5 animate-spin" />
+                ) : (
+                  <Mic className="h-4 w-4 md:h-5 md:w-5" />
+                )}
+              </button>
+            </Tooltip>
           </div>
         </div>
 
@@ -559,103 +625,112 @@ function POSContent({ primaryColor, userRole, userName, userId }: { primaryColor
         <div className="px-2 pb-1.5 md:px-4 md:pb-2.5">
           <div className="flex items-center gap-1 md:gap-1.5 overflow-x-auto scrollbar-hide">
             {/* Shift Status */}
-            <button
-              onClick={() => setShowShiftModal(true)}
-              className={`h-9 px-3 rounded-lg text-xs font-bold flex items-center gap-1.5 shrink-0 transition-all ${
-                currentShift
-                  ? 'bg-green-500/10 text-green-600 dark:text-green-400'
-                  : 'bg-red-500/10 text-red-600 dark:text-red-400'
-              }`}
-              title="إدارة الوردية"
-            >
-              <Clock className="h-3.5 w-3.5" />
-              <span className="hidden sm:inline">{currentShift ? 'مفتوحة' : 'مغلقة'}</span>
-            </button>
+            <Tooltip text="إدارة الوردية">
+              <button
+                onClick={() => setShowShiftModal(true)}
+                className={`h-9 px-3 rounded-lg text-xs font-bold flex items-center gap-1.5 shrink-0 transition-all ${
+                  currentShift
+                    ? 'bg-green-500/10 text-green-600 dark:text-green-400'
+                    : 'bg-red-500/10 text-red-600 dark:text-red-400'
+                }`}
+              >
+                <Clock className="h-3.5 w-3.5" />
+                <span className="hidden sm:inline">{currentShift ? 'مفتوحة' : 'مغلقة'}</span>
+              </button>
+            </Tooltip>
 
             {/* Cashier Reports */}
-            <button
-              onClick={() => setShowReportsModal(true)}
-              className="h-9 px-3 rounded-lg text-xs font-bold flex items-center gap-1.5 shrink-0 transition-all bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/20"
-              title="التقارير"
-            >
-              <BarChart3 className="h-3.5 w-3.5" />
-              <span className="hidden sm:inline">التقارير</span>
-            </button>
+            <Tooltip text="التقارير">
+              <button
+                onClick={() => setShowReportsModal(true)}
+                className="h-9 px-3 rounded-lg text-xs font-bold flex items-center gap-1.5 shrink-0 transition-all bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/20"
+              >
+                <BarChart3 className="h-3.5 w-3.5" />
+                <span className="hidden sm:inline">التقارير</span>
+              </button>
+            </Tooltip>
 
             {/* Divider */}
             <div className="w-px h-6 bg-gray-200/50 dark:bg-slate-700/50 shrink-0" />
 
             {/* Held Orders */}
-            <button
-              onClick={() => setShowHeldOrders(true)}
-              className="h-9 w-9 rounded-lg bg-gray-100/80 dark:bg-slate-800/80 text-gray-500 hover:bg-gray-200/80 dark:hover:bg-slate-700/80 flex items-center justify-center shrink-0 transition-all backdrop-blur-sm"
-              title="الفواتير المعلقة"
-            >
-              <Pause className="h-4 w-4" />
-            </button>
+            <Tooltip text="الفواتير المعلقة">
+              <button
+                onClick={() => setShowHeldOrders(true)}
+                className="h-9 w-9 rounded-lg bg-gray-100/80 dark:bg-slate-800/80 text-gray-500 hover:bg-gray-200/80 dark:hover:bg-slate-700/80 flex items-center justify-center shrink-0 transition-all backdrop-blur-sm"
+              >
+                <Pause className="h-4 w-4" />
+              </button>
+            </Tooltip>
 
             {/* QR Scanner */}
-            <button
-              onClick={() => { setScanMode('qr'); setShowScanner(true); }}
-              className="h-9 w-9 rounded-lg bg-gray-100/80 dark:bg-slate-800/80 text-gray-500 hover:bg-gray-200/80 dark:hover:bg-slate-700/80 flex items-center justify-center shrink-0 transition-all backdrop-blur-sm"
-              title="مسح QR"
-            >
-              <QrCode className="h-4 w-4" />
-            </button>
+            <Tooltip text="مسح QR">
+              <button
+                onClick={() => { setScanMode('qr'); setShowScanner(true); }}
+                className="h-9 w-9 rounded-lg bg-gray-100/80 dark:bg-slate-800/80 text-gray-500 hover:bg-gray-200/80 dark:hover:bg-slate-700/80 flex items-center justify-center shrink-0 transition-all backdrop-blur-sm"
+              >
+                <QrCode className="h-4 w-4" />
+              </button>
+            </Tooltip>
 
             {/* Barcode Scanner - Unified */}
-            <button
-              onClick={() => { setScanMode('barcode'); setShowScanner(true); }}
-              className="h-9 w-9 rounded-lg bg-gray-100/80 dark:bg-slate-800/80 text-gray-500 hover:bg-gray-200/80 dark:hover:bg-slate-700/80 flex items-center justify-center shrink-0 transition-all backdrop-blur-sm"
-              title="مسح باركود"
-            >
-              <ScanLine className="h-4 w-4" />
-            </button>
+            <Tooltip text="مسح باركود">
+              <button
+                onClick={() => { setScanMode('barcode'); setShowScanner(true); }}
+                className="h-9 w-9 rounded-lg bg-gray-100/80 dark:bg-slate-800/80 text-gray-500 hover:bg-gray-200/80 dark:hover:bg-slate-700/80 flex items-center justify-center shrink-0 transition-all backdrop-blur-sm"
+              >
+                <ScanLine className="h-4 w-4" />
+              </button>
+            </Tooltip>
 
             {/* Split Payment */}
-            <button
-              onClick={() => {
-                if (cart.length === 0) {
-                  toast.error('الفاتورة فارغة');
-                  return;
-                }
-                setShowSplitPayment(true);
-              }}
-              className="h-9 w-9 rounded-lg bg-gray-100/80 dark:bg-slate-800/80 text-gray-500 hover:bg-gray-200/80 dark:hover:bg-slate-700/80 flex items-center justify-center shrink-0 transition-all backdrop-blur-sm"
-              title="الدفع المتعدد"
-            >
-              <Split className="h-4 w-4" />
-            </button>
+            <Tooltip text="الدفع المتعدد">
+              <button
+                onClick={() => {
+                  if (cart.length === 0) {
+                    toast.error('الفاتورة فارغة');
+                    return;
+                  }
+                  setShowSplitPayment(true);
+                }}
+                className="h-9 w-9 rounded-lg bg-gray-100/80 dark:bg-slate-800/80 text-gray-500 hover:bg-gray-200/80 dark:hover:bg-slate-700/80 flex items-center justify-center shrink-0 transition-all backdrop-blur-sm"
+              >
+                <Split className="h-4 w-4" />
+              </button>
+            </Tooltip>
 
             {/* Coding - Inventory Management */}
-            <button
-              onClick={() => router.push('/manager/coding')}
-              className="h-9 w-9 rounded-lg bg-gray-100/80 dark:bg-slate-800/80 text-gray-500 hover:bg-gray-200/80 dark:hover:bg-slate-700/80 flex items-center justify-center shrink-0 transition-all backdrop-blur-sm"
-              title="التكويـد"
-            >
-              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" /></svg>
-            </button>
+            <Tooltip text="التكويـد">
+              <button
+                onClick={() => router.push('/manager/coding')}
+                className="h-9 w-9 rounded-lg bg-gray-100/80 dark:bg-slate-800/80 text-gray-500 hover:bg-gray-200/80 dark:hover:bg-slate-700/80 flex items-center justify-center shrink-0 transition-all backdrop-blur-sm"
+              >
+                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" /></svg>
+              </button>
+            </Tooltip>
 
             {/* Audit - Inventory Count */}
-            <button
-              onClick={() => router.push('/manager/audit')}
-              className="h-9 w-9 rounded-lg bg-gray-100/80 dark:bg-slate-800/80 text-gray-500 hover:bg-gray-200/80 dark:hover:bg-slate-700/80 flex items-center justify-center shrink-0 transition-all backdrop-blur-sm"
-              title="الجرد"
-            >
-              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" /></svg>
-            </button>
+            <Tooltip text="الجرد">
+              <button
+                onClick={() => router.push('/manager/audit')}
+                className="h-9 w-9 rounded-lg bg-gray-100/80 dark:bg-slate-800/80 text-gray-500 hover:bg-gray-200/80 dark:hover:bg-slate-700/80 flex items-center justify-center shrink-0 transition-all backdrop-blur-sm"
+              >
+                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" /></svg>
+              </button>
+            </Tooltip>
 
             {/* Divider */}
             <div className="w-px h-6 bg-gray-200/50 dark:bg-slate-700/50 shrink-0" />
 
             {/* Reports - desktop only */}
-            <button
-              onClick={() => router.push('/pos/returns')}
-              className="hidden md:flex h-9 w-9 rounded-lg bg-gray-100/80 dark:bg-slate-800/80 text-gray-500 hover:bg-gray-200/80 dark:hover:bg-slate-700/80 items-center justify-center shrink-0 transition-all backdrop-blur-sm"
-              title="التقارير"
-            >
-              <BarChart3 className="h-4 w-4" />
-            </button>
+            <Tooltip text="المرتجعات">
+              <button
+                onClick={() => router.push('/pos/returns')}
+                className="hidden md:flex h-9 w-9 rounded-lg bg-gray-100/80 dark:bg-slate-800/80 text-gray-500 hover:bg-gray-200/80 dark:hover:bg-slate-700/80 items-center justify-center shrink-0 transition-all backdrop-blur-sm"
+              >
+                <BarChart3 className="h-4 w-4" />
+              </button>
+            </Tooltip>
 
             {/* Spacer */}
             <div className="flex-1" />
@@ -680,13 +755,14 @@ function POSContent({ primaryColor, userRole, userName, userId }: { primaryColor
 
             {/* User Profile Button - mobile only */}
             <div className="md:hidden relative">
-              <button
-                onClick={() => setShowProfileMenu(!showProfileMenu)}
-                className="h-9 w-9 rounded-lg bg-gray-100/80 dark:bg-slate-800/80 flex items-center justify-center hover:bg-gray-200/80 dark:hover:bg-slate-700/80 shrink-0 transition-all backdrop-blur-sm"
-                title="الملف الشخصي"
-              >
-                <User className="h-4 w-4 text-gray-500" />
-              </button>
+              <Tooltip text="الملف الشخصي">
+                <button
+                  onClick={() => setShowProfileMenu(!showProfileMenu)}
+                  className="h-9 w-9 rounded-lg bg-gray-100/80 dark:bg-slate-800/80 flex items-center justify-center hover:bg-gray-200/80 dark:hover:bg-slate-700/80 shrink-0 transition-all backdrop-blur-sm"
+                >
+                  <User className="h-4 w-4 text-gray-500" />
+                </button>
+              </Tooltip>
               {showProfileMenu && (
                 <>
                   <div className="fixed inset-0 z-40" onClick={() => setShowProfileMenu(false)} />
@@ -719,13 +795,14 @@ function POSContent({ primaryColor, userRole, userName, userId }: { primaryColor
             </div>
 
             {/* Logout - desktop only */}
-            <button
-              onClick={handleLogout}
-              className="hidden md:flex h-9 w-9 rounded-lg bg-red-500/10 text-red-500 hover:bg-red-500/15 items-center justify-center shrink-0 transition-all"
-              title="تسجيل خروج"
-            >
-              <LogOut className="h-4 w-4" />
-            </button>
+            <Tooltip text="تسجيل خروج">
+              <button
+                onClick={handleLogout}
+                className="hidden md:flex h-9 w-9 rounded-lg bg-red-500/10 text-red-500 hover:bg-red-500/15 items-center justify-center shrink-0 transition-all"
+              >
+                <LogOut className="h-4 w-4" />
+              </button>
+            </Tooltip>
 
             {/* Mobile cart toggle */}
             <button

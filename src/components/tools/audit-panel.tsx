@@ -83,7 +83,7 @@ export function AuditPanel({ isOpen, onClose, onComplete }: AuditPanelProps) {
       type: 'voice',
       status: 'in_progress',
       started_by: user?.id,
-    });
+    } as any);
     if (data) setActiveSession(data);
   };
 

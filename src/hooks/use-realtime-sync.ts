@@ -9,62 +9,12 @@ const supabase = createClient();
 
 // Tables that need real-time sync
 const MANAGER_TABLES = [
-  'treasury_accounts',
-  'treasury_transactions',
-  'internal_loans',
-  'stock_items',
-  'stock_adjustments',
-  'audit_sessions',
-  'order_pipeline',
-  'time_control',
   'orders',
-  'products',
-  'inventory_stock',
-  'shifts',
+  'stock_items',
+  'audit_sessions',
+  'coding_drafts',
   'notifications',
   'branding_settings',
-  'employees',
-  'leaves',
-  'expenses',
-  'tasks',
-  'stock_transfers',
-  'transfer_items',
-  'product_history',
-  'reconciliation_sessions',
-  'coding_drafts',
-  'audit_items',
-  'order_stage_timers',
-  'product_categories',
-  'storefront_banners',
-  'warehouses',
-  'purchase_orders',
-  'purchase_order_items',
-  'product_suppliers',
-  'subscriptions',
-  'subscription_plans',
-  'reconciliation_logs',
-  'discrepancy_entries',
-  'deliveries',
-  'delivery_drivers',
-  'customer_wallets',
-  'loyalty_transactions',
-  'coupons',
-  'invoices',
-  'held_orders',
-  'users',
-  'bank_accounts',
-  'bank_transactions',
-  'tax_periods',
-  'chart_of_accounts',
-  'journal_entries',
-  'petty_cash_entries',
-  'coupon_redemptions',
-  'customer_addresses',
-  'wallet_transactions',
-  'customer_wishlist',
-  'customer_notifications',
-  'audit_logs',
-  'platform_events',
 ];
 
 export function useRealtimeSync() {
@@ -156,7 +106,7 @@ export function useRealtimeSync() {
 }
 
 // Hook for specific table real-time updates
-export function useTableSync<T = any>(table: string, initialData: T[] = []) {
+export function useTableSync<T = any>(table: string, initialData: T[] = [], columns: string = '*') {
   const [data, setData] = useState<T[]>(initialData);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -167,10 +117,10 @@ export function useTableSync<T = any>(table: string, initialData: T[] = []) {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const { data: result, error } = await supabase.from(table).select('*').order('created_at', { ascending: false });
+        const { data: result, error } = await supabase.from(table).select(columns).order('created_at', { ascending: false }).limit(100);
         if (!cancelled) {
           if (error) throw error;
-          setData(result || []);
+          setData((result as T[]) || []);
           // Cache for offline
           localStorage.setItem(`cache_${table}`, JSON.stringify({ data: result, timestamp: Date.now() }));
         }
@@ -195,19 +145,22 @@ export function useTableSync<T = any>(table: string, initialData: T[] = []) {
 
     fetchData();
 
-    // Subscribe to real-time changes
+    // Subscribe to real-time changes with debounce
+    let timeout: NodeJS.Timeout;
     const channel = supabase
       .channel(`sync-${table}-${Date.now()}`)
       .on('postgres_changes', { event: '*', schema: 'public', table }, () => {
-        fetchData(); // Refetch on any change
+        clearTimeout(timeout);
+        timeout = setTimeout(() => fetchData(), 2000); // Debounce for 2 seconds
       })
       .subscribe();
 
     return () => {
       cancelled = true;
+      clearTimeout(timeout);
       supabase.removeChannel(channel);
     };
-  }, [table]);
+  }, [table, columns]);
 
   return { data, loading, error, setData };
 }
@@ -222,13 +175,13 @@ export function useAutoSync() {
     }
   }, [isOnline]);
 
-  // Periodic sync check every 30 seconds when online
+  // Periodic sync check every 30 seconds when online (fixed from 3 seconds)
   useEffect(() => {
     if (!isOnline) return;
 
     const interval = setInterval(() => {
       processSyncQueue();
-    }, 3000);
+    }, 30000);
 
     return () => clearInterval(interval);
   }, [isOnline]);

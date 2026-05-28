@@ -22,7 +22,7 @@ export default function PlatformAnalyticsPage() {
 
   const loadData = async () => {
     try {
-      const { data } = await supabase.from('platform_events').select('*').order('created_at', { ascending: false }).limit(1000);
+      const { data } = await supabase.from('platform_events').select('id, event_category, duration_ms, tenant_id, created_at').order('created_at', { ascending: false }).limit(100);
       if (data) setEvents(data);
     } catch { /* silent */ }
     finally { setLoading(false); }

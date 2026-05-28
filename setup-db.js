@@ -229,6 +229,60 @@ CREATE TABLE IF NOT EXISTS employees (
     hire_date DATE,
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
+CREATE TABLE IF NOT EXISTS audit_sessions (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    type VARCHAR(50) DEFAULT 'manual',
+    status VARCHAR(50) DEFAULT 'in_progress',
+    initiated_by UUID,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    completed_at TIMESTAMPTZ,
+    differences JSONB DEFAULT '[]'::jsonb
+);
+
+DROP TABLE IF EXISTS audit_items CASCADE;
+CREATE TABLE IF NOT EXISTS audit_items (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    audit_session_id UUID REFERENCES audit_sessions(id) ON DELETE CASCADE,
+    stock_item_id UUID,
+    product_name VARCHAR(200),
+    product_sku VARCHAR(100),
+    system_qty DECIMAL(15,2) DEFAULT 0,
+    actual_qty DECIMAL(15,2) DEFAULT 0,
+    variance DECIMAL(15,2),
+    variance_value DECIMAL(15,2),
+    cost_price DECIMAL(15,2) DEFAULT 0,
+    status VARCHAR(50) DEFAULT 'matched',
+    notes TEXT,
+    shelf_location VARCHAR(100),
+    voice_input TEXT,
+    ocr_confidence DECIMAL(5,2),
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+DROP TABLE IF EXISTS coding_drafts CASCADE;
+CREATE TABLE IF NOT EXISTS coding_drafts (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    product_code VARCHAR(100),
+    product_name VARCHAR(200),
+    category VARCHAR(100),
+    subcategory VARCHAR(100),
+    unit VARCHAR(50),
+    shelf_number VARCHAR(100),
+    cost_price DECIMAL(15,2) DEFAULT 0,
+    selling_price DECIMAL(15,2) DEFAULT 0,
+    min_stock DECIMAL(15,2) DEFAULT 0,
+    status VARCHAR(50) DEFAULT 'pending',
+    submitted_by UUID,
+    submitted_by_name VARCHAR(200),
+    submitted_by_role VARCHAR(50),
+    approved_by UUID,
+    approved_at TIMESTAMPTZ,
+    rejection_reason TEXT,
+    voice_input JSONB,
+    image_url TEXT,
+    request_type VARCHAR(50) DEFAULT 'create',
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
 `;
 
 async function setupDB() {

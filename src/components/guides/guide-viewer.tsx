@@ -73,6 +73,7 @@ export function GuideViewer({ role, color, accessCode }: { role: string; color: 
   const [codeInput, setCodeInput] = useState('');
   const [codeError, setCodeError] = useState('');
   const [showCode, setShowCode] = useState(false);
+  const [lang, setLang] = useState<'ar' | 'en'>('ar');
   const supabaseRef = useRef<ReturnType<typeof createClient> | null>(null);
 
   useEffect(() => {
@@ -230,17 +231,25 @@ export function GuideViewer({ role, color, accessCode }: { role: string; color: 
             <button
               onClick={loadGuide}
               disabled={syncing}
-              className="h-8 w-8 rounded-lg bg-gray-100 dark:bg-slate-800 flex items-center justify-center hover:bg-gray-200 dark:hover:bg-slate-700 transition-all disabled:opacity-50"
+              className="h-8 w-8 md:h-10 md:w-10 rounded-lg md:rounded-xl bg-gray-100 dark:bg-slate-800 flex items-center justify-center hover:bg-gray-200 dark:hover:bg-slate-700 transition-all disabled:opacity-50"
               title="تحديث"
             >
-              <RefreshCw className={`h-4 w-4 text-gray-500 ${syncing ? 'animate-spin' : ''}`} />
+              <RefreshCw className={`h-4 w-4 md:h-5 md:w-5 text-gray-500 ${syncing ? 'animate-spin' : ''}`} />
             </button>
-            {guide.role === 'customer' ? (
-              <a href="/login" className="text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 px-4 py-1.5 rounded-lg transition-all shadow-md">
-                تسجيل الدخول / مستخدم جديد
-              </a>
+            <button
+              onClick={() => setLang(lang === 'ar' ? 'en' : 'ar')}
+              className="h-8 w-8 md:h-10 md:w-10 rounded-lg md:rounded-xl border border-gray-200 dark:border-slate-700 flex items-center justify-center font-bold text-sm hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors"
+              title="تغيير اللغة (Language)"
+            >
+              {lang === 'ar' ? 'EN' : 'ع'}
+            </button>
+            {role === 'customer' ? (
+              <Link href="/login" className="flex items-center gap-2 text-xs md:text-sm font-bold text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 px-3 py-1.5 md:px-5 md:py-2.5 rounded-lg md:rounded-xl transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5">
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
+                <span className="hidden sm:inline">دخول / حساب جديد</span>
+              </Link>
             ) : (
-              <button onClick={() => setHasCode(false)} className="text-sm font-medium text-red-500 hover:text-red-600 px-3 py-1.5 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
+              <button onClick={() => setHasCode(false)} className="text-xs md:text-sm font-bold text-red-500 hover:text-red-600 px-3 py-1.5 md:px-4 md:py-2 rounded-lg md:rounded-xl hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
                 خروج
               </button>
             )}
@@ -269,7 +278,7 @@ export function GuideViewer({ role, color, accessCode }: { role: string; color: 
 
         {/* Detailed Guide Content */}
         <div className="space-y-4">
-          <DynamicInfographic role={role} />
+          <DynamicInfographic role={role} lang={lang} />
           
           {guide.sections
             .sort((a, b) => a.order - b.order)

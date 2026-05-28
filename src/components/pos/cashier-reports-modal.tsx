@@ -2,9 +2,11 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, TrendingUp, DollarSign, Package, ShoppingBag, Calendar, Activity } from 'lucide-react';
-import { supabase } from '@/lib/supabase/client';
+import { createClient } from '@/lib/supabase/client';
 import { useAuthStore } from '@/lib/store/auth-store';
 import { cn } from '@/lib/utils';
+
+const supabase = createClient();
 
 interface ReportStats {
   totalSales: number;
@@ -37,7 +39,7 @@ export function CashierReportsModal({ isOpen, onClose }: { isOpen: boolean; onCl
         const { data: orders } = await supabase
           .from('orders')
           .select('*, order_items(*)')
-          .eq('cashier_id', user.id)
+          .eq('cashier_id', user!.id)
           .gte('created_at', fromDate.toISOString());
 
         if (orders) {

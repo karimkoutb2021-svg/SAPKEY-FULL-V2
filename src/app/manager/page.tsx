@@ -307,7 +307,7 @@ export default function ManagerDashboard() {
       {/* Quick Actions */}
       <div className="rounded-2xl bg-white/[0.03] border border-white/[0.06] p-6">
         <h2 className="text-lg font-semibold mb-4">إجراءات سريعة</h2>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
           <Link href="/manager/treasury?action=deposit" className="flex flex-col items-center gap-2 p-4 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] transition-all duration-200 group">
             <span className="text-2xl group-hover:scale-110 transition-transform">💵</span>
             <span className="text-sm text-gray-300">إيداع</span>
@@ -320,9 +320,13 @@ export default function ManagerDashboard() {
             <span className="text-2xl group-hover:scale-110 transition-transform">🎤</span>
             <span className="text-sm text-gray-300">جرد صوتي</span>
           </Link>
-          <Link href="/manager/audit?action=ocr" className="flex flex-col items-center gap-2 p-4 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] transition-all duration-200 group">
+          <Link href="/manager/audit?action=ocr" className="flex flex-col items-center gap-2 p-4 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] transition-all duration-200 group relative">
             <span className="text-2xl group-hover:scale-110 transition-transform">📷</span>
             <span className="text-sm text-gray-300">جرد بالكاميرا</span>
+          </Link>
+          <Link href="/pos" className="flex flex-col items-center gap-2 p-4 rounded-xl bg-gradient-to-br from-emerald-500/20 to-teal-500/20 hover:from-emerald-500/30 hover:to-teal-500/30 border border-emerald-500/30 transition-all duration-200 group md:col-span-4 lg:col-span-1">
+            <span className="text-2xl group-hover:scale-110 transition-transform">🖥️</span>
+            <span className="text-sm font-bold text-emerald-400">نقاط البيع (POS)</span>
           </Link>
         </div>
       </div>

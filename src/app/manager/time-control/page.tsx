@@ -51,8 +51,8 @@ export default function TimeControlPage() {
     const today = new Date().toISOString().split('T')[0];
     try {
       const [entriesData, empsData, leavesData, settingsData] = await Promise.all([
-        supabase.from('time_control').select('*').order('created_at', { ascending: false }).limit(100),
-        supabase.from('employees').select('*').eq('is_active', true),
+        supabase.from('time_control').select('id, user_id, user_name, date, clock_in, clock_out, break_start, break_end, total_hours, status, notes, created_at').order('created_at', { ascending: false }).limit(100),
+        supabase.from('employees').select('id, full_name_ar, is_active').eq('is_active', true),
         supabase.from('leaves').select('*').gte('to_date', today),
         timeControlSettingsService.get(),
       ]);

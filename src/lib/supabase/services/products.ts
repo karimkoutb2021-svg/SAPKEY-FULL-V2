@@ -41,7 +41,7 @@ export const productService = {
     const { data, error, count } = await query.order('name_ar');
 
     if (error) throw error;
-    return { data: data as Product[], count };
+    return { data: data as unknown as Product[], count };
   },
 
   async getById(id: string) {

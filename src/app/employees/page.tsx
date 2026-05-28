@@ -43,7 +43,7 @@ export default function EmployeesPage() {
 
   async function loadData() {
     try {
-      const { data, error } = await supabase.from('users').select('*').order('created_at', { ascending: false });
+      const { data, error } = await supabase.from('users').select('id, email, full_name_ar, phone, role, created_at, is_active, last_login').order('created_at', { ascending: false }).limit(200);
       if (error) { console.error(error); return; }
       if (data) setUsers(data);
     } catch { /* silent */ }

@@ -1,5 +1,3 @@
-'use client';
-
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
@@ -7,6 +5,7 @@ import { motion } from 'framer-motion';
 import { useAuthStore } from '@/lib/store/auth-store';
 import { LogIn, Mail, Lock, Eye, EyeOff, Loader2, ArrowRight, Store } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { createClient } from '@/lib/supabase/client';
 
 export default function CustomerLoginPage() {
   const { login } = useAuthStore();
@@ -36,6 +35,23 @@ export default function CustomerLoginPage() {
       }
     } else {
       toast.error(r.error || 'بيانات الدخول غير صحيحة');
+    }
+  };
+
+  const handleGoogleLogin = async () => {
+    setLoading(true);
+    try {
+      const supabase = createClient();
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: `${window.location.origin}/shop`
+        }
+      });
+      if (error) throw error;
+    } catch (err: any) {
+      toast.error('فشل تسجيل الدخول باستخدام جوجل: ' + (err.message || ''));
+      setLoading(false);
     }
   };
 
@@ -90,6 +106,27 @@ export default function CustomerLoginPage() {
               className="btn-premium w-full flex items-center justify-center gap-2">
               {loading ? <Loader2 className="h-5 w-5 animate-spin" /> : <LogIn className="h-5 w-5" />}
               {loading ? 'جاري تسجيل الدخول...' : 'تسجيل الدخول'}
+            </button>
+
+            <div className="relative flex py-1 items-center">
+              <div className="flex-grow border-t border-gray-200 dark:border-slate-700"></div>
+              <span className="flex-shrink mx-3 text-xs text-gray-400 font-medium">أو تابع باستخدام</span>
+              <div className="flex-grow border-t border-gray-200 dark:border-slate-700"></div>
+            </div>
+
+            <button
+              type="button"
+              onClick={handleGoogleLogin}
+              disabled={loading}
+              className="w-full h-11 px-4 rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-gray-700 dark:text-gray-200 text-sm font-bold flex items-center justify-center gap-2 hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors shadow-sm disabled:opacity-50"
+            >
+              <svg className="h-5 w-5" viewBox="0 0 24 24">
+                <path fill="#EA4335" d="M12 5.04c1.66 0 3.2.57 4.38 1.69l3.27-3.27C17.67 1.53 14.99 1 12 1 7.35 1 3.37 3.68 1.4 7.6l3.86 3C6.18 7.69 8.86 5.04 12 5.04z" />
+                <path fill="#4285F4" d="M23.49 12.27c0-.81-.07-1.59-.2-2.36H12v4.51h6.46c-.28 1.48-1.12 2.74-2.38 3.58l3.7 2.87c2.16-1.99 3.41-4.92 3.41-8.6z" />
+                <path fill="#FBBC05" d="M5.26 14.4c-.25-.76-.39-1.57-.39-2.4s.14-1.64.39-2.4L1.4 7.6C.51 9.38 0 11.38 0 13.5s.51 4.12 1.4 5.9l3.86-3z" />
+                <path fill="#34A853" d="M12 23c3.24 0 5.97-1.07 7.96-2.92l-3.7-2.87c-1.03.69-2.35 1.1-4.26 1.1-3.14 0-5.82-2.65-6.74-5.56L1.4 15.74C3.37 20.32 7.35 23 12 23z" />
+              </svg>
+              الدخول السريع بحساب Google / Gmail
             </button>
 
             <div className="text-center text-sm text-gray-500">

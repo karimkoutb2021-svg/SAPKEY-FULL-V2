@@ -9,7 +9,8 @@ import { useAuthStore } from '@/lib/store/auth-store';
 import toast from 'react-hot-toast';
 
 export default function DeveloperPage() {
-  const { userRole } = useAuthStore();
+  const user = useAuthStore(state => state.user);
+  const userRole = user?.role;
   const [loading, setLoading] = useState(false);
 
   // التأكد من أن المستخدم أدمن أو مطور
