@@ -19,6 +19,7 @@ const supabase = createClient();
 
 interface CodingDraft {
   id: string;
+  request_type?: 'create' | 'update' | 'delete';
   product_code: string;
   product_name: string;
   category?: string;
