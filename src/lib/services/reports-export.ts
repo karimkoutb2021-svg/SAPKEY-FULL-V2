@@ -112,7 +112,7 @@ export async function exportToExcel(report: ReportData, filename: string) {
       }
 
       // Conditional Formatting (Coloring rows based on values)
-      if ((col.type === 'number' || col.type === 'currency') && cell.value < 0) {
+      if ((col.type === 'number' || col.type === 'currency') && typeof cell.value === 'number' && cell.value < 0) {
         cell.font = { color: { argb: 'FFEF4444' } }; // Red for negative
       }
 
