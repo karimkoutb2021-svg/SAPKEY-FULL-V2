@@ -220,7 +220,7 @@ export default function AdminBannersPage() {
                 <div className="flex items-stretch">
                   <div className="w-48 h-28 flex-shrink-0 bg-gray-100 relative">
                     {b.image_url ? (
-                      <img src={b.image_url} alt={b.title_ar} className="w-full h-full object-cover" />
+                      <img loading="lazy" src={b.image_url} alt={b.title_ar} className="w-full h-full object-cover" />
                     ) : (
                       <div className="flex items-center justify-center h-full"><ImageIcon className="w-8 h-8 text-gray-300" /></div>
                     )}
@@ -287,7 +287,7 @@ export default function AdminBannersPage() {
                 <div className="flex items-center gap-4">
                   <div className="w-32 h-16 rounded-xl overflow-hidden bg-gray-100 flex items-center justify-center flex-shrink-0">
                     {form.image_url ? (
-                      <img src={form.image_url} alt="" className="w-full h-full object-cover" />
+                      <img loading="lazy" src={form.image_url} alt="" className="w-full h-full object-cover" />
                     ) : (
                       <ImageIcon className="w-8 h-8 text-gray-300" />
                     )}
@@ -356,3 +356,4 @@ export default function AdminBannersPage() {
     </div>
   );
 }
+

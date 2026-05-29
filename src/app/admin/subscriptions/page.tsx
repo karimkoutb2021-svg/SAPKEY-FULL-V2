@@ -132,7 +132,8 @@ export default function SubscriptionsPage() {
       </motion.div>
 
       {/* Plan Cards - Apple Style */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+      <div className="overflow-x-auto pb-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 min-w-[800px] md:min-w-0">
         {plans.map((plan, i) => {
           const price = isYearly ? plan.priceYearly : plan.priceMonthly;
           const priceLabel = isYearly ? 'ج.م/سنة' : 'ج.م/شهر';
@@ -262,6 +263,7 @@ export default function SubscriptionsPage() {
             </motion.div>
           );
         })}
+        </div>
       </div>
 
       {/* Edit Modal */}

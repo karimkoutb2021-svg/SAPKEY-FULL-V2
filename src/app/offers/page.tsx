@@ -85,9 +85,9 @@ function OfferCard({ product }: { product: OfferProduct }) {
 
         {!imgLoaded && !imgError && <div className="absolute inset-0 bg-gray-200 dark:bg-slate-700 animate-pulse" />}
         {imageUrl ? (
-          <img src={imageUrl} alt={product.nameAr}
+          <img loading="lazy" src={imageUrl} alt={product.nameAr}
             className={`w-full h-full object-cover transition-all duration-500 group-hover:scale-110 ${imgLoaded ? 'opacity-100' : 'opacity-0'}`}
-            onLoad={() => setImgLoaded(true)} onError={() => setImgError(true)} loading="lazy" />
+            onLoad={() => setImgLoaded(true)} onError={() => setImgError(true)} />
         ) : (
           <div className="absolute inset-0 flex items-center justify-center">
             <ImageIcon className="w-8 h-8 text-gray-300 dark:text-slate-600" />
@@ -271,3 +271,4 @@ export default function OffersPage() {
     </div>
   );
 }
+

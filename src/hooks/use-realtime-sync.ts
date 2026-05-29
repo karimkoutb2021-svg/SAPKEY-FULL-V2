@@ -145,19 +145,28 @@ export function useTableSync<T = any>(table: string, initialData: T[] = [], colu
 
     fetchData();
 
-    // Subscribe to real-time changes with debounce
-    let timeout: NodeJS.Timeout;
+    // Subscribe to real-time changes without full refetch
     const channel = supabase
       .channel(`sync-${table}-${Date.now()}`)
-      .on('postgres_changes', { event: '*', schema: 'public', table }, () => {
-        clearTimeout(timeout);
-        timeout = setTimeout(() => fetchData(), 2000); // Debounce for 2 seconds
+      .on('postgres_changes', { event: '*', schema: 'public', table }, (payload) => {
+        if (payload.eventType === 'INSERT' || payload.eventType === 'UPDATE') {
+          setData(prev => {
+            const idx = prev.findIndex((item: any) => item.id === (payload.new as any).id);
+            if (idx >= 0) {
+              const next = [...prev];
+              next[idx] = { ...next[idx], ...(payload.new as any) } as T;
+              return next;
+            }
+            return [payload.new as T, ...prev].slice(0, 100);
+          });
+        } else if (payload.eventType === 'DELETE') {
+          setData(prev => prev.filter((item: any) => item.id !== payload.old.id));
+        }
       })
       .subscribe();
 
     return () => {
       cancelled = true;
-      clearTimeout(timeout);
       supabase.removeChannel(channel);
     };
   }, [table, columns]);

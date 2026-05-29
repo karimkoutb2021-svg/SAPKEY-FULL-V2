@@ -126,7 +126,7 @@ export function QRCodeGenerator({ isOpen, onClose, initialValue = '' }: QRCodeGe
         <html>
           <head><title>QR Code - ${value}</title></head>
           <body style="display:flex;justify-content:center;align-items:center;height:100vh;margin:0;">
-            <img src="${canvas.toDataURL()}" style="max-width:300px;" />
+            <img loading="lazy" src="${canvas.toDataURL()}" style="max-width:300px;" />
             <p style="text-align:center;margin-top:20px;font-family:monospace;">${value}</p>
           </body>
         </html>

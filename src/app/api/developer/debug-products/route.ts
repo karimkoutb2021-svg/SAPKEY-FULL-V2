@@ -5,8 +5,8 @@ export async function GET(req: Request) {
   try {
     const supabase = await createClient();
 
-    const { data: categories } = await supabase.from('product_categories').select('*');
-    const { data: products } = await supabase.from('products').select('*');
+    const { data: categories } = await supabase.from('product_categories').select().limit(500);
+    const { data: products } = await supabase.from('products').select().limit(500);
 
     const result = products?.map(p => {
       const cat = categories?.find(c => c.id === p.category_id);

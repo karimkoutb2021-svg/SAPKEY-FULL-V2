@@ -242,7 +242,7 @@ export default function PortfolioPage() {
           </div>
           {branding.logo && (
             <div className="mb-6">
-              <img src={branding.logo} alt={storeName} className="h-20 w-20 mx-auto rounded-2xl object-contain bg-white/20 backdrop-blur-sm p-2 shadow-xl" />
+              <img loading="lazy" src={branding.logo} alt={storeName} className="h-20 w-20 mx-auto rounded-2xl object-contain bg-white/20 backdrop-blur-sm p-2 shadow-xl" />
             </div>
           )}
           <h1 className="text-3xl md:text-5xl font-bold text-white mb-4 tracking-tight">بورتفوليو {storeName}</h1>
@@ -561,3 +561,4 @@ export default function PortfolioPage() {
     </div>
   );
 }
+

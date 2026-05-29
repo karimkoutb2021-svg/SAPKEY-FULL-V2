@@ -70,13 +70,11 @@ function RealProductCard({ product, size = 'normal' }: { product: ShopProduct; s
           <div className="absolute inset-0 bg-gray-200 dark:bg-slate-700 animate-pulse" />
         )}
         {imageUrl ? (
-          <img
-            src={imageUrl}
+          <img loading="lazy" src={imageUrl}
             alt={product.nameAr}
             className={`w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 ${imgLoaded ? 'opacity-100' : 'opacity-0'}`}
             onLoad={() => setImgLoaded(true)}
             onError={() => setImgError(true)}
-            loading="lazy"
           />
         ) : (
           <div className="absolute inset-0 flex items-center justify-center">
@@ -207,8 +205,7 @@ function HeroBanner({ products, banners }: { products: ShopProduct[]; banners: S
                 src={s.video}
               />
             ) : (
-              <img 
-                src={s.image} 
+              <img loading="lazy" src={s.image} 
                 alt={s.title} 
                 className="absolute inset-0 w-full h-full object-cover object-center" 
               />
@@ -334,7 +331,7 @@ function CategorySlider({ categories }: { categories: ProductCategory[] }) {
               className="shrink-0 group flex flex-col items-center gap-2 p-3 sm:p-4 rounded-2xl bg-gray-50 dark:bg-slate-800/50 hover:bg-gray-100 dark:hover:bg-slate-800 transition-all min-w-[90px] sm:min-w-[110px]"
             >
               <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl overflow-hidden bg-white dark:bg-slate-700 flex items-center justify-center group-hover:scale-105 transition-transform shadow-sm p-1">
-                <img src={cat.image_url || "/category-placeholder.svg"} alt={cat.name_ar} className="w-full h-full object-cover rounded-xl" loading="lazy" />
+                <img loading="lazy" src={cat.image_url || "/category-placeholder.svg"} alt={cat.name_ar} className="w-full h-full object-cover rounded-xl" />
               </div>
               <span className="text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300 text-center leading-tight line-clamp-2">
                 {cat.name_ar}
@@ -477,7 +474,7 @@ export default function SupermarketLandingPage() {
         <div className="px-3 sm:px-4 lg:px-8 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2 shrink-0">
             {(branding.logo || '/logo.jpg') ? (
-              <img src={branding.logo || '/logo.jpg'} className="h-10 sm:h-12 w-auto max-w-[160px] rounded-xl object-contain bg-white/10 p-1 shrink-0" alt={branding.storeName} />
+              <img loading="lazy" src={branding.logo || '/logo.jpg'} className="h-10 sm:h-12 w-auto max-w-[160px] rounded-xl object-contain bg-white/10 p-1 shrink-0" alt={branding.storeName} />
             ) : (
               <div className="h-9 w-9 sm:h-10 sm:w-10 rounded-xl flex items-center justify-center shrink-0" style={{ backgroundColor: branding.primaryColor || '#10B981' }}>
                 <Store className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
@@ -600,7 +597,7 @@ export default function SupermarketLandingPage() {
                   animate={{ opacity: i === currentCtaScene % (branding.ctaBannerImages?.length || 1) ? 1 : 0 }}
                   transition={{ duration: 1 }}
                 >
-                  <img src={img} alt="Smart Supermarket" className="absolute inset-0 w-full h-full object-cover" />
+                  <img loading="lazy" src={img} alt="Smart Supermarket" className="absolute inset-0 w-full h-full object-cover" />
                 </motion.div>
               ))}
               <div className="absolute inset-0 bg-gradient-to-l from-black/80 via-black/40 to-black/20"></div>
@@ -684,3 +681,4 @@ export default function SupermarketLandingPage() {
     </div>
   );
 }
+

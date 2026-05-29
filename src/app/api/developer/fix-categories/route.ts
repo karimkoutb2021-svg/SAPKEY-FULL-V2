@@ -6,7 +6,7 @@ export async function POST(req: Request) {
     const supabase = await createClient();
 
     // Fetch all categories
-    const { data: categories, error: catError } = await supabase.from('product_categories').select('*');
+    const { data: categories, error: catError } = await supabase.from('product_categories').select().limit(500);
     if (catError || !categories) throw new Error('Failed to fetch categories');
 
     // Create a mapping of category names to their IDs
@@ -51,7 +51,7 @@ export async function POST(req: Request) {
     ];
 
     // Fetch all products
-    const { data: products, error: prodError } = await supabase.from('products').select('*');
+    const { data: products, error: prodError } = await supabase.from('products').select().limit(500);
     if (prodError || !products) throw new Error('Failed to fetch products');
 
     let updatedCount = 0;

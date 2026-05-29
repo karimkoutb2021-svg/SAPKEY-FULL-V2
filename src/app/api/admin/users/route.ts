@@ -138,7 +138,7 @@ export async function GET() {
   try {
     const { data, error } = await getSupabase()
       .from('users')
-      .select('id, email, full_name_ar, full_name_en, phone, role, is_active, created_at')
+      .select().limit(500)
       .order('created_at', { ascending: false });
 
     if (error) {

@@ -74,7 +74,7 @@ export default function CartPage() {
                   <motion.div key={item.variantId || item.productId} layout className="flex gap-3 sm:gap-4 p-3 sm:p-4 rounded-xl border bg-white dark:bg-slate-900 dark:border-slate-800">
                     <div className="h-20 w-20 rounded-lg bg-gray-100 dark:bg-slate-800 flex items-center justify-center shrink-0 overflow-hidden">
                         {item.image ? (
-                          <img src={item.image || "/product-placeholder.svg"} alt={item.nameAr} className="w-full h-full object-cover" />
+                          <img loading="lazy" src={item.image || "/product-placeholder.svg"} alt={item.nameAr} className="w-full h-full object-cover" />
                         ) : (
                         <ShoppingCart className="h-8 w-8 text-gray-300 dark:text-slate-600" />
                       )}
@@ -178,3 +178,4 @@ export default function CartPage() {
     </PageTransition>
   );
 }
+

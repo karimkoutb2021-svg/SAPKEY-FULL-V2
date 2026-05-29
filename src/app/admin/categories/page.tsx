@@ -7,6 +7,7 @@ import { categoryService, type ProductCategory } from '@/lib/supabase/services/c
 import { uploadImage, compressImage, IMAGE_SIZES, deleteImage } from '@/lib/supabase/storage';
 import { Plus, Edit2, Trash2, Image as ImageIcon, Upload, Loader2, Save, X, ChevronUp, ChevronDown, Eye, EyeOff } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
 
 const supabase = createClient();
@@ -14,8 +15,16 @@ const supabase = createClient();
 export default function AdminCategoriesPage() {
   const { user } = useAuthStore();
   const router = useRouter();
-  const [categories, setCategories] = useState<ProductCategory[]>([]);
-  const [loading, setLoading] = useState(true);
+  const queryClient = useQueryClient();
+  const { data: categories = [], isLoading: loading } = useQuery({
+    queryKey: ['admin-categories'],
+    queryFn: async () => {
+      const { data } = await categoryService.getAll();
+      return data || [];
+    },
+    staleTime: 5 * 60 * 1000,
+  });
+
   const [saving, setSaving] = useState(false);
   const [editing, setEditing] = useState<ProductCategory | null>(null);
   const [showForm, setShowForm] = useState(false);
@@ -34,29 +43,27 @@ export default function AdminCategoriesPage() {
   });
 
   useEffect(() => {
-    loadCategories();
-  }, []);
-
-  useEffect(() => {
     const ch = supabase.channel('admin-product_categories')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'product_categories' }, () => {
-        loadCategories();
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'product_categories' }, (payload) => {
+        if (payload.eventType === 'INSERT' || payload.eventType === 'UPDATE') {
+          queryClient.setQueryData(['admin-categories'], (old: ProductCategory[] = []) => {
+             const idx = old.findIndex(c => c.id === (payload.new as any).id);
+             if (idx >= 0) {
+               const updated = [...old];
+               updated[idx] = { ...updated[idx], ...(payload.new as any) } as ProductCategory;
+               return updated.sort((a,b) => a.sort_order - b.sort_order);
+             }
+             return [...old, payload.new as ProductCategory].sort((a,b) => a.sort_order - b.sort_order);
+          });
+        } else if (payload.eventType === 'DELETE') {
+          queryClient.setQueryData(['admin-categories'], (old: ProductCategory[] = []) => {
+             return old.filter(c => c.id !== payload.old.id);
+          });
+        }
       })
       .subscribe();
     return () => { supabase.removeChannel(ch); };
-  }, []);
-
-  async function loadCategories() {
-    try {
-      setLoading(true);
-      const { data } = await categoryService.getAll();
-      setCategories(data || []);
-    } catch (err: any) {
-      toast.error('فشل تحميل التصنيفات: ' + err.message);
-    } finally {
-      setLoading(false);
-    }
-  }
+  }, [queryClient]);
 
   function openCreate() {
     setEditing(null);
@@ -105,7 +112,7 @@ export default function AdminCategoriesPage() {
         toast.success('تم إنشاء التصنيف');
       }
       setShowForm(false);
-      await loadCategories();
+      // Wait for realtime to update or invalidate cache
     } catch (err: any) {
       toast.error('خطأ: ' + err.message);
     } finally {
@@ -118,7 +125,6 @@ export default function AdminCategoriesPage() {
     try {
       await categoryService.delete(id);
       toast.success('تم حذف التصنيف');
-      await loadCategories();
     } catch (err: any) {
       toast.error('خطأ: ' + err.message);
     }
@@ -154,7 +160,7 @@ export default function AdminCategoriesPage() {
     [items[index], items[index - 1]] = [items[index - 1], items[index]];
     items[index].sort_order = index;
     items[index - 1].sort_order = index - 1;
-    setCategories(items);
+    queryClient.setQueryData(['admin-categories'], items);
     await categoryService.reorder([
       { id: items[index].id, sort_order: index },
       { id: items[index - 1].id, sort_order: index - 1 },
@@ -167,7 +173,7 @@ export default function AdminCategoriesPage() {
     [items[index], items[index + 1]] = [items[index + 1], items[index]];
     items[index].sort_order = index;
     items[index + 1].sort_order = index + 1;
-    setCategories(items);
+    queryClient.setQueryData(['admin-categories'], items);
     await categoryService.reorder([
       { id: items[index].id, sort_order: index },
       { id: items[index + 1].id, sort_order: index + 1 },
@@ -202,7 +208,7 @@ export default function AdminCategoriesPage() {
                 </div>
 
                 <div className="w-16 h-12 rounded-xl overflow-hidden bg-gray-100 flex-shrink-0 flex items-center justify-center">
-                  <img src="/category-placeholder.svg" alt={cat.name_ar} className="w-full h-full object-cover" />
+                  <img loading="lazy" src="/category-placeholder.svg" alt={cat.name_ar} className="w-full h-full object-cover" />
                 </div>
 
                 <div className="flex-1 min-w-0">
@@ -272,7 +278,7 @@ export default function AdminCategoriesPage() {
                 <div className="flex items-center gap-4">
                   <div className="w-20 h-16 rounded-xl overflow-hidden bg-gray-100 flex items-center justify-center flex-shrink-0">
                     {form.image_url ? (
-                      <img src={form.image_url} alt="" className="w-full h-full object-cover" />
+                      <img loading="lazy" src={form.image_url} alt="" className="w-full h-full object-cover" />
                     ) : (
                       <ImageIcon className="w-8 h-8 text-gray-300" />
                     )}
@@ -313,3 +319,4 @@ export default function AdminCategoriesPage() {
     </div>
   );
 }
+

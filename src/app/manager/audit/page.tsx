@@ -9,6 +9,7 @@ import { auditService, inventoryService } from '@/lib/supabase/services/inventor
 import { auditItemService } from '@/lib/supabase/services/procurement';
 import { UnifiedScanner } from '@/components/scanner/unified-scanner';
 import { ProductMasterCard } from '@/components/tools/product-master-card';
+import { OCRScanner } from '@/components/scanner/ocr-scanner';
 import { Mic, MicOff, Camera, FileText, Check, X, AlertTriangle, TrendingUp, TrendingDown, Search, Package, Eye, Download, QrCode, ScanLine } from 'lucide-react';
 import * as XLSX from 'xlsx';
 import toast from 'react-hot-toast';
@@ -70,11 +71,10 @@ function ProductGridBtn({ product, onClick, audited }: { product: StockItem; onC
     >
       <div className="relative aspect-square overflow-hidden bg-gray-50 dark:bg-slate-800/30 p-2">
         {!imgLoaded && !imgError && <div className="absolute inset-0 bg-gray-200 dark:bg-slate-700/50 animate-pulse" />}
-        <img src={imgError ? '/product-placeholder.svg' : imageUrl} alt={product.product_name}
+        <img loading="lazy" src={imgError ? '/product-placeholder.svg' : imageUrl} alt={product.product_name}
           className="w-full h-full object-contain mix-blend-multiply dark:mix-blend-normal transition-transform duration-500 group-hover:scale-110"
           onLoad={() => setImgLoaded(true)}
-          onError={() => setImgError(true)}
-          loading="lazy" />
+          onError={() => setImgError(true)} />
         {audited && (
           <div className="absolute inset-0 bg-emerald-500/20 flex items-center justify-center backdrop-blur-sm">
             <span className="text-[11px] font-black text-white bg-emerald-500 px-2 py-1 rounded-lg shadow-sm">تم الجرد</span>
@@ -122,9 +122,10 @@ export default function AuditPage() {
   // Voice
   const [isRecording, setIsRecording] = useState(false);
 
-  // Modals
+  // Modals & Scanners
   const [showStartModal, setShowStartModal] = useState(false);
   const [showReportModal, setShowReportModal] = useState(false);
+  const [showOCRScanner, setShowOCRScanner] = useState(false);
   const [reportData, setReportData] = useState<{total:number, matched:number, shortage:number, overage:number, value:number} | null>(null);
   const recognitionRef = useRef<any>(null);
 
@@ -297,9 +298,32 @@ export default function AuditPage() {
     recognition.lang = 'ar-EG';
     recognition.onresult = (e: any) => {
       const trans = e.results[0][0].transcript;
+      
+      if (activeSession && selectedProduct) {
+        const numMatch = trans.match(/\d+/);
+        if (numMatch) {
+          setActualQty(numMatch[0]);
+          toast.success(`تم التقاط الكمية الصوتية: ${numMatch[0]}`);
+          setIsRecording(false);
+          return;
+        }
+      }
+
       setSearch(trans);
+      const nTrans = normalizeArabic(trans);
+      const matches = stockItems.filter(p => normalizeArabic(p.product_name).includes(nTrans) || p.sku.includes(nTrans));
+      if (matches.length === 1) {
+        if (activeSession) {
+          setSelectedProduct(matches[0]);
+          toast.success('تم تحديد المنتج: ' + matches[0].product_name);
+        } else {
+          setScannedCode(matches[0].barcode || matches[0].sku);
+          setProductCardOpen(true);
+        }
+      } else {
+        toast.success(`تم البحث: ${trans}`);
+      }
       setIsRecording(false);
-      toast.success(`تم البحث: ${trans}`);
     };
     recognition.onend = () => setIsRecording(false);
     recognitionRef.current = recognition;
@@ -322,6 +346,12 @@ export default function AuditPage() {
     }
   }, [stockItems, activeSession]);
 
+  const handleOCRResult = useCallback((text: string) => {
+    setShowOCRScanner(false);
+    setActualQty(text);
+    toast.success('تم إدراج الكمية بنجاح، يرجى تأكيد المطابقة');
+  }, []);
+
   const filtered = stockItems.filter(p => {
     const nSearch = normalizeArabic(search);
     const ms = !search || normalizeArabic(p.product_name).includes(nSearch) || p.sku.includes(search) || (p.barcode && p.barcode.includes(search));
@@ -331,10 +361,10 @@ export default function AuditPage() {
   if (loading) return <div className="text-center py-8 text-gray-500">جاري التحميل...</div>;
 
   return (
-    <div className="flex flex-col lg:flex-row flex-1 h-full gap-4 overflow-hidden" dir="rtl">
+    <div className="flex flex-col lg:flex-row flex-1 min-h-[calc(100vh-80px)] lg:h-full gap-4 lg:overflow-hidden overflow-y-auto pb-20 lg:pb-0" dir="rtl">
       
       {/* ─── Audit Action Panel (First in DOM) ─── */}
-      <div className="w-full lg:w-96 flex flex-col overflow-hidden bg-white/60 dark:bg-slate-900/60 rounded-3xl border border-white/20 shadow-lg shrink-0 lg:min-h-0 order-1">
+      <div className="w-full lg:w-96 flex flex-col bg-white/60 dark:bg-slate-900/60 rounded-3xl border border-white/20 shadow-lg shrink-0 order-1 overflow-hidden h-[50vh] lg:h-auto">
         
         {!activeSession ? (
           <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-slate-700 text-center">
@@ -378,13 +408,21 @@ export default function AuditPage() {
                   </div>
                 </div>
 
-                <div className="mb-6">
+                <div className="mb-6 relative">
                   <label className="block text-xs font-bold text-gray-500 mb-2">أدخل الكمية الفعلية المجردة</label>
                   <input
                     type="number" value={actualQty} onChange={(e) => setActualQty(e.target.value)}
                     placeholder="0"
-                    className="w-full px-6 py-4 rounded-2xl bg-white dark:bg-slate-900 border-2 border-emerald-500/50 text-center text-3xl font-black text-emerald-600 focus:outline-none focus:ring-4 focus:ring-emerald-500/20 transition-all shadow-inner"
+                    className="w-full pl-6 pr-14 py-4 rounded-2xl bg-white dark:bg-slate-900 border-2 border-emerald-500/50 text-center text-3xl font-black text-emerald-600 focus:outline-none focus:ring-4 focus:ring-emerald-500/20 transition-all shadow-inner"
                   />
+                  {activeSession.type === 'ocr' && (
+                    <button 
+                      onClick={() => setShowOCRScanner(true)}
+                      className="absolute right-3 top-[38px] p-2 bg-emerald-100 dark:bg-emerald-500/20 text-emerald-600 rounded-xl hover:bg-emerald-200 transition-colors"
+                    >
+                      <ScanLine className="w-6 h-6" />
+                    </button>
+                  )}
                 </div>
 
                 <button onClick={submitItem} disabled={!actualQty} className="w-full py-4 rounded-2xl bg-gradient-to-l from-emerald-500 to-teal-600 text-white font-black hover:opacity-90 transition-all shadow-xl disabled:opacity-50 flex items-center justify-center gap-2">
@@ -422,10 +460,10 @@ export default function AuditPage() {
         )}
       </div>
 
-      {/* ─── Product Grid Area (Second in DOM) ─── */}
-      <div className="flex-1 flex flex-col overflow-hidden bg-white/40 dark:bg-slate-900/40 rounded-3xl border border-white/20 shadow-lg lg:min-h-0 order-2">
+      {/* ─── Main Product Grid (Second in DOM) ─── */}
+      <div className="flex-1 flex flex-col min-h-0 order-2 h-[60vh] lg:h-auto bg-white/40 dark:bg-slate-900/40 rounded-3xl border border-white/20 shadow-lg overflow-hidden">
         {/* Top bar */}
-        <div className="p-4 border-b border-white/10 flex items-center gap-2 bg-white/20 dark:bg-slate-800/20">
+        <div className="p-4 border-b border-white/10 flex items-center gap-2 bg-white/20 dark:bg-slate-800/20 shrink-0">
           <div className="flex-1 relative">
             <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
             <input
@@ -450,7 +488,7 @@ export default function AuditPage() {
         <div className="flex gap-2 overflow-x-auto pb-2 pt-1 px-1 shrink-0 scrollbar-hide">
           {categories.map(c => (
             <button key={c.id} onClick={() => setCategory(c.id)} className={cn("px-5 py-2.5 rounded-full text-xs font-bold whitespace-nowrap transition-all duration-300 shadow-sm border backdrop-blur-md flex items-center gap-2", category === c.id ? "bg-emerald-500 text-white border-emerald-400 shadow-[0_0_15px_rgba(16,185,129,0.4)] scale-105" : "bg-white dark:bg-slate-800/40 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-white/10 hover:bg-gray-50 dark:hover:bg-slate-700/60 hover:scale-105")}>
-              {(c as any).image && <img src={(c as any).image} alt={c.name} className="w-5 h-5 object-contain" />}
+              {(c as any).image && <img loading="lazy" src={(c as any).image} alt={c.name} className="w-5 h-5 object-contain" />}
               {c.name}
             </button>
           ))}
@@ -480,6 +518,7 @@ export default function AuditPage() {
 
       <UnifiedScanner isOpen={scannerOpen} onClose={() => setScannerOpen(false)} onScan={handleScanResult} mode={scannerMode} />
       <ProductMasterCard isOpen={productCardOpen} onClose={() => setProductCardOpen(false)} barcode={scannedCode} />
+      <OCRScanner isOpen={showOCRScanner} onClose={() => setShowOCRScanner(false)} onScan={handleOCRResult} />
 
       {/* ─── Modals ─── */}
       {showStartModal && (
@@ -583,3 +622,4 @@ export default function AuditPage() {
     </div>
   );
 }
+

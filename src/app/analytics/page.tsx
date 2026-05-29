@@ -83,6 +83,7 @@ export default function AnalyticsPage() {
 
       const { data: allOrders } = await supabase.from('orders')
         .select('*, order_items(*, products(*, product_categories(name_ar)))')
+        .limit(500)
         .gte('created_at', prevStartDate.toISOString());
 
       if (allOrders) {

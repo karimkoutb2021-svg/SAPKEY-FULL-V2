@@ -181,14 +181,43 @@ export default function ManagerDashboard() {
 
     fetchStats();
 
-    // Real-time subscription
+    // Real-time subscription - Zero Fetch Mutations
     const channel = supabase.channel('dashboard-stats')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'orders' }, () => fetchStats())
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'stock_items' }, () => fetchStats())
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'expenses' }, () => fetchStats())
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'stock_transfers' }, () => fetchStats())
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'time_control' }, () => fetchStats())
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'treasury_transactions' }, () => fetchStats())
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'orders' }, (payload) => {
+         const o = payload.new as any;
+         setStats(prev => ({
+           ...prev,
+           todayOrders: prev.todayOrders + 1,
+           pendingOrders: o.status === 'pending' ? prev.pendingOrders + 1 : prev.pendingOrders,
+           totalRevenue: prev.totalRevenue + (o.total || 0)
+         }));
+         setActivities(prev => [{
+           id: `order-${o.id}`, type: 'order', description: `طلب #${o.order_number || o.id.slice(0, 8)} - ${o.total} ج.م`, time: o.created_at, status: o.status
+         } as ActivityItem, ...prev].slice(0, 10));
+      })
+      .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'orders' }, (payload) => {
+         // handle status changes roughly (just activities for now to prevent bugs)
+         const o = payload.new as any;
+         setActivities(prev => {
+           const arr = [...prev];
+           const idx = arr.findIndex(a => a.id === `order-${o.id}`);
+           if (idx >= 0) { arr[idx].status = o.status; return arr; }
+           return [{ id: `order-${o.id}`, type: 'order', description: `تحديث طلب #${o.order_number || o.id.slice(0, 8)}`, time: o.updated_at || new Date().toISOString(), status: o.status } as ActivityItem, ...prev].slice(0,10);
+         });
+      })
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'treasury_transactions' }, (payload) => {
+         const t = payload.new as any;
+         const amt = t.amount || 0;
+         const diff = (t.type === 'deposit' || t.type === 'transfer_in') ? amt : (t.type === 'withdrawal' || t.type === 'transfer_out') ? -amt : 0;
+         setStats(prev => ({ ...prev, treasuryBalance: prev.treasuryBalance + diff }));
+         setActivities(prev => [{
+           id: `tx-${t.id}`, type: 'treasury', description: `${t.type} - ${amt} ج.م`, time: t.created_at, status: t.status
+         } as ActivityItem, ...prev].slice(0, 10));
+      })
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'expenses' }, (payload) => {
+         const e = payload.new as any;
+         if (e.status === 'approved') setStats(prev => ({ ...prev, todayExpenses: prev.todayExpenses + (e.amount || 0) }));
+      })
       .subscribe();
 
     return () => { supabase.removeChannel(channel); };

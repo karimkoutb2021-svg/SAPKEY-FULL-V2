@@ -61,7 +61,7 @@ export function DynamicInfographic({ role = 'customer', lang = 'ar' }: { role?: 
             {info.subtitle}
           </p>
           <div className="relative mx-auto max-w-2xl rounded-2xl overflow-hidden shadow-2xl border-4 border-white/10 group">
-            <img src={`/guides/${role || 'customer'}_${lang}.png`} alt={`Infographic for ${role}`} className="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-700" />
+            <img loading="lazy" src={`/guides/${role || 'customer'}_${lang}.png`} alt={`Infographic for ${role}`} className="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-700" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent pointer-events-none" />
           </div>
         </motion.div>

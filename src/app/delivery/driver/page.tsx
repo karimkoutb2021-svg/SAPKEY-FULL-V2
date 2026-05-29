@@ -13,6 +13,7 @@ import { useAuthStore } from '@/lib/store/auth-store';
 import { deliveryService, type Delivery } from '@/lib/supabase/services/deliveries';
 import { logoutUser } from '@/lib/supabase/auth';
 import toast from 'react-hot-toast';
+import { createClient } from '@/lib/supabase/client';
 
 const statusConfig: Record<string, { label: string; color: string; icon: any }> = {
   assigned: { label: 'طلب جديد', color: 'bg-blue-500 text-white', icon: Bell },
@@ -47,13 +48,25 @@ export default function DriverDashboard() {
   }, [fetchOrders]);
 
   useEffect(() => {
-    const supabase = (deliveryService as any).__supabase || null;
-    if (!supabase || !user?.id) return;
+    const supabase = createClient();
+    if (!user?.id) return;
     const channel = supabase.channel(`driver-${user.id}`)
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'deliveries', filter: `driver_id=eq.${user.id}` }, () => fetchOrders())
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'deliveries', filter: `driver_id=eq.${user.id}` }, (payload) => {
+        if (payload.eventType === 'INSERT' || payload.eventType === 'UPDATE') {
+          setDriverOrders(prev => {
+            const idx = prev.findIndex(o => o.id === (payload.new as any).id);
+            if (idx >= 0) {
+              const updated = [...prev];
+              updated[idx] = { ...updated[idx], ...(payload.new as any) };
+              return updated;
+            }
+            return [payload.new as Delivery, ...prev];
+          });
+        }
+      })
       .subscribe();
     return () => { supabase.removeChannel(channel); };
-  }, [user?.id, fetchOrders]);
+  }, [user?.id]);
 
   const handleLogout = async () => {
     await logoutUser();

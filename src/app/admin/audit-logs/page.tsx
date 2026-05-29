@@ -17,14 +17,18 @@ export default function AuditLogsPage() {
   useEffect(() => {
     loadLogs();
     const ch = supabase.channel('audit-logs-admin-sync')
-      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'audit_logs' }, () => loadLogs())
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'audit_logs' }, (payload) => {
+        if ((payload.new as any)) {
+          setLogs(prev => [(payload.new as any), ...prev].slice(0, 50));
+        }
+      })
       .subscribe();
     return () => { supabase.removeChannel(ch); };
   }, []);
 
   const loadLogs = async () => {
     try {
-      const { data } = await supabase.from('audit_logs').select('*').order('created_at', { ascending: false }).limit(50);
+      const { data } = await supabase.from('audit_logs').select('id, event_type, action, actor_email, created_at').order('created_at', { ascending: false }).limit(50);
       if (data) setLogs(data);
     } catch { /* silent */ }
     finally { setLoading(false); }

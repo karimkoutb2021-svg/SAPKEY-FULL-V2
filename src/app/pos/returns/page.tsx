@@ -40,8 +40,27 @@ export default function ReturnsPage() {
 
     const channel = supabase
       .channel('returns-orders')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'orders' }, () => {
-        fetchOrders();
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'orders' }, (payload) => {
+        if (payload.eventType === 'INSERT' || payload.eventType === 'UPDATE') {
+          const newOrder = (payload.new as any);
+          if (newOrder.status === 'completed' || newOrder.status === 'refunded') {
+            setCompletedOrders(prev => {
+              const idx = prev.findIndex(o => o.id === newOrder.id);
+              if (idx >= 0) {
+                const updated = [...prev];
+                updated[idx] = newOrder;
+                return updated;
+              }
+              const arr = [newOrder, ...prev];
+              arr.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+              return arr.slice(0, 50);
+            });
+          } else if (payload.eventType === 'UPDATE') {
+            setCompletedOrders(prev => prev.filter(o => o.id !== payload.old.id));
+          }
+        } else if (payload.eventType === 'DELETE') {
+          setCompletedOrders(prev => prev.filter(o => o.id !== payload.old.id));
+        }
       })
       .subscribe();
 

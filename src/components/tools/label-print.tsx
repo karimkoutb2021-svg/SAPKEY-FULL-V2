@@ -26,7 +26,7 @@ export function LabelPrintModal({ isOpen, onClose }: LabelPrintModalProps) {
   useState(() => {
     if (isOpen) {
       setLoading(true);
-      supabase.from('stock_items').select('*').order('product_name').then(({ data }) => {
+      supabase.from('stock_items').select().limit(500).order('product_name').then(({ data }) => {
         if (data) setStockItems(data);
         setLoading(false);
       });

@@ -77,7 +77,7 @@ export default function TimeControlPage() {
       .on('postgres_changes', { event: '*', schema: 'public', table: 'time_control' }, () => { fetchData(); })
       .on('postgres_changes', { event: '*', schema: 'public', table: 'employees' }, () => { fetchData(); })
       .subscribe();
-    return () => { channel.unsubscribe(); };
+    return () => { supabase.removeChannel(channel); };
   }, [fetchData]);
 
   const activeNow = entries.filter(e => e.status === 'active');

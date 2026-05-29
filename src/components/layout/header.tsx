@@ -62,7 +62,7 @@ export function Header() {
 
           <Link href="/" className="flex items-center gap-2 shrink-0 group">
             {(branding.logo || '/logo.jpg') ? (
-              <img src={branding.logo || '/logo.jpg'} className="h-9 sm:h-10 w-auto max-w-[120px] object-contain block shrink-0 border border-white/[0.1] rounded-lg group-hover:shadow-[0_0_15px_rgba(16,185,129,0.2)] transition-shadow" alt={branding.storeName} />
+              <img loading="lazy" src={branding.logo || '/logo.jpg'} className="h-9 sm:h-10 w-auto max-w-[120px] object-contain block shrink-0 border border-white/[0.1] rounded-lg group-hover:shadow-[0_0_15px_rgba(16,185,129,0.2)] transition-shadow" alt={branding.storeName} />
             ) : (
               <div className="h-9 w-9 sm:h-10 sm:w-10 rounded-xl flex items-center justify-center shrink-0 shadow-lg group-hover:shadow-[0_0_15px_rgba(16,185,129,0.2)] transition-shadow" style={{ backgroundColor: branding.primaryColor || '#10B981' }}>
                 <Store className="h-4 w-4 sm:h-5 sm:w-5 text-white" />

@@ -136,7 +136,7 @@ export const orderService = {
         schema: 'public',
         table: 'orders'
       }, (payload) => {
-        callback(normalizeOrder(payload.new));
+        callback(normalizeOrder((payload.new as any)));
       })
       .subscribe();
   },

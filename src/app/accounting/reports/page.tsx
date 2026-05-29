@@ -49,8 +49,8 @@ export default function ReportsPage() {
 
   async function loadData() {
     try {
-      const { data: orders } = await supabase.from('orders').select('total, created_at');
-      const { data: exps } = await supabase.from('expenses').select('amount, status, created_at');
+      const { data: orders } = await supabase.from('orders').select().limit(500);
+      const { data: exps } = await supabase.from('expenses').select().limit(500);
 
       const totalRev = (orders || []).reduce((s: number, o: any) => s + (o.total || 0), 0);
       const totalExp = (exps || []).filter((e: any) => e.status === 'approved').reduce((s: number, e: any) => s + (e.amount || 0), 0);

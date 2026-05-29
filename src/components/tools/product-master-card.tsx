@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
@@ -213,7 +213,7 @@ export function ProductMasterCard({ isOpen, onClose, productId, productName, sku
             {/* ─── Header ─── */}
             <div className="flex items-start gap-4 mb-6">
               <div className="w-16 h-16 rounded-xl bg-white/[0.04] flex items-center justify-center flex-shrink-0 overflow-hidden">
-                <img
+                <img loading="lazy"
                   src={product.image_url || '/product-placeholder.svg'}
                   alt={product.name_ar}
                   className="w-full h-full object-contain"

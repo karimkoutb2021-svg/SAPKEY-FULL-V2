@@ -12,6 +12,7 @@ import { formatCurrency } from '@/lib/utils';
 import { useAuthStore } from '@/lib/store/auth-store';
 import { deliveryService, type Delivery } from '@/lib/supabase/services/deliveries';
 import toast from 'react-hot-toast';
+import { createClient } from '@/lib/supabase/client';
 
 const statusConfig: Record<string, { label: string; color: string; icon: any }> = {
   pending: { label: 'في الانتظار', color: 'bg-slate-100 text-slate-800', icon: Clock },
@@ -58,8 +59,27 @@ export default function DeliveryPage() {
 
   useEffect(() => {
     fetchDeliveries();
-    const unsub = deliveryService.subscribeToAllDeliveries((data) => setDeliveries(data));
-    return () => { unsub.then(fn => fn()); };
+    const supabase = createClient();
+    if (!supabase) {
+       // Just fallback to polling if supabase is completely unavailable somehow
+       return;
+    }
+    const channel = supabase.channel('delivery-manager-sync')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'deliveries' }, (payload: any) => {
+        if (payload.eventType === 'INSERT' || payload.eventType === 'UPDATE') {
+          setDeliveries((prev: any[]) => {
+            const idx = prev.findIndex(d => d.id === (payload.new as any).id);
+            if (idx >= 0) {
+              const updated = [...prev];
+              updated[idx] = { ...updated[idx], ...(payload.new as any) };
+              return updated;
+            }
+            return [(payload.new as any), ...prev].slice(0, 50);
+          });
+        }
+      })
+      .subscribe();
+    return () => { supabase.removeChannel(channel); };
   }, [fetchDeliveries]);
 
   if (!isAuthenticated || !['delivery', 'manager', 'admin'].includes(user?.role || '')) {

@@ -71,8 +71,47 @@ export default function POSMonitoringPage() {
     fetchData();
 
     const channel = supabase.channel('pos-monitor')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'orders' }, () => fetchData())
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'shifts' }, () => fetchData())
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'orders' }, (payload) => {
+        if (payload.eventType === 'INSERT' || payload.eventType === 'UPDATE') {
+          const newOrder = payload.new as POSOrder;
+          
+          setRecentOrders(prev => {
+            const idx = prev.findIndex(o => o.id === newOrder.id);
+            let updated = [...prev];
+            if (idx >= 0) {
+              updated[idx] = newOrder;
+            } else {
+              updated = [newOrder, ...prev].sort((a,b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()).slice(0, 50);
+            }
+            
+            // Recalculate totals based on updated array (using the same logic as fetchData)
+            const completed = updated.filter(o => o.status === 'completed');
+            setTodayTotal(completed.reduce((s, o) => s + (o.grand_total || 0), 0));
+            setTodayCount(completed.length);
+            setCashTotal(completed.filter(o => o.payment_method === 'cash').reduce((s, o) => s + (o.grand_total || 0), 0));
+            setCardTotal(completed.filter(o => o.payment_method === 'card').reduce((s, o) => s + (o.grand_total || 0), 0));
+            setWalletTotal(completed.filter(o => o.payment_method === 'wallet').reduce((s, o) => s + (o.grand_total || 0), 0));
+            setCreditTotal(completed.filter(o => o.payment_method === 'credit').reduce((s, o) => s + (o.grand_total || 0), 0));
+            
+            return updated.slice(0, 20); // Keep only 20 for recentOrders display if they used slice(0,20) before, wait, they used it
+          });
+        }
+      })
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'shifts' }, (payload) => {
+        if (payload.eventType === 'INSERT' || payload.eventType === 'UPDATE') {
+          setActiveShifts(prev => {
+             const shift = payload.new as Shift;
+             if (shift.status !== 'open') return prev.filter(s => s.id !== shift.id);
+             const idx = prev.findIndex(s => s.id === shift.id);
+             if (idx >= 0) {
+               const upd = [...prev];
+               upd[idx] = { ...upd[idx], ...shift };
+               return upd;
+             }
+             return [shift, ...prev];
+          });
+        }
+      })
       .subscribe();
 
     return () => { supabase.removeChannel(channel); };

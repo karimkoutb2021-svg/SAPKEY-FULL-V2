@@ -56,8 +56,10 @@ export default function JournalPage() {
 
   useEffect(() => {
     const ch = supabase.channel('acct-journal_entries')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'journal_entries' }, () => {
-        loadData();
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'journal_entries' }, (payload) => {
+        if (payload.eventType === 'INSERT') setEntries(prev => [(payload.new as any), ...prev].sort((a, b) => new Date(b.entry_date || 0).getTime() - new Date(a.entry_date || 0).getTime()));
+        else if (payload.eventType === 'UPDATE') setEntries(prev => prev.map(e => e.id === (payload.new as any).id ? (payload.new as any) : e).sort((a, b) => new Date(b.entry_date || 0).getTime() - new Date(a.entry_date || 0).getTime()));
+        else if (payload.eventType === 'DELETE') setEntries(prev => prev.filter(e => e.id !== payload.old.id));
       })
       .subscribe();
     return () => { supabase.removeChannel(ch); };
@@ -65,7 +67,7 @@ export default function JournalPage() {
 
   async function loadData() {
     try {
-      const { data } = await supabase.from('journal_entries').select('*').order('entry_date', { ascending: false });
+      const { data } = await supabase.from('journal_entries').select().limit(500).order('entry_date', { ascending: false });
       if (data) setEntries(data);
     } catch { /* silent */ }
     finally { setLoading(false); }

@@ -285,6 +285,7 @@ export default function TenantsPage() {
 
       {/* ═══════════ DESKTOP: Table View ═══════════ */}
       <div className="hidden md:block overflow-hidden rounded-2xl border border-gray-100 dark:border-slate-800 shadow-lg bg-white dark:bg-slate-900">
+        <div className="overflow-x-auto">
         <table className="w-full text-sm">
           <thead>
             <tr className="bg-gray-50 dark:bg-slate-800/50 border-b border-gray-100 dark:border-slate-800">
@@ -356,6 +357,7 @@ export default function TenantsPage() {
             })}
           </tbody>
         </table>
+        </div>
       </div>
 
       {/* Renew Modal */}

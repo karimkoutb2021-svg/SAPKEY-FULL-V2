@@ -4,6 +4,7 @@ import { useState, useCallback, useRef, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
+import { useQuery } from '@tanstack/react-query';
 import { Search, Mic, SlidersHorizontal, ShoppingCart, X, CheckCircle, MessageCircle, CreditCard, Wallet, ChevronRight, Star, Heart, Plus, Minus, Filter, Grid, List, User, Store, Image as ImageIcon, Loader2, Percent, Home, Package, Truck, LogOut, Zap, Gift } from 'lucide-react';
 import { formatCurrency } from '@/lib/utils';
 import { useCartStore } from '@/lib/store/ecommerce-store';
@@ -82,9 +83,9 @@ function ProductCard({ product, viewMode, onAdd, onOrderNow, isWishlisted, onTog
             onClick={() => router.push(`/shop/product/${product.id}`)}>
             {!imgLoaded && !imgError && <div className="absolute inset-0 bg-gray-200 dark:bg-slate-700 animate-pulse" />}
             {imageUrl ? (
-              <img src={imageUrl} alt={product.nameAr}
+              <img loading="lazy" src={imageUrl} alt={product.nameAr}
                 className={`w-full h-full object-cover transition-opacity duration-300 ${imgLoaded ? 'opacity-100' : 'opacity-0'}`}
-                onLoad={() => setImgLoaded(true)} onError={() => { setImgError(true); setImgLoaded(true); }} loading="lazy" />
+                onLoad={() => setImgLoaded(true)} onError={() => { setImgError(true); setImgLoaded(true); }} />
             ) : (
               <div className="absolute inset-0 flex items-center justify-center">
                 <ImageIcon className="w-7 h-7 text-gray-300" />
@@ -157,9 +158,9 @@ function ProductCard({ product, viewMode, onAdd, onOrderNow, isWishlisted, onTog
         onClick={() => router.push(`/shop/product/${product.id}`)}>
         {!imgLoaded && !imgError && <div className="absolute inset-0 bg-gray-200 dark:bg-slate-700 animate-pulse" />}
         {imageUrl ? (
-          <img src={imageUrl} alt={product.nameAr}
+          <img loading="lazy" src={imageUrl} alt={product.nameAr}
             className={`w-full h-full object-cover transition-all duration-500 group-hover:scale-110 ${imgLoaded ? 'opacity-100' : 'opacity-0'}`}
-            onLoad={() => setImgLoaded(true)} onError={() => { setImgError(true); setImgLoaded(true); }} loading="lazy" />
+            onLoad={() => setImgLoaded(true)} onError={() => { setImgError(true); setImgLoaded(true); }} />
         ) : (
           <div className="absolute inset-0 flex items-center justify-center">
             <ImageIcon className="w-10 h-10 text-gray-300 dark:text-slate-600" />
@@ -314,35 +315,41 @@ export default function ShopPage() {
   const [wishlist, setWishlist] = useState<Set<string>>(new Set());
   const [products, setProducts] = useState<ShopProduct[]>([]);
   const [categories, setCategories] = useState<{ id: string; name: string; image?: string }[]>([]);
-  const [loadingProducts, setLoadingProducts] = useState(true);
+
+  const { data: queryData, isLoading: loadingProducts } = useQuery({
+    queryKey: ['shop_data'],
+    queryFn: async () => {
+      const [prodRes, catRes] = await Promise.allSettled([
+        productService.getAll({ is_active: true, limit: 2000 }),
+        loadCategories(),
+      ]);
+      
+      let newProducts: ShopProduct[] = [];
+      let newCategories: { id: string; name: string; image?: string }[] = [];
+      
+      if (prodRes.status === 'fulfilled' && prodRes.value.data) {
+        newProducts = prodRes.value.data.map(mapProduct);
+      }
+      if (catRes.status === 'fulfilled' && catRes.value) {
+        newCategories = [
+          { id: 'all', name: 'الكل', image: '/category-placeholder.svg' },
+          ...catRes.value.map((c: ProductCategory) => ({ id: c.id, name: c.name_ar, image: c.image_url || '/category-placeholder.svg' }))
+        ];
+      }
+      return { products: newProducts, categories: newCategories };
+    },
+    staleTime: 5 * 60 * 1000, // Cache for 5 minutes
+  });
 
   useEffect(() => {
-    async function loadData() {
-      try {
-        const [prodRes, catRes] = await Promise.allSettled([
-          productService.getAll({ is_active: true, limit: 2000 }),
-          loadCategories(),
-        ]);
-
-        if (prodRes.status === 'fulfilled' && prodRes.value.data) {
-          setProducts(prodRes.value.data.map(mapProduct));
-        }
-        if (catRes.status === 'fulfilled' && catRes.value) {
-          const cats = [{ id: 'all', name: 'الكل', image: '/category-placeholder.svg' }, ...catRes.value.map((c: ProductCategory) => ({ id: c.id, name: c.name_ar, image: c.image_url || '/category-placeholder.svg' }))];
-          setCategories(cats);
-        }
-
-        if (searchParams.get('login') === 'true' && !isAuthenticated) {
-          setShowAuthModal(true);
-        }
-      } catch (e) {
-        console.error(e);
-      } finally {
-        setLoadingProducts(false);
-      }
+    if (queryData) {
+      setProducts(queryData.products);
+      setCategories(queryData.categories);
     }
-    loadData();
-  }, []);
+    if (searchParams.get('login') === 'true' && !isAuthenticated) {
+      setShowAuthModal(true);
+    }
+  }, [queryData, searchParams, isAuthenticated]);
   
   // Map URL category parameter to actual category ID when categories are loaded
   useEffect(() => {
@@ -583,7 +590,7 @@ export default function ShopPage() {
               </button>
               {(branding.logo || '/logo.jpg') ? (
                 <button onClick={() => router.push('/')}>
-                  <img src={branding.logo || '/logo.jpg'} className="h-9 w-9 rounded-lg object-contain block bg-white p-0.5 border border-gray-100" alt={branding.storeName} />
+                  <img loading="lazy" src={branding.logo || '/logo.jpg'} className="h-9 w-9 rounded-lg object-contain block bg-white p-0.5 border border-gray-100" alt={branding.storeName} />
                 </button>
               ) : (
                 <button onClick={() => router.push('/')}
@@ -671,7 +678,7 @@ export default function ShopPage() {
                          }`}
                          style={category === c.id ? { backgroundColor: primaryColor } : {}}>
                          {c.image && (
-                           <img src={c.image} alt={c.name} className="w-5 h-5 rounded-md object-cover" />
+                           <img loading="lazy" src={c.image} alt={c.name} className="w-5 h-5 rounded-md object-cover" />
                          )}
                          <span className="leading-none">{c.name}</span>
                          {c.id !== 'all' && (
@@ -712,7 +719,7 @@ export default function ShopPage() {
                   style={category === c.id ? { backgroundColor: primaryColor } : {}}>
                   {c.image ? (
                     <div className="w-8 h-8 rounded-lg overflow-hidden shrink-0 bg-gray-100 dark:bg-slate-700">
-                      <img src={c.image} alt={c.name} className="w-full h-full object-cover" />
+                      <img loading="lazy" src={c.image} alt={c.name} className="w-full h-full object-cover" />
                     </div>
                   ) : (
                     <div className="w-8 h-8 rounded-lg bg-gray-100 dark:bg-slate-800 shrink-0" />
@@ -1247,3 +1254,4 @@ export default function ShopPage() {
      </div>
    );
 }
+

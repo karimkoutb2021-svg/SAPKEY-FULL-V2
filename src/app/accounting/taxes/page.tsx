@@ -23,13 +23,13 @@ export default function TaxesPage() {
 
   useEffect(() => {
     const ch1 = supabase.channel('acct-orders')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'orders' }, () => {
-        loadData();
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'orders' }, (payload) => {
+        if ((payload.new as any)) setTotalSales(prev => prev + ((payload.new as any).total || 0));
       })
       .subscribe();
     const ch2 = supabase.channel('acct-treasury_transactions')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'treasury_transactions' }, () => {
-        loadData();
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'treasury_transactions' }, (payload) => {
+        if ((payload.new as any) && (payload.new as any).type === 'withdrawal') setTotalPurchases(prev => prev + ((payload.new as any).amount || 0));
       })
       .subscribe();
     return () => {
@@ -38,41 +38,42 @@ export default function TaxesPage() {
     };
   }, []);
 
+  useEffect(() => {
+    const now = new Date();
+    setPeriods([
+      {
+        id: '1', period: `${now.toLocaleDateString('ar-EG', { month: 'long' })} ${now.getFullYear()}`,
+        sales: Math.round(totalSales * 0.4), vatCollected: Math.round(totalSales * 0.4 * 0.15),
+        vatPaid: Math.round(totalPurchases * 0.4 * 0.15), netVat: Math.round(totalSales * 0.4 * 0.15 - totalPurchases * 0.4 * 0.15),
+        status: 'pending',
+        dueDate: new Date(now.getFullYear(), now.getMonth() + 1, 15).toISOString(),
+      },
+      {
+        id: '2', period: `${now.toLocaleDateString('ar-EG', { month: 'long' })} ${now.getFullYear() - (now.getMonth() === 0 ? 1 : 0)}`,
+        sales: Math.round(totalSales * 0.35), vatCollected: Math.round(totalSales * 0.35 * 0.15),
+        vatPaid: Math.round(totalPurchases * 0.35 * 0.15), netVat: Math.round(totalSales * 0.35 * 0.15 - totalPurchases * 0.35 * 0.15),
+        status: 'submitted',
+        dueDate: new Date(now.getFullYear(), now.getMonth(), 15).toISOString(),
+      },
+      {
+        id: '3', period: `${now.toLocaleDateString('ar-EG', { month: 'long' })} ${now.getFullYear() - 1}`,
+        sales: Math.round(totalSales * 0.25), vatCollected: Math.round(totalSales * 0.25 * 0.15),
+        vatPaid: Math.round(totalPurchases * 0.25 * 0.15), netVat: Math.round(totalSales * 0.25 * 0.15 - totalPurchases * 0.25 * 0.15),
+        status: 'paid',
+        dueDate: new Date(now.getFullYear(), now.getMonth() - 1, 15).toISOString(),
+      },
+    ]);
+  }, [totalSales, totalPurchases]);
+
   async function loadData() {
     try {
-      const { data: orders } = await supabase.from('orders').select('total, created_at');
-      const { data: txns } = await supabase.from('treasury_transactions').select('amount, type, created_at');
+      const { data: orders } = await supabase.from('orders').select().limit(500);
+      const { data: txns } = await supabase.from('treasury_transactions').select().limit(500);
 
       const sales = (orders || []).reduce((s: number, o: any) => s + (o.total || 0), 0);
       const purchases = (txns || []).filter((t: any) => t.type === 'withdrawal').reduce((s: number, t: any) => s + (t.amount || 0), 0);
       setTotalSales(sales);
       setTotalPurchases(purchases);
-
-      // Generate 3 periods from actual data
-      const now = new Date();
-      setPeriods([
-        {
-          id: '1', period: `${now.toLocaleDateString('ar-EG', { month: 'long' })} ${now.getFullYear()}`,
-          sales: Math.round(sales * 0.4), vatCollected: Math.round(sales * 0.4 * 0.15),
-          vatPaid: Math.round(purchases * 0.4 * 0.15), netVat: Math.round(sales * 0.4 * 0.15 - purchases * 0.4 * 0.15),
-          status: 'pending',
-          dueDate: new Date(now.getFullYear(), now.getMonth() + 1, 15).toISOString(),
-        },
-        {
-          id: '2', period: `${now.toLocaleDateString('ar-EG', { month: 'long' })} ${now.getFullYear() - (now.getMonth() === 0 ? 1 : 0)}`,
-          sales: Math.round(sales * 0.35), vatCollected: Math.round(sales * 0.35 * 0.15),
-          vatPaid: Math.round(purchases * 0.35 * 0.15), netVat: Math.round(sales * 0.35 * 0.15 - purchases * 0.35 * 0.15),
-          status: 'submitted',
-          dueDate: new Date(now.getFullYear(), now.getMonth(), 15).toISOString(),
-        },
-        {
-          id: '3', period: `${now.toLocaleDateString('ar-EG', { month: 'long' })} ${now.getFullYear() - 1}`,
-          sales: Math.round(sales * 0.25), vatCollected: Math.round(sales * 0.25 * 0.15),
-          vatPaid: Math.round(purchases * 0.25 * 0.15), netVat: Math.round(sales * 0.25 * 0.15 - purchases * 0.25 * 0.15),
-          status: 'paid',
-          dueDate: new Date(now.getFullYear(), now.getMonth() - 1, 15).toISOString(),
-        },
-      ]);
     } catch { /* silent */ }
     finally { setLoading(false); }
   }

@@ -104,7 +104,7 @@ export function ImageUpload({ value, onChange, label, width, height, maxSizeMB =
           {value && (
             <div className="flex items-center gap-2">
               <div className={`${previewSize} rounded-xl border border-gray-200 dark:border-slate-700 overflow-hidden bg-gray-50 dark:bg-slate-800 flex items-center justify-center`}>
-                <img src={value} alt={label} className="max-h-full max-w-full object-contain" />
+                <img loading="lazy" src={value} alt={label} className="max-h-full max-w-full object-contain" />
               </div>
               <button onClick={() => onChange('')} className="h-8 w-8 rounded-lg bg-red-50 dark:bg-red-900/20 text-red-500 flex items-center justify-center">
                 <X className="h-3.5 w-3.5" />

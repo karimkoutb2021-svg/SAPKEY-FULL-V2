@@ -156,7 +156,7 @@ export function ProductCardModal({ isOpen, onClose, scannedCode, mode = 'barcode
             ) : product ? (
               <>
                 {product.image_url ? (
-                  <img src={product.image_url} alt={product.name_ar} className="w-full h-full object-cover" />
+                  <img loading="lazy" src={product.image_url} alt={product.name_ar} className="w-full h-full object-cover" />
                 ) : (
                   <div className="text-white/30">
                     <Package size={64} />

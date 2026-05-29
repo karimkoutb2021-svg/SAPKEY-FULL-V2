@@ -16,14 +16,18 @@ export default function DeploymentPage() {
   useEffect(() => {
     loadDeployments();
     const ch = supabase.channel('deployment-admin-sync')
-      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'platform_events' }, () => loadDeployments())
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'platform_events', filter: 'event_category=eq.deployment' }, (payload) => {
+        if ((payload.new as any)) {
+          setDeployments(prev => [(payload.new as any), ...prev].slice(0, 20));
+        }
+      })
       .subscribe();
     return () => { supabase.removeChannel(ch); };
   }, []);
 
   const loadDeployments = async () => {
     try {
-      const { data } = await supabase.from('platform_events').select('*').eq('event_category', 'deployment').order('created_at', { ascending: false }).limit(20);
+      const { data } = await supabase.from('platform_events').select('id, status, event_name, source, created_at, message').eq('event_category', 'deployment').order('created_at', { ascending: false }).limit(20);
       if (data) setDeployments(data);
     } catch { /* silent */ }
     finally { setLoading(false); }

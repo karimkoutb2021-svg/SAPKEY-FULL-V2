@@ -22,7 +22,7 @@ export function ProductCard({ product, view = 'grid' }: ProductCardProps) {
       <div className="product-card-premium overflow-hidden">
         <div className="flex items-center">
           <div className="h-28 w-28 rounded-2xl bg-gradient-to-br from-gray-100 to-gray-200 dark:from-slate-800 dark:to-slate-700 flex items-center justify-center shrink-0 overflow-hidden">
-            <img src={product.image || "/product-placeholder.svg"} alt={product.nameAr} className="h-full w-full object-cover" />
+            <img loading="lazy" src={product.image || "/product-placeholder.svg"} alt={product.nameAr} className="h-full w-full object-cover" />
           </div>
           <div className="flex-1 p-4">
             <Link href={`/shop/product/${product.id}`} className="text-base font-bold text-gray-900 dark:text-white hover:text-emerald-600 transition-colors line-clamp-1">
@@ -60,7 +60,7 @@ export function ProductCard({ product, view = 'grid' }: ProductCardProps) {
       className="product-card-premium group"
     >
       <div className="relative aspect-square bg-gradient-to-br from-gray-50 to-gray-100 dark:from-slate-800 dark:to-slate-900 flex items-center justify-center overflow-hidden">
-        <img src={product.image || "/product-placeholder.svg"} alt={product.nameAr} className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500" />
+        <img loading="lazy" src={product.image || "/product-placeholder.svg"} alt={product.nameAr} className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500" />
         {product.hasExpiry && (
           <span className="absolute top-3 right-3 px-2.5 py-1 bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 text-[10px] font-bold rounded-full">
             صلاحية

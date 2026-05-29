@@ -15,7 +15,7 @@ export async function GET() {
     const supabase = createAdminClient();
     const { data, error } = await supabase
       .from('branding_settings')
-      .select('key, value')
+      .select().limit(500)
       .in('key', ['logo', 'appIcon', 'favicon', 'storeName', 'storeNameEn', 'slogan', 'primaryColor']);
 
     if (data) {

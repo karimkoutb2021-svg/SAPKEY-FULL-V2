@@ -22,7 +22,14 @@ export default function TreasuryPage() {
   useEffect(() => {
     loadData();
     const channel = supabase.channel('acct-treasury')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'treasury_transactions' }, () => loadData())
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'treasury_transactions' }, (payload) => {
+        if ((payload.new as any)) {
+          setTransactions(prev => [(payload.new as any), ...prev].slice(0, 50));
+          const amt = (payload.new as any).amount || 0;
+          const isDeposit = (payload.new as any).type === 'deposit' || (payload.new as any).type === 'transfer_in';
+          setBalance(prev => isDeposit ? prev + amt : prev - amt);
+        }
+      })
       .subscribe();
     return () => { supabase.removeChannel(channel); };
   }, []);

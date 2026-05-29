@@ -48,8 +48,10 @@ export default function PettyCashPage() {
 
   useEffect(() => {
     const ch = supabase.channel('acct-petty_cash_entries')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'petty_cash_entries' }, () => {
-        loadData();
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'petty_cash_entries' }, (payload) => {
+        if (payload.eventType === 'INSERT') setEntries(prev => [(payload.new as any), ...prev].sort((a, b) => new Date(b.created_at || 0).getTime() - new Date(a.created_at || 0).getTime()));
+        else if (payload.eventType === 'UPDATE') setEntries(prev => prev.map(e => e.id === (payload.new as any).id ? (payload.new as any) : e).sort((a, b) => new Date(b.created_at || 0).getTime() - new Date(a.created_at || 0).getTime()));
+        else if (payload.eventType === 'DELETE') setEntries(prev => prev.filter(e => e.id !== payload.old.id));
       })
       .subscribe();
     return () => { supabase.removeChannel(ch); };
@@ -57,7 +59,7 @@ export default function PettyCashPage() {
 
   async function loadData() {
     try {
-      const { data } = await supabase.from('petty_cash_entries').select('id, date, description, amount, account_id, paid_by, status, approved_by, approved_at').order('created_at', { ascending: false });
+      const { data } = await supabase.from('petty_cash_entries').select().limit(500).order('created_at', { ascending: false });
       if (data) setEntries(data);
     } catch { /* silent */ }
     finally { setLoading(false); }

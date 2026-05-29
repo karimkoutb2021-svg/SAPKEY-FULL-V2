@@ -65,7 +65,7 @@ export function Footer() {
           <div className="lg:col-span-2">
             <Link href="/" className="flex items-center gap-3 mb-4">
               {(branding.logo || '/logo.jpg') ? (
-                <img src={branding.logo || '/logo.jpg'} alt={branding.storeName || 'SAPKEY'} className="h-10 w-auto max-w-[160px] rounded-xl object-contain bg-white/10 p-1" />
+                <img loading="lazy" src={branding.logo || '/logo.jpg'} alt={branding.storeName || 'SAPKEY'} className="h-10 w-auto max-w-[160px] rounded-xl object-contain bg-white/10 p-1" />
               ) : (
                 <div className="h-10 w-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: primaryColor }}>
                   <Store className="h-5 w-5 text-white" />

@@ -71,7 +71,7 @@ export default function ProductsPage() {
           <div className="flex items-center gap-3">
             {imageUrl ? (
               <div className="relative h-10 w-10 rounded-xl overflow-hidden shrink-0 border border-gray-100 dark:border-slate-800 shadow-sm group-hover:scale-105 transition-transform">
-                <img src={imageUrl} alt={nameAr} className="h-full w-full object-cover" />
+                <img loading="lazy" src={imageUrl} alt={nameAr} className="h-full w-full object-cover" />
               </div>
             ) : (
               <div className="h-10 w-10 rounded-xl bg-gray-100 dark:bg-slate-800 flex items-center justify-center shrink-0 border border-gray-200 dark:border-slate-700 shadow-sm group-hover:scale-105 transition-transform">
@@ -490,3 +490,4 @@ export default function ProductsPage() {
     </div>
   );
 }
+

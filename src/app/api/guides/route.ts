@@ -90,7 +90,7 @@ export async function GET(req: NextRequest) {
 
   const { data, error } = await getSupabase()
     .from('guide_content')
-    .select('*')
+    .select().limit(500)
     .order('updated_at', { ascending: false });
 
   if (error) {

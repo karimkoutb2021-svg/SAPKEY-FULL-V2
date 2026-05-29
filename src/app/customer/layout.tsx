@@ -30,7 +30,7 @@ export default function CustomerLayout({ children }: { children: React.ReactNode
       })
       .subscribe();
     supabase.from('orders').select('id', { count: 'exact', head: true }).eq('status', 'preparing').then(r => setOrdersCount(r.count || 0));
-    return () => { channel.unsubscribe(); };
+    return () => { supabase.removeChannel(channel); };
   }, []);
 
   return (

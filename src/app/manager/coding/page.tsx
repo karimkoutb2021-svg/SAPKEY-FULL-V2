@@ -64,11 +64,10 @@ function ProductGridBtn({ product, onClick, audited }: { product: StockItem; onC
     >
       <div className="relative aspect-square overflow-hidden bg-gray-50 dark:bg-slate-800/30 p-2">
         {!imgLoaded && !imgError && <div className="absolute inset-0 bg-gray-200 dark:bg-slate-700/50 animate-pulse" />}
-        <img src={imgError ? '/product-placeholder.svg' : imageUrl} alt={product.product_name}
+        <img loading="lazy" src={imgError ? '/product-placeholder.svg' : imageUrl} alt={product.product_name}
           className="w-full h-full object-contain mix-blend-multiply dark:mix-blend-normal transition-transform duration-500 group-hover:scale-110"
           onLoad={() => setImgLoaded(true)}
-          onError={() => setImgError(true)}
-          loading="lazy" />
+          onError={() => setImgError(true)} />
         {audited && (
           <div className="absolute inset-0 bg-emerald-500/20 flex items-center justify-center backdrop-blur-sm">
             <span className="text-[11px] font-black text-white bg-emerald-500 px-2 py-1 rounded-lg shadow-sm">مُكود</span>
@@ -563,7 +562,7 @@ export default function CodingPage() {
         <div className="flex gap-2 overflow-x-auto pb-2 pt-1 px-1 shrink-0 scrollbar-hide">
           {categories.map(c => (
             <button key={c.id} onClick={() => setCategory(c.id)} className={cn("px-5 py-2.5 rounded-full text-xs font-bold whitespace-nowrap transition-all duration-300 shadow-sm border backdrop-blur-md flex items-center gap-2", category === c.id ? "bg-emerald-500 text-white border-emerald-400 shadow-[0_0_15px_rgba(16,185,129,0.4)] scale-105" : "bg-white dark:bg-slate-800/40 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-white/10 hover:bg-gray-50 dark:hover:bg-slate-700/60 hover:scale-105")}>
-              {(c as any).image && <img src={(c as any).image} alt={c.name} className="w-5 h-5 object-contain" />}
+              {(c as any).image && <img loading="lazy" src={(c as any).image} alt={c.name} className="w-5 h-5 object-contain" />}
               {c.name}
             </button>
           ))}
@@ -599,3 +598,4 @@ export default function CodingPage() {
     </div>
   );
 }
+

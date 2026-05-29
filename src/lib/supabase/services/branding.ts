@@ -61,7 +61,7 @@ export const brandingService = {
         'postgres_changes',
         { event: '*', schema: 'public', table: 'branding_settings' },
         (payload) => {
-          if (payload.new) {
+          if ((payload.new as any)) {
             const newConfig = payload.new as BrandingSetting;
             callback(newConfig.key, newConfig.value);
           }

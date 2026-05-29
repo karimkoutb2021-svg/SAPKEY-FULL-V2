@@ -1,5 +1,5 @@
-const CACHE_NAME = 'sm-cache-ce34cf5-1780002479458';
-const BUILD_ID = 'ce34cf5';
+const CACHE_NAME = 'sm-cache-3a465c5-1780067948696';
+const BUILD_ID = '3a465c5';
 const STATIC_CACHE = 'sm-static-v5';
 const BYPASS_URLS = ['/version.json', '/api/version', '/api/manifest', '/sw.js', '/manifest.json'];
 const ASSETS = ['/offline.html'];

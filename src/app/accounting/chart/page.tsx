@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -90,8 +90,10 @@ export default function ChartOfAccountsPage() {
 
   useEffect(() => {
     const ch = supabase.channel('acct-chart_of_accounts')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'chart_of_accounts' }, () => {
-        loadData();
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'chart_of_accounts' }, (payload) => {
+        if (payload.eventType === 'INSERT') setAccounts(prev => [...prev, payload.new as Account].sort((a, b) => (a.code || '').localeCompare(b.code || '')));
+        else if (payload.eventType === 'UPDATE') setAccounts(prev => prev.map(a => a.id === (payload.new as any).id ? payload.new as Account : a).sort((a, b) => (a.code || '').localeCompare(b.code || '')));
+        else if (payload.eventType === 'DELETE') setAccounts(prev => prev.filter(a => a.id !== payload.old.id));
       })
       .subscribe();
     return () => { supabase.removeChannel(ch); };
@@ -99,7 +101,7 @@ export default function ChartOfAccountsPage() {
 
   async function loadData() {
     try {
-      const { data } = await supabase.from('chart_of_accounts').select('*').order('code');
+      const { data } = await supabase.from('chart_of_accounts').select().limit(500).order('code');
       if (data && data.length > 0) {
         setAccounts(data);
         // auto-expand root accounts

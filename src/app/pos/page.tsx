@@ -79,11 +79,10 @@ function ProductBtn({ product, onAdd }: { product: POSProduct; onAdd: (p: POSPro
     >
       <div className="relative aspect-square overflow-hidden bg-gray-50 dark:bg-slate-800/30 p-2">
         {!imgLoaded && !imgError && <div className="absolute inset-0 bg-gray-200 dark:bg-slate-700/50 animate-pulse" />}
-        <img src={imgError ? '/product-placeholder.svg' : imageUrl} alt={product.nameAr}
+        <img loading="lazy" src={imgError ? '/product-placeholder.svg' : imageUrl} alt={product.nameAr}
           className="w-full h-full object-contain mix-blend-multiply dark:mix-blend-normal transition-transform duration-500 group-hover:scale-110"
           onLoad={() => setImgLoaded(true)}
-          onError={() => setImgError(true)}
-          loading="lazy" />
+          onError={() => setImgError(true)} />
         {isOutOfStock && (
           <div className="absolute inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center">
             <span className="text-white text-[10px] font-black bg-red-500 px-2 py-1 rounded-lg shadow-lg">نفذ</span>
@@ -254,22 +253,47 @@ function POSContent({ primaryColor, userRole, userName, userId }: { primaryColor
   // Real-time subscription for product/category updates
   useEffect(() => {
     const channel = supabase.channel('pos-sync')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'products' }, async () => {
-        const { data } = await supabase.from('products').select('id, name_en, name_ar, sale_price, unit_price, unit, category_id, image_url, barcode, current_stock').limit(2000);
-        if (data) {
-          const mapped = data.map(mapProduct);
-          setProducts(mapped);
-          const localProducts: LocalProduct[] = mapped.map(p => ({
-            id: p.id, sku: p.id, barcode: p.barcode || null, nameAr: p.nameAr,
-            nameEn: p.name, price: p.price, costPrice: 0, categoryId: p.categoryId || null,
-            unit: p.baseUnit, stock: p.stock ?? 0, isActive: true,
-          }));
-          await cacheProducts(localProducts);
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'products' }, async (payload) => {
+        if (payload.eventType === 'INSERT' || payload.eventType === 'UPDATE') {
+          const newProduct = (payload.new as any);
+          const mapped = mapProduct(newProduct);
+          
+          setProducts(prev => {
+            const index = prev.findIndex(p => p.id === mapped.id);
+            if (index >= 0) {
+              const updated = [...prev];
+              updated[index] = mapped;
+              return updated;
+            }
+            return [...prev, mapped];
+          });
+          
+          const localProd: LocalProduct = {
+            id: mapped.id, sku: mapped.id, barcode: mapped.barcode || null, nameAr: mapped.nameAr,
+            nameEn: mapped.name, price: mapped.price, costPrice: 0, categoryId: mapped.categoryId || null,
+            unit: mapped.baseUnit, stock: mapped.stock ?? 0, isActive: true,
+          };
+          await cacheProducts([localProd]);
+        } else if (payload.eventType === 'DELETE') {
+          setProducts(prev => prev.filter(p => p.id !== payload.old.id));
         }
       })
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'product_categories' }, async () => {
-        const { data } = await supabase.from('product_categories').select('*');
-        if (data) setCategories([{ id: 'all', name: 'الكل', image: '' }, ...data.map((c: any) => ({ id: c.id, name: c.name_ar, image: c.image_url || '' }))]);
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'product_categories' }, async (payload) => {
+        if (payload.eventType === 'INSERT' || payload.eventType === 'UPDATE') {
+          const c = (payload.new as any);
+          const mappedCat = { id: c.id, name: c.name_ar, image: c.image_url || '' };
+          setCategories(prev => {
+            const index = prev.findIndex(cat => cat.id === c.id);
+            if (index >= 0) {
+              const updated = [...prev];
+              updated[index] = mappedCat;
+              return updated;
+            }
+            return [...prev, mappedCat];
+          });
+        } else if (payload.eventType === 'DELETE') {
+          setCategories(prev => prev.filter(cat => cat.id !== payload.old.id));
+        }
       })
       .subscribe();
     return () => { supabase.removeChannel(channel); };
@@ -839,7 +863,7 @@ function POSContent({ primaryColor, userRole, userName, userId }: { primaryColor
                     : 'bg-white/40 dark:bg-slate-800/40 text-gray-700 dark:text-gray-300 border-white/20 dark:border-white/10 hover:bg-white/60 dark:hover:bg-slate-700/60 hover:scale-105'
                 }`}
               >
-                {c.image && <img src={c.image} alt={c.name} className="w-5 h-5 object-contain" />}
+                {c.image && <img loading="lazy" src={c.image} alt={c.name} className="w-5 h-5 object-contain" />}
                 {c.name}
               </button>
             ))}
@@ -1204,3 +1228,4 @@ function CartPanel({ cart, primaryColor, total, subtotal, taxTotal, paymentMetho
     </div>
   );
 }
+

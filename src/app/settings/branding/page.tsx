@@ -107,7 +107,7 @@ export default function BrandingPage() {
             <CardHeader><CardTitle className="text-sm flex items-center gap-2"><Image className="h-4 w-4" /> الشعار</CardTitle></CardHeader>
             <CardContent className="space-y-3">
               <div className="h-24 w-24 rounded-2xl border-2 border-dashed flex items-center justify-center overflow-hidden mx-auto" style={{ borderColor: branding.primaryColor + '40' }}>
-                {logoPreview ? <img src={logoPreview} className="h-full w-full object-contain" /> : <Store className="h-8 w-8 text-gray-300" />}
+                {logoPreview ? <img loading="lazy" src={logoPreview} className="h-full w-full object-contain" /> : <Store className="h-8 w-8 text-gray-300" />}
               </div>
               <input type="file" accept="image/*" onChange={handleLogoUpload} className="text-xs text-gray-400 w-full" />
               <Input label="اسم المتجر" value={branding.storeName} onChange={(e) => update('storeName', e.target.value)} />
@@ -121,7 +121,7 @@ export default function BrandingPage() {
             <CardHeader><CardTitle className="text-sm flex items-center gap-2"><Image className="h-4 w-4" /> أيقونة المتصفح</CardTitle></CardHeader>
             <CardContent className="space-y-3">
               <div className="h-16 w-16 rounded-xl border-2 border-dashed flex items-center justify-center overflow-hidden mx-auto">
-                {faviconPreview ? <img src={faviconPreview} className="h-full w-full object-contain" /> : <Store className="h-6 w-6 text-gray-300" />}
+                {faviconPreview ? <img loading="lazy" src={faviconPreview} className="h-full w-full object-contain" /> : <Store className="h-6 w-6 text-gray-300" />}
               </div>
               <input type="file" accept="image/*" onChange={handleFaviconUpload} className="text-xs text-gray-400 w-full" />
               <p className="text-xs text-gray-400">يظهر في علامة تبويب المتصفح (يفضل 32x32 أو 64x64)</p>
@@ -194,7 +194,7 @@ export default function BrandingPage() {
           <CardContent>
             <div className="p-6 rounded-2xl border" style={{ borderColor: branding.primaryColor + '30', backgroundColor: branding.backgroundColor }}>
               <div className="text-center">
-                {logoPreview && <img src={logoPreview} className="h-16 mx-auto mb-2" />}
+                {logoPreview && <img loading="lazy" src={logoPreview} className="h-16 mx-auto mb-2" />}
                 <h2 className="text-xl font-bold" style={{ color: branding.primaryColor }}>{branding.storeName}</h2>
                 <p className="text-sm" style={{ color: branding.textColor + '99' }}>{branding.slogan}</p>
                 <p className="text-xs mt-2" style={{ color: branding.textColor + '80' }}>{branding.address} | {branding.phone}</p>
@@ -231,3 +231,4 @@ export default function BrandingPage() {
     </PageTransition>
   );
 }
+

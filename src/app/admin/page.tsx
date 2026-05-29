@@ -32,8 +32,11 @@ export default function AdminDashboard() {
     loadRecentEvents();
 
     const ch = supabase.channel('admin-dashboard-sync')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'audit_logs' }, () => { checkHealth(); loadRecentEvents(); })
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'platform_events' }, () => { checkHealth(); loadRecentEvents(); })
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'platform_events' }, (payload) => {
+        if ((payload.new as any)) {
+          setRecentEvents(prev => [(payload.new as any), ...prev].slice(0, 5));
+        }
+      })
       .subscribe();
 
     return () => { supabase.removeChannel(ch); };
@@ -41,7 +44,7 @@ export default function AdminDashboard() {
 
   const loadRecentEvents = async () => {
     try {
-      const { data } = await supabase.from('platform_events').select('*').order('created_at', { ascending: false }).limit(5);
+      const { data } = await supabase.from('platform_events').select('id, status, event_name, message, event_category, created_at').order('created_at', { ascending: false }).limit(5);
       if (data) setRecentEvents(data);
     } catch { /* silent */ }
   };

@@ -66,7 +66,7 @@ export default function AIOrderingPage() {
     const channel = supabase.channel('ai-products-sync')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'products' }, () => loadProducts())
       .subscribe();
-    return () => { channel.unsubscribe(); };
+    return () => { supabase.removeChannel(channel); };
   }, []);
 
   const loadProducts = async () => {

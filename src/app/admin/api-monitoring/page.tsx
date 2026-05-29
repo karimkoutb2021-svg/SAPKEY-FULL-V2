@@ -15,14 +15,18 @@ export default function ApiMonitoringPage() {
   useEffect(() => {
     loadEvents();
     const ch = supabase.channel('api-monitoring-admin-sync')
-      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'platform_events' }, () => loadEvents())
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'platform_events', filter: 'event_category=eq.api' }, (payload) => {
+        if ((payload.new as any)) {
+          setEvents(prev => [(payload.new as any), ...prev].slice(0, 50));
+        }
+      })
       .subscribe();
     return () => { supabase.removeChannel(ch); };
   }, []);
 
   const loadEvents = async () => {
     try {
-      const { data } = await supabase.from('platform_events').select('*').eq('event_category', 'api').order('created_at', { ascending: false }).limit(50);
+      const { data } = await supabase.from('platform_events').select('id, event_name, status, duration_ms, source, created_at').eq('event_category', 'api').order('created_at', { ascending: false }).limit(50);
       if (data) setEvents(data);
     } catch { /* silent */ }
     finally { setLoading(false); }

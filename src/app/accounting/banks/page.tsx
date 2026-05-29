@@ -20,17 +20,24 @@ export default function BanksPage() {
   useEffect(() => {
     loadData();
     const channel = supabase.channel('acct-banks')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'bank_accounts' }, () => loadData())
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'bank_accounts' }, (payload) => {
+        if (payload.eventType === 'INSERT') setBanks(prev => [...prev, (payload.new as any)]);
+        else if (payload.eventType === 'UPDATE') setBanks(prev => prev.map(b => b.id === (payload.new as any).id ? (payload.new as any) : b));
+        else if (payload.eventType === 'DELETE') setBanks(prev => prev.filter(b => b.id !== payload.old.id));
+      })
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'bank_transactions' }, (payload) => {
+        if ((payload.new as any)) setTransactions(prev => [(payload.new as any), ...prev].slice(0, 20));
+      })
       .subscribe();
     return () => { supabase.removeChannel(channel); };
   }, []);
 
   async function loadData() {
     try {
-      const { data: accs } = await supabase.from('bank_accounts').select('*');
+      const { data: accs } = await supabase.from('bank_accounts').select('id, icon, name, account_number, balance, account_type, type, status');
       if (accs && accs.length > 0) {
         setBanks(accs);
-        const { data: txns } = await supabase.from('bank_transactions').select('*').order('created_at', { ascending: false }).limit(20);
+        const { data: txns } = await supabase.from('bank_transactions').select('id, type, description, bank_name, created_at, amount, balance').order('created_at', { ascending: false }).limit(20);
         setTransactions(txns || []);
       } else {
         // Fallback demo

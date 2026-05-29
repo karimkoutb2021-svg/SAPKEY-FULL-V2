@@ -65,8 +65,10 @@ export default function ExpensesPage() {
 
   useEffect(() => {
     const ch = supabase.channel('acct-expenses')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'expenses' }, () => {
-        loadData();
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'expenses' }, (payload) => {
+        if (payload.eventType === 'INSERT') setExpenses(prev => [(payload.new as any), ...prev].sort((a, b) => new Date(b.created_at || 0).getTime() - new Date(a.created_at || 0).getTime()));
+        else if (payload.eventType === 'UPDATE') setExpenses(prev => prev.map(e => e.id === (payload.new as any).id ? (payload.new as any) : e).sort((a, b) => new Date(b.created_at || 0).getTime() - new Date(a.created_at || 0).getTime()));
+        else if (payload.eventType === 'DELETE') setExpenses(prev => prev.filter(e => e.id !== payload.old.id));
       })
       .subscribe();
     return () => { supabase.removeChannel(ch); };
@@ -74,7 +76,7 @@ export default function ExpensesPage() {
 
   async function loadData() {
     try {
-      const { data } = await supabase.from('expenses').select('*').order('created_at', { ascending: false });
+      const { data } = await supabase.from('expenses').select().limit(500).order('created_at', { ascending: false });
       if (data) setExpenses(data);
     } catch { /* silent */ }
     finally { setLoading(false); }
@@ -441,7 +443,7 @@ export default function ExpensesPage() {
         <Dialog open={!!viewReceipt} onOpenChange={() => setViewReceipt(null)}>
           <DialogContent className="sm:max-w-md">
             <DialogHeader><DialogTitle>عرض الإيصال</DialogTitle></DialogHeader>
-            {viewReceipt && <div className="flex justify-center"><img src={viewReceipt} alt="إيصال" className="max-w-full rounded-lg max-h-[60vh] object-contain" /></div>}
+            {viewReceipt && <div className="flex justify-center"><img loading="lazy" src={viewReceipt} alt="إيصال" className="max-w-full rounded-lg max-h-[60vh] object-contain" /></div>}
             <DialogFooter className="gap-2">
               <button className="h-8 md:h-9 px-3 rounded-lg border text-[10px] md:text-xs" onClick={() => setViewReceipt(null)}>إغلاق</button>
             </DialogFooter>
@@ -451,3 +453,4 @@ export default function ExpensesPage() {
     </PageTransition>
   );
 }
+

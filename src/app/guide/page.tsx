@@ -49,8 +49,7 @@ export default function GuidePage() {
               </ul>
             </div>
             <div className="w-full md:w-1/2 flex-shrink-0">
-              <img 
-                src="/guide/coding_audit_infographic.png" 
+              <img loading="lazy" src="/guide/coding_audit_infographic.png" 
                 alt="انفوجرافيك التكويد والجرد" 
                 className="w-full h-auto rounded-2xl shadow-2xl border border-gray-100 dark:border-white/10 hover:scale-105 transition-transform duration-500"
               />
@@ -88,8 +87,7 @@ export default function GuidePage() {
               </ul>
             </div>
             <div className="w-full md:w-1/2 flex-shrink-0">
-              <img 
-                src="/guide/cashier_permissions_infographic.png" 
+              <img loading="lazy" src="/guide/cashier_permissions_infographic.png" 
                 alt="انفوجرافيك صلاحيات الكاشير" 
                 className="w-full h-auto rounded-2xl shadow-2xl border border-white/50 dark:border-white/10 hover:-translate-y-2 transition-transform duration-500"
               />
@@ -109,3 +107,4 @@ export default function GuidePage() {
     </PageTransition>
   );
 }
+

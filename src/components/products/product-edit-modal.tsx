@@ -114,7 +114,7 @@ export function ProductEditModal({ product, isOpen, onClose, onSave }: ProductEd
                       onClick={() => fileInputRef.current?.click()}
                     >
                       {editProduct.image_url || editProduct.image ? (
-                        <img src={editProduct.image_url || editProduct.image} className="h-full w-full object-cover" />
+                        <img loading="lazy" src={editProduct.image_url || editProduct.image} className="h-full w-full object-cover" />
                       ) : (
                         <ImageIcon className="h-8 w-8 text-gray-400" />
                       )}

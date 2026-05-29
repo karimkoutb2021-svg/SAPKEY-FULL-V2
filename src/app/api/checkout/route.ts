@@ -39,7 +39,7 @@ export async function POST(req: Request) {
           status: 'pending'
         }
       ])
-      .select()
+      .select().limit(500)
 
     if (error) {
       console.error('Supabase order error:', error)

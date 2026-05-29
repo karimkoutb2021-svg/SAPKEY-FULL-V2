@@ -311,7 +311,7 @@ export default function DriverOrderDetail() {
                     <input ref={fileInputRef} type="file" accept="image/*" capture="environment" onChange={handleFileChange} className="hidden" />
                     {proofPhoto ? (
                       <div className="relative rounded-xl overflow-hidden border">
-                        <img src={proofPhoto} alt="Proof" className="w-full h-48 object-cover" />
+                        <img loading="lazy" src={proofPhoto} alt="Proof" className="w-full h-48 object-cover" />
                         <button onClick={() => setProofPhoto(null)} className="absolute top-2 right-2 p-1.5 rounded-full bg-black/50 text-white"><X className="h-4 w-4" /></button>
                       </div>
                     ) : (

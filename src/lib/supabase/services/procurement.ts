@@ -242,7 +242,7 @@ export const transferService = {
   },
   async getById(id: string) {
     return supabase.from('stock_transfers')
-      .select('*, items:transfer_items(*)')
+      .select('*, items:transfer_items(id, transfer_id, stock_item_id, product_name, product_sku, requested_qty, approved_qty, received_qty, unit, notes, created_at)')
       .eq('id', id)
       .single();
   },
@@ -342,7 +342,7 @@ export const purchaseOrderService = {
   },
   async getById(id: string) {
     return supabase.from('purchase_orders')
-      .select('*, items:purchase_order_items(*)')
+      .select('*, items:purchase_order_items(id, purchase_order_id, stock_item_id, product_name, product_sku, quantity, unit_price, total_price, received_qty, unit, notes, created_at)')
       .eq('id', id)
       .single();
   },

@@ -15,14 +15,18 @@ export default function SecurityPage() {
   useEffect(() => {
     loadEvents();
     const ch = supabase.channel('security-admin-sync')
-      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'audit_logs' }, () => loadEvents())
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'audit_logs' }, (payload) => {
+        if ((payload.new as any)) {
+          setEvents(prev => [(payload.new as any), ...prev].slice(0, 10));
+        }
+      })
       .subscribe();
     return () => { supabase.removeChannel(ch); };
   }, []);
 
   const loadEvents = async () => {
     try {
-      const { data } = await supabase.from('audit_logs').select('*').order('created_at', { ascending: false }).limit(10);
+      const { data } = await supabase.from('audit_logs').select('id, event_type, action, actor_email, created_at').order('created_at', { ascending: false }).limit(10);
       if (data) setEvents(data);
     } catch { /* silent */ }
     finally { setLoading(false); }

@@ -219,8 +219,8 @@ export default function ReportsPage() {
 
   async function fetchFilterOptions() {
     const [empRes, whRes] = await Promise.all([
-      supabase.from('employees').select('id, full_name_ar').eq('is_active', true),
-      supabase.from('warehouses').select('id, name_ar').eq('is_active', true),
+      supabase.from('employees').select().limit(500).eq('is_active', true),
+      supabase.from('warehouses').select().limit(500).eq('is_active', true),
     ]);
     if (empRes.data) setEmployees(empRes.data);
     if (whRes.data) setWarehouses(whRes.data);
@@ -254,8 +254,8 @@ export default function ReportsPage() {
   async function fetchSummary(startStr: string) {
     try {
       const [ordersRes, expensesRes] = await Promise.all([
-        supabase.from('orders').select('id, total, items, customer_name, created_at').gte('created_at', startStr),
-        supabase.from('expenses').select('amount, category, created_at').eq('status', 'approved').gte('created_at', startStr),
+        supabase.from('orders').select().limit(500).gte('created_at', startStr),
+        supabase.from('expenses').select().limit(500).eq('status', 'approved').gte('created_at', startStr),
       ]);
 
       const orders = ordersRes.data || [];
@@ -315,7 +315,7 @@ export default function ReportsPage() {
 
   async function fetchTreasury(startStr: string) {
     try {
-      let accountsQuery = supabase.from('treasury_accounts').select('id, name_ar, type, opening_balance, current_balance, wallet_provider').eq('is_active', true);
+      let accountsQuery = supabase.from('treasury_accounts').select().limit(500).eq('is_active', true);
       if (walletTypeFilter !== 'all') accountsQuery = accountsQuery.eq('type', walletTypeFilter);
       const accountsRes = await accountsQuery;
       const accounts = (accountsRes.data || []) as TreasuryAccount[];
@@ -324,14 +324,14 @@ export default function ReportsPage() {
         accounts.map(async (acct) => {
           const depRes = await supabase
             .from('treasury_transactions')
-            .select('amount')
+            .select().limit(500)
             .eq('treasury_id', acct.id)
             .eq('type', 'deposit')
             .eq('status', 'completed')
             .gte('created_at', startStr);
           const wdRes = await supabase
             .from('treasury_transactions')
-            .select('amount')
+            .select().limit(500)
             .eq('treasury_id', acct.id)
             .eq('type', 'withdrawal')
             .eq('status', 'completed')
@@ -354,7 +354,7 @@ export default function ReportsPage() {
         const dayEnd = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 23, 59, 59).toISOString();
         const { data: dayTx } = await supabase
           .from('treasury_transactions')
-          .select('amount, type')
+          .select().limit(500)
           .eq('status', 'completed')
           .gte('created_at', dayStart)
           .lte('created_at', dayEnd);
@@ -375,17 +375,17 @@ export default function ReportsPage() {
     try {
       let movQuery = supabase
         .from('stock_movements')
-        .select('movement_type, quantity')
+        .select().limit(500)
         .gte('created_at', startStr);
       if (movementTypeFilter !== 'all') movQuery = movQuery.eq('movement_type', movementTypeFilter);
 
       const [movRes, transferRes, stockRes, topTransRes] = await Promise.all([
         movQuery,
-        supabase.from('stock_transfers').select('status').gte('created_at', startStr),
-        supabase.from('inventory_stock').select('quantity, warehouse_id'),
+        supabase.from('stock_transfers').select().limit(500).gte('created_at', startStr),
+        supabase.from('inventory_stock').select().limit(500),
         supabase
           .from('transfer_items')
-          .select('product_name, requested_qty')
+          .select().limit(500)
           .gte('created_at', startStr),
       ]);
 
@@ -445,7 +445,7 @@ export default function ReportsPage() {
     try {
       const { data: loanData } = await supabase
         .from('internal_loans')
-        .select('id, borrower_name, borrower_role, loan_type, amount, remaining_amount, status, issue_date')
+        .select().limit(500)
         .in('status', ['active', 'partial'])
         .order('issue_date', { ascending: false });
       const loanList = (loanData || []) as LoanItem[];
@@ -468,8 +468,8 @@ export default function ReportsPage() {
   async function fetchReconciliation(startStr: string) {
     try {
       const [sessionsRes, discRes] = await Promise.all([
-        supabase.from('reconciliation_sessions').select('id, session_date, status, total_system_balance, total_actual_balance, total_difference, pending_operations_count, pending_transfers_count, pending_collections_count').gte('created_at', startStr).order('session_date', { ascending: false }),
-        supabase.from('discrepancy_entries').select('difference, resolved').gte('created_at', startStr),
+        supabase.from('reconciliation_sessions').select().limit(500).gte('created_at', startStr).order('session_date', { ascending: false }),
+        supabase.from('discrepancy_entries').select().limit(500).gte('created_at', startStr),
       ]);
       const sessions = (sessionsRes.data || []) as ReconSession[];
       setReconSessions(sessions);

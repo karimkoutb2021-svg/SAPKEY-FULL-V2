@@ -81,7 +81,7 @@ export function CartDrawer({ open, onClose }: { open: boolean; onClose: () => vo
                         {/* Product Image */}
                         <div className="h-16 w-16 rounded-lg bg-gray-100 flex items-center justify-center shrink-0 overflow-hidden">
                           {item.image ? (
-                            <img src={item.image} alt={item.nameAr} className="h-full w-full object-cover" />
+                            <img loading="lazy" src={item.image} alt={item.nameAr} className="h-full w-full object-cover" />
                           ) : (
                             <span className="text-2xl">🛒</span>
                           )}

@@ -35,6 +35,7 @@ export default function WishlistPage() {
       const { data } = await supabase
         .from('customer_wishlist')
         .select('id, notes, created_at, product:products(*)')
+        .limit(500)
         .eq('customer_id', user.id)
         .order('created_at', { ascending: false });
       setItems(data || []);

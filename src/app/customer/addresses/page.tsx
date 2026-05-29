@@ -35,7 +35,7 @@ export default function AddressesPage() {
   const loadAddresses = async () => {
     if (!user?.id) return;
     try {
-      const { data } = await supabase.from('customer_addresses').select('*').eq('customer_id', user.id).order('is_default', { ascending: false }).order('created_at', { ascending: false });
+      const { data } = await supabase.from('customer_addresses').select().limit(500).eq('customer_id', user.id).order('is_default', { ascending: false }).order('created_at', { ascending: false });
       setAddresses(data || []);
     } catch { /* silent */ }
     finally { setLoading(false); }

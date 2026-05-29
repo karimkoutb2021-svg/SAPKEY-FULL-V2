@@ -52,12 +52,12 @@ export default function ProfitLossPage() {
 
       const { data: orders } = await supabase
         .from('orders')
-        .select('total, subtotal, status, created_at')
+        .select().limit(500)
         .gte('created_at', startDate.toISOString());
 
       const { data: expenses } = await supabase
         .from('expenses')
-        .select('amount, category, description, status, created_at')
+        .select().limit(500)
         .gte('created_at', startDate.toISOString());
 
       // Calculate revenue from orders

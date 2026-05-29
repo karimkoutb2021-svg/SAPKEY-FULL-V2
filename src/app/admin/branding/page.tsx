@@ -316,7 +316,7 @@ export default function AdminBrandingPage() {
         <div className="space-y-6">
           <div className="rounded-2xl overflow-hidden" style={{ background: `linear-gradient(135deg, ${sysColor}, ${adjustColor(sysColor, -40)})` }}>
             <div className="p-8 text-center text-white">
-              {sysLogo && <img src={sysLogo} alt={sysName} className="h-16 w-16 mx-auto rounded-2xl object-contain bg-white/20 p-2 mb-4" />}
+              {sysLogo && <img loading="lazy" src={sysLogo} alt={sysName} className="h-16 w-16 mx-auto rounded-2xl object-contain bg-white/20 p-2 mb-4" />}
               <h2 className="text-2xl font-bold mb-1">{sysName}</h2>
               <p className="text-white/80 text-sm">{sysSlogan}</p>
               <p className="text-white/60 text-xs mt-2">الإصدار {sysVersion}</p>
@@ -356,7 +356,7 @@ export default function AdminBrandingPage() {
         <div className="space-y-6">
           <div className="rounded-2xl overflow-hidden" style={{ background: `linear-gradient(135deg, ${primaryColor}, ${adjustColor(primaryColor, -40)})` }}>
             <div className="p-8 text-center text-white">
-              {logo && <img src={logo} alt={storeName} className="h-16 w-16 mx-auto rounded-2xl object-contain bg-white/20 p-2 mb-4" />}
+              {logo && <img loading="lazy" src={logo} alt={storeName} className="h-16 w-16 mx-auto rounded-2xl object-contain bg-white/20 p-2 mb-4" />}
               <h2 className="text-2xl font-bold mb-1">{storeName}</h2>
               <p className="text-white/80 text-sm">{slogan}</p>
             </div>
@@ -795,3 +795,4 @@ function adjustColor(hex: string, amount: number): string {
   const b = Math.min(255, Math.max(0, (num & 0x0000FF) + amount));
   return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`;
 }
+

@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -23,8 +23,10 @@ export default function PayrollPage() {
 
   useEffect(() => {
     const ch = supabase.channel('acct-employees')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'employees' }, () => {
-        loadData();
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'employees' }, (payload) => {
+        if (payload.eventType === 'INSERT') setEmployees(prev => [...prev, (payload.new as any)]);
+        else if (payload.eventType === 'UPDATE') setEmployees(prev => prev.map(e => e.id === (payload.new as any).id ? (payload.new as any) : e));
+        else if (payload.eventType === 'DELETE') setEmployees(prev => prev.filter(e => e.id !== payload.old.id));
       })
       .subscribe();
     return () => { supabase.removeChannel(ch); };
@@ -32,7 +34,7 @@ export default function PayrollPage() {
 
   async function loadData() {
     try {
-      const { data: emps } = await supabase.from('employees').select('*');
+      const { data: emps } = await supabase.from('employees').select().limit(500);
       if (emps && emps.length > 0) {
         setEmployees(emps);
       } else {

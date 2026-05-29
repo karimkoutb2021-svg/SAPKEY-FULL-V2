@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useState, useEffect, useMemo, useCallback, type ReactNode } from 'react';
 import { motion } from 'framer-motion';
@@ -194,7 +194,7 @@ async function fetchActivityData(
   if (hasTreasury) {
     const { data: txns } = await supabase
       .from('treasury_transactions')
-      .select('*, treasury_accounts(name_ar)')
+      .select('*').limit(500)
       .order('created_at', { ascending: false });
 
     if (txns) {
@@ -221,7 +221,7 @@ async function fetchActivityData(
   if (hasInventory) {
     const { data: history } = await supabase
       .from('product_history')
-      .select('*')
+      .select().limit(500)
       .order('created_at', { ascending: false });
 
     if (history) {
@@ -249,7 +249,7 @@ async function fetchActivityData(
   if (hasTransfer) {
     const { data: transfers } = await supabase
       .from('stock_transfers')
-      .select('*, from_warehouse:from_warehouse_id(name_ar), to_warehouse:to_warehouse_id(name_ar)')
+      .select('*, from_warehouse:from_warehouse_id(name_ar), to_warehouse:to_warehouse_id(name_ar)').limit(500)
       .order('created_at', { ascending: false });
 
     if (transfers) {
@@ -274,7 +274,7 @@ async function fetchActivityData(
   if (hasTreasury) {
     const { data: expenses } = await supabase
       .from('expenses')
-      .select('*')
+      .select().limit(500)
       .order('created_at', { ascending: false });
 
     if (expenses) {
@@ -297,7 +297,7 @@ async function fetchActivityData(
 
     const { data: loans } = await supabase
       .from('internal_loans')
-      .select('*')
+      .select().limit(500)
       .order('created_at', { ascending: false });
 
     if (loans) {

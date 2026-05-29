@@ -54,7 +54,7 @@ export function Sidebar() {
         {sidebarOpen && (
           <div className="flex items-center gap-2 min-w-0">
             {branding.logo ? (
-              <img src={branding.logo} className="h-8 w-8 rounded-lg object-contain flex-shrink-0 border border-white/[0.1]" alt={branding.storeName} />
+              <img loading="lazy" src={branding.logo} className="h-8 w-8 rounded-lg object-contain flex-shrink-0 border border-white/[0.1]" alt={branding.storeName} />
             ) : (
               <div className="h-8 w-8 rounded-lg flex items-center justify-center flex-shrink-0 shadow-lg" style={{ backgroundColor: branding.primaryColor || '#10B981' }}>
                 <Store className="h-5 w-5 text-white" />

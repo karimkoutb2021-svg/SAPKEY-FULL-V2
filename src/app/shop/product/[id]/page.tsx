@@ -116,7 +116,7 @@ function FrequentlyBoughtTogether({
           {/* Horizontal Images Row */}
           <div className="flex items-center gap-3 md:gap-4 overflow-x-auto pb-4 md:pb-0" style={{ msOverflowStyle: 'none', scrollbarWidth: 'none' }}>
             <div className="shrink-0 relative">
-               <img src={mainProduct.image} alt={mainProduct.nameAr} className="w-24 h-24 md:w-28 md:h-28 rounded-2xl object-cover border-2 border-emerald-500 shadow-md bg-white dark:bg-slate-800" />
+               <img loading="lazy" src={mainProduct.image} alt={mainProduct.nameAr} className="w-24 h-24 md:w-28 md:h-28 rounded-2xl object-cover border-2 border-emerald-500 shadow-md bg-white dark:bg-slate-800" />
                <div className="absolute -top-2 -right-2 h-6 w-6 rounded-full bg-emerald-500 flex items-center justify-center border-2 border-white dark:border-slate-900 shadow-sm"><CheckCircle className="h-3.5 w-3.5 text-white"/></div>
             </div>
             
@@ -126,7 +126,7 @@ function FrequentlyBoughtTogether({
                 <div key={p.id} className="shrink-0 flex items-center gap-3 md:gap-4">
                   <Plus className="h-5 w-5 text-gray-300 dark:text-slate-600 shrink-0" />
                   <button onClick={() => toggleProduct(p.id)} className="relative transition-all active:scale-95 group text-right">
-                    <img src={p.image} alt={p.nameAr} className={`w-24 h-24 md:w-28 md:h-28 rounded-2xl object-cover border-2 transition-all shadow-sm bg-white dark:bg-slate-800 ${isSelected ? 'border-emerald-500 shadow-md' : 'border-gray-200 dark:border-slate-700 opacity-70 group-hover:opacity-100'}`} />
+                    <img loading="lazy" src={p.image} alt={p.nameAr} className={`w-24 h-24 md:w-28 md:h-28 rounded-2xl object-cover border-2 transition-all shadow-sm bg-white dark:bg-slate-800 ${isSelected ? 'border-emerald-500 shadow-md' : 'border-gray-200 dark:border-slate-700 opacity-70 group-hover:opacity-100'}`} />
                     <div className={`absolute -top-2 -right-2 h-6 w-6 rounded-full border-2 border-white dark:border-slate-900 flex items-center justify-center transition-all shadow-sm ${isSelected ? 'bg-emerald-500' : 'bg-gray-100 dark:bg-slate-700'}`}>
                        {isSelected && <CheckCircle className="h-3.5 w-3.5 text-white"/>}
                     </div>
@@ -338,7 +338,7 @@ export default function ProductDetailPage() {
                         className={`w-16 h-16 rounded-xl overflow-hidden border-2 transition-all shrink-0 ${
                           i === currentImage ? 'border-emerald-500 shadow-md' : 'border-transparent opacity-60 hover:opacity-100'
                         }`}>
-                        <img src={img} alt="" className="w-full h-full object-cover" />
+                        <img loading="lazy" src={img} alt="" className="w-full h-full object-cover" />
                       </button>
                     ))}
                   </div>
@@ -545,7 +545,7 @@ export default function ProductDetailPage() {
                     className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-gray-100 dark:border-slate-800 overflow-hidden text-right hover:shadow-md transition-all">
                     <div className="aspect-square flex items-center justify-center overflow-hidden bg-gray-50 dark:bg-slate-800/50">
                       {pImage ? (
-                        <img src={pImage} alt={p.nameAr} className="w-full h-full object-cover" />
+                        <img loading="lazy" src={pImage} alt={p.nameAr} className="w-full h-full object-cover" />
                       ) : (
                         <span className="text-5xl drop-shadow-lg">{pGradient.emoji}</span>
                       )}

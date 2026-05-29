@@ -66,11 +66,31 @@ export default function OrdersPage() {
     timeControlSettingsService.get().then(setTimeSettings);
 
     const channel = supabase.channel('orders-sync')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'orders' }, () => fetchOrders())
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'orders' }, (payload) => {
+        if (payload.eventType === 'INSERT' || payload.eventType === 'UPDATE') {
+          setOrders(prev => {
+            const idx = prev.findIndex(o => o.id === (payload.new as any).id);
+            if (idx >= 0) {
+              const updated = [...prev];
+              updated[idx] = (payload.new as any);
+              return updated;
+            }
+            return [(payload.new as any), ...prev].sort((a,b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()).slice(0, 200);
+          });
+        } else if (payload.eventType === 'DELETE') {
+          setOrders(prev => prev.filter(o => o.id !== payload.old.id));
+        }
+      })
       .subscribe();
 
     const timerChannel = supabase.channel('orders-timers')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'order_stage_timers' }, () => fetchOrders())
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'order_stage_timers' }, async (payload) => {
+         // Re-run loadTimers by simply triggering the loadTimers logic directly or faking an update
+         if ((payload.new as any) && (payload.new as any).order_id) {
+           const timers = await stageTimerService.getByOrder((payload.new as any).order_id);
+           setStageTimers(prev => ({ ...prev, [(payload.new as any).order_id]: timers }));
+         }
+      })
       .subscribe();
 
     return () => { supabase.removeChannel(channel); supabase.removeChannel(timerChannel); };
@@ -114,14 +134,23 @@ export default function OrdersPage() {
     if (status === 'preparing' && order?.status === 'confirmed') {
       updates.preparing_started_at = new Date().toISOString();
     }
+    // Optimistic UI update
+    setOrders(prev => {
+      const idx = prev.findIndex(o => o.id === id);
+      if (idx >= 0) {
+        const updated = [...prev];
+        updated[idx] = { ...updated[idx], ...updates };
+        return updated;
+      }
+      return prev;
+    });
+
     await supabase.from('orders').update(updates).eq('id', id);
 
     // Record time engine stage transition
     if (timeSettings) {
       await timeAutoEngine.processOrderStatusChange(id, status, timeSettings);
     }
-
-    fetchOrders();
   }
 
   async function sendWhatsApp(order: Order) {
@@ -154,6 +183,18 @@ export default function OrdersPage() {
       toast.error('يرجى إدخال اسم المندوب');
       return;
     }
+    
+    // Optimistic update
+    setOrders(prev => {
+      const idx = prev.findIndex(o => o.id === driverModal.orderId);
+      if (idx >= 0) {
+        const updated = [...prev];
+        updated[idx] = { ...updated[idx], delivery_driver: driverName.trim() };
+        return updated;
+      }
+      return prev;
+    });
+
     await supabase.from('orders').update({
       delivery_driver: driverName.trim(),
       notes: `مندوب التوصيل: ${driverName.trim()}`,
@@ -162,7 +203,6 @@ export default function OrdersPage() {
     setDriverModal({ open: false, orderId: '' });
     setDriverName('');
     toast.success('تم تعيين المندوب');
-    fetchOrders();
   }
 
   const filtered = filter === 'all' ? orders : orders.filter(o => o.status === filter);

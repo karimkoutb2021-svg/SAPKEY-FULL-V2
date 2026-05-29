@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useState, useRef, useCallback, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -536,7 +536,7 @@ export default function OCRScanPage() {
                       <span className="mr-2 text-sm text-muted-foreground">{file?.name}</span>
                     </div>
                   ) : (
-                    <img src={preview} alt="Preview" className="max-h-48 mx-auto rounded-lg" />
+                    <img loading="lazy" src={preview} alt="Preview" className="max-h-48 mx-auto rounded-lg" />
                   )}
                   <button
                     onClick={(e) => {

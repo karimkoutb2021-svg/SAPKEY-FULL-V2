@@ -27,10 +27,25 @@ const supabase = createClient();
       return;
     }
     loadOrders();
+    if (!user) return;
     const channel = supabase.channel('customer-orders')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'orders' }, () => loadOrders())
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'orders', filter: `customer_id=eq.${user.id}` }, (payload) => {
+        if (payload.eventType === 'INSERT' || payload.eventType === 'UPDATE') {
+          setOrders(prev => {
+            const idx = prev.findIndex(o => o.id === (payload.new as any).id);
+            if (idx >= 0) {
+              const updated = [...prev];
+              updated[idx] = { ...updated[idx], ...(payload.new as any) };
+              return updated;
+            }
+            const arr = [(payload.new as any), ...prev];
+            arr.sort((a,b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+            return arr;
+          });
+        }
+      })
       .subscribe();
-    return () => { channel.unsubscribe(); };
+    return () => { supabase.removeChannel(channel); };
   }, [isAuthenticated, router]);
 
   async function loadOrders() {

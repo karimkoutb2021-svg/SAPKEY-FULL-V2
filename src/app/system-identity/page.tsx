@@ -130,7 +130,7 @@ export default function SystemIdentityPage() {
           </div>
           {systemBranding.systemLogo && (
             <div className="mb-6">
-              <img src={systemBranding.systemLogo} alt={systemName} className="h-20 w-20 mx-auto rounded-2xl object-contain bg-white/20 backdrop-blur-sm p-2 shadow-xl" />
+              <img loading="lazy" src={systemBranding.systemLogo} alt={systemName} className="h-20 w-20 mx-auto rounded-2xl object-contain bg-white/20 backdrop-blur-sm p-2 shadow-xl" />
             </div>
           )}
           <h1 className="text-3xl md:text-5xl font-bold text-white mb-4 tracking-tight">{systemName}</h1>
@@ -192,7 +192,7 @@ export default function SystemIdentityPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="p-6 rounded-2xl bg-gray-50 dark:bg-slate-800 flex items-center justify-center min-h-[140px]">
                   {systemBranding.systemLogo ? (
-                    <img src={systemBranding.systemLogo} alt={systemName} className="h-16 object-contain" />
+                    <img loading="lazy" src={systemBranding.systemLogo} alt={systemName} className="h-16 object-contain" />
                   ) : (
                     <div className="h-16 w-16 rounded-2xl flex items-center justify-center shadow-sm" style={{ backgroundColor: primaryColor }}>
                       <Store className="h-8 w-8 text-white" />
@@ -201,7 +201,7 @@ export default function SystemIdentityPage() {
                 </div>
                 <div className="p-6 rounded-2xl bg-gray-900 dark:bg-black flex items-center justify-center min-h-[140px]">
                   {systemBranding.systemLogo ? (
-                    <img src={systemBranding.systemLogo} alt={systemName} className="h-16 object-contain brightness-0 invert" />
+                    <img loading="lazy" src={systemBranding.systemLogo} alt={systemName} className="h-16 object-contain brightness-0 invert" />
                   ) : (
                     <div className="h-16 w-16 rounded-2xl flex items-center justify-center bg-white/10">
                       <Store className="h-8 w-8 text-white" />
@@ -469,7 +469,7 @@ export default function SystemIdentityPage() {
           <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-3">
               {systemBranding.systemLogo ? (
-                <img src={systemBranding.systemLogo} alt={systemName} className="h-8 w-8 rounded-lg object-contain" />
+                <img loading="lazy" src={systemBranding.systemLogo} alt={systemName} className="h-8 w-8 rounded-lg object-contain" />
               ) : (
                 <div className="h-8 w-8 rounded-lg flex items-center justify-center" style={{ backgroundColor: primaryColor }}><Store className="h-4 w-4 text-white" /></div>
               )}
@@ -488,3 +488,4 @@ export default function SystemIdentityPage() {
     </div>
   );
 }
+

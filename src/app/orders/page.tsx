@@ -17,7 +17,21 @@ export default function OrdersPage() {
   useEffect(() => {
     fetchOrders();
     const channel = supabase.channel('orders-list-sync')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'orders' }, () => fetchOrders())
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'orders' }, (payload) => {
+        if (payload.eventType === 'INSERT' || payload.eventType === 'UPDATE') {
+          setOrders(prev => {
+            const idx = prev.findIndex(o => o.id === (payload.new as any).id);
+            if (idx >= 0) {
+              const updated = [...prev];
+              updated[idx] = (payload.new as any);
+              return updated;
+            }
+            return [(payload.new as any), ...prev].sort((a,b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()).slice(0, 50);
+          });
+        } else if (payload.eventType === 'DELETE') {
+          setOrders(prev => prev.filter(o => o.id !== payload.old.id));
+        }
+      })
       .subscribe();
     return () => { supabase.removeChannel(channel); };
   }, []);

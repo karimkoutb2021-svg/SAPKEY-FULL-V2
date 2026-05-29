@@ -157,7 +157,7 @@ export const productService = {
   async getSuppliers(productId: string) {
     const { data, error } = await supabase
       .from('product_suppliers')
-      .select('*, supplier:suppliers(*)')
+      .select('*, supplier:suppliers(id, name, company_name, contact_person, phone, email)')
       .eq('product_id', productId)
       .order('is_preferred', { ascending: false });
 
@@ -184,7 +184,7 @@ export const productService = {
   async getInventory(productId: string) {
     const { data, error } = await supabase
       .from('inventory_stock')
-      .select('*, warehouse:warehouses(*)')
+      .select('*, warehouse:warehouses(id, name, name_ar, type, location)')
       .eq('product_id', productId);
 
     if (error) throw error;
@@ -233,7 +233,7 @@ export const inventoryService = {
   async getStock(warehouseId?: string) {
     let query = supabase
       .from('inventory_stock')
-      .select('*, product:products(*), warehouse:warehouses(*)');
+      .select('*, product:products(id, sku, name_ar, name_en, sale_price, unit, barcode), warehouse:warehouses(id, name, name_ar, type, location)');
 
     if (warehouseId) {
       query = query.eq('warehouse_id', warehouseId);
@@ -248,7 +248,7 @@ export const inventoryService = {
   async getLowStock(threshold?: number) {
     const { data: products, error } = await supabase
       .from('products')
-      .select('*, inventory:inventory_stock(*)')
+      .select('*, inventory:inventory_stock(id, warehouse_id, quantity, updated_at)')
       .eq('is_active', true);
 
     if (error) throw error;

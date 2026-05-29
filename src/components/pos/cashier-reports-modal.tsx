@@ -38,7 +38,7 @@ export function CashierReportsModal({ isOpen, onClose }: { isOpen: boolean; onCl
         
         const { data: orders } = await supabase
           .from('orders')
-          .select('*, order_items(*)')
+          .select('*').limit(500)
           .eq('cashier_id', user!.id)
           .gte('created_at', fromDate.toISOString());
 
