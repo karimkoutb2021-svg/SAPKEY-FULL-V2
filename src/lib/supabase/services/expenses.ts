@@ -23,7 +23,7 @@ export const expenseService = {
   },
 
   async getById(id: string) {
-    return supabase.from('expenses').select('*').eq('id', id).single();
+    return supabase.from('expenses').select('id, amount, description, category, responsible, attachment_url, status, created_by, created_at').eq('id', id).single();
   },
 
   async create(data: {

@@ -38,7 +38,7 @@ export default function OrdersPage() {
 
   const fetchOrders = async () => {
     try {
-      const { data } = await supabase.from('orders').select('*').order('created_at', { ascending: false }).limit(50);
+      const { data } = await supabase.from('orders').select('id, order_number, customer_name, customer_phone, total, status, payment_status, payment_method, created_at, items, notes').order('created_at', { ascending: false }).limit(50);
       if (data) setOrders(data);
     } catch { /* silent */ }
     finally { setLoading(false); }

@@ -84,7 +84,7 @@ export default function LoyaltyPage() {
                   <p className="text-lg font-bold text-violet-400 font-mono">{c.code}</p>
                   <p className="text-xs text-white/50 mt-0.5">
                     خصم {c.discount_type === 'percentage' ? `${c.discount_value}%` : `${c.discount_value} ج.م`}
-                    {c.min_order > 0 ? ` | الحد الأدنى: ${c.min_order} ج.م` : ''}
+                    {(c.min_order ?? 0) > 0 ? ` | الحد الأدنى: ${c.min_order} ج.م` : ''}
                   </p>
                 </div>
                 <span className="text-2xl">🎫</span>

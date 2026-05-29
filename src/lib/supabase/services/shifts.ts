@@ -212,7 +212,7 @@ export const shiftService = {
   },
 
   async getShiftSummary(shiftId: string) {
-    const { data: shift } = await supabase.from('shifts').select('*').eq('id', shiftId).single();
+    const { data: shift } = await supabase.from('shifts').select('id, cashier_id, branch_id, opened_at, closed_at, starting_cash, expected_cash, actual_cash, status, notes, created_at').eq('id', shiftId).single();
     if (!shift) throw new Error('Shift not found');
 
     const { data: transactions } = await supabase

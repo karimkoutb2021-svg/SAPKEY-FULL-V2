@@ -81,7 +81,7 @@ export const refundService = {
   },
 
   async getById(id: string) {
-    const { data, error } = await supabase.from('refunds').select('*').eq('id', id).single();
+    const { data, error } = await supabase.from('refunds').select('id, order_id, refund_number, cashier_id, reason, items, total, refund_method, status, created_at').eq('id', id).single();
     if (error) throw error;
     return data as Refund;
   },

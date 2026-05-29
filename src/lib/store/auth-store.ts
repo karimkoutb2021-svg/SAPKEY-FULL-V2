@@ -58,7 +58,7 @@ export const useAuthStore = create<AuthState>()((set, get) => ({
       let name = email.split('@')[0];
       let nameAr = email.split('@')[0];
       try {
-        const { data: userData } = await supabase.from('users').select('*').eq('email', email).single();
+        const { data: userData } = await supabase.from('users').select('id, email, full_name_ar, full_name_en, phone, role, avatar_url, is_active, branch_id').eq('email', email).single();
         if (userData) {
           role = (userData.role as UserRole) || 'customer';
           name = userData.full_name_en || name;

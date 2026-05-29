@@ -20,10 +20,10 @@ export interface TreasuryAccount {
   wallet_provider?: string;
   opening_balance: number;
   current_balance: number;
-  currency: string;
+  currency?: string;
   is_active: boolean;
-  created_at: string;
-  updated_at: string;
+  created_at?: string;
+  updated_at?: string;
 }
 
 export interface TreasuryTransaction {
@@ -47,8 +47,8 @@ export interface InternalLoan {
   id: string;
   borrower_id: string;
   borrower_name: string;
-  borrower_role: 'manager' | 'cashier' | 'driver' | 'employee';
-  loan_type: 'personal' | 'custodian_cashier' | 'custodian_driver' | 'advance_salary';
+  borrower_role?: string;
+  loan_type?: string;
   amount: number;
   remaining_amount: number;
   reason: string;
@@ -56,15 +56,15 @@ export interface InternalLoan {
   issue_date: string;
   expected_settlement_date?: string;
   settled_date?: string;
-  created_at: string;
+  created_at?: string;
 }
 
 export const treasuryService = {
   async getAll() {
-    return supabase.from('treasury_accounts').select('*').eq('is_active', true).order('created_at', { ascending: false });
+    return supabase.from('treasury_accounts').select('id, name, name_ar, type, opening_balance, current_balance, is_active').eq('is_active', true).order('created_at', { ascending: false });
   },
   async getById(id: string) {
-    return supabase.from('treasury_accounts').select('*').eq('id', id).single();
+    return supabase.from('treasury_accounts').select('id, name, name_ar, type, opening_balance, current_balance, is_active').eq('id', id).single();
   },
   async create(data: Partial<TreasuryAccount>) {
     return supabase.from('treasury_accounts').insert(data).select().single();
@@ -102,12 +102,12 @@ export const treasuryTransactionService = {
 
 export const internalLoanService = {
   async getAll(type?: InternalLoan['loan_type']) {
-    let query = supabase.from('internal_loans').select('*').order('created_at', { ascending: false });
+    let query = supabase.from('internal_loans').select('id, borrower_id, borrower_name, amount, remaining_amount, reason, status, issue_date, due_date').order('created_at', { ascending: false });
     if (type) query = query.eq('loan_type', type);
     return query;
   },
   async getByBorrower(borrowerId: string) {
-    return supabase.from('internal_loans').select('*').eq('borrower_id', borrowerId).order('created_at', { ascending: false });
+    return supabase.from('internal_loans').select('id, borrower_id, borrower_name, amount, remaining_amount, reason, status, issue_date, due_date').eq('borrower_id', borrowerId).order('created_at', { ascending: false });
   },
   async create(data: Partial<InternalLoan>) {
     return supabase.from('internal_loans').insert(data).select().single();

@@ -27,7 +27,7 @@ export const customerService = {
   },
 
   async getById(id: string) {
-    const { data, error } = await supabase.from('customers').select('*').eq('id', id).single();
+    const { data, error } = await supabase.from('customers').select('id, name, phone, email, address, type, total_spent, total_orders, is_active, points, created_at, updated_at').eq('id', id).single();
     if (error) throw error;
     return data as Customer;
   },

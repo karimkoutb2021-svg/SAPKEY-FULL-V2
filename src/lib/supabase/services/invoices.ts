@@ -46,7 +46,7 @@ export const invoiceService = {
   async getById(id: string) {
     const { data: invoice, error } = await supabase
       .from('purchase_invoices')
-      .select('*')
+      .select('id, invoice_number, supplier_id, supplier_name_ar, invoice_date, due_date, total, paid_amount, remaining_amount, status, importance, notes, created_at')
       .eq('id', id)
       .single();
 
@@ -54,7 +54,7 @@ export const invoiceService = {
 
     const { data: items, error: itemsError } = await supabase
       .from('purchase_invoice_items')
-      .select('*')
+      .select('id, invoice_id, product_id, product_code, product_name_ar, barcode, quantity, unit, unit_price, discount_percent, tax_percent, total')
       .eq('invoice_id', id);
 
     if (itemsError) throw itemsError;

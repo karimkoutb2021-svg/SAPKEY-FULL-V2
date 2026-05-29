@@ -131,7 +131,7 @@ export const notificationEngine = {
   async checkCashThresholds() {
     const { data: configs } = await supabase
       .from('cash_threshold_configs')
-      .select('*')
+      .select('id, branch_id, safe_limit, enabled, notify_manager')
       .eq('enabled', true);
 
     if (!configs) return;
@@ -245,7 +245,7 @@ export const notificationRuleService = {
   async getAll() {
     const { data, error } = await supabase
       .from('notification_rules')
-      .select('*')
+      .select('id, type, enabled, delegable, delegated_to, requires_biometric, threshold_value, advance_days')
       .order('type');
     if (error) throw error;
     return data as any[];
@@ -291,7 +291,7 @@ export const productThresholdService = {
   async getByProduct(productId: string) {
     const { data, error } = await supabase
       .from('product_notification_thresholds')
-      .select('*')
+      .select('id, product_id, warehouse_id, custom_min_stock, expiry_alert_days')
       .eq('product_id', productId)
       .maybeSingle();
     if (error) throw error;
@@ -335,7 +335,7 @@ export const cashThresholdService = {
   async getAll() {
     const { data, error } = await supabase
       .from('cash_threshold_configs')
-      .select('*');
+      .select('id, branch_id, safe_limit, enabled, notify_manager');
     if (error) throw error;
     return data as CashThresholdConfig[];
   },

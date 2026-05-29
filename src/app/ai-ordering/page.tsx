@@ -73,7 +73,7 @@ export default function AIOrderingPage() {
     try {
       const { data } = await supabase
         .from('products')
-        .select('*')
+        .select('id, name_ar, name_en, sku, barcode, unit_price, cost_price, sale_price, image_url, category_id, unit, current_stock, min_stock_level, description, is_active, created_at, updated_at')
         .eq('is_active', true)
         .limit(200);
       if (data && data.length > 0) {

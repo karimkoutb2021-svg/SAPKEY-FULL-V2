@@ -11,7 +11,7 @@ export interface BrandingSetting {
 
 export const brandingService = {
   async getAll() {
-    const { data, error } = await supabase.from('branding_settings').select('*');
+    const { data, error } = await supabase.from('branding_settings').select('id, key, value, updated_at');
     if (error) throw error;
 
     // Convert to key-value object

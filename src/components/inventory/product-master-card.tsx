@@ -16,7 +16,7 @@ interface StockItem {
   barcode?: string;
   current_qty: number;
   min_qty: number;
-  max_qty: number;
+  max_qty?: number;
   unit: string;
   cost_price: number;
   selling_price: number;
@@ -31,7 +31,7 @@ interface StockItem {
   total_profit?: number;
   last_purchase_date?: string;
   last_purchase_price?: number;
-  created_at: string;
+  created_at?: string;
 }
 
 interface Warehouse {

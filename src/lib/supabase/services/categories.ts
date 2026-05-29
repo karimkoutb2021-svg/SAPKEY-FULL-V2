@@ -55,7 +55,7 @@ export const categoryService = {
   async getById(id: string) {
     const { data, error } = await supabase
       .from('product_categories')
-      .select('*')
+      .select('id, name_ar, name_en, slug, description, image_url, parent_id, sort_order, is_active, created_at, updated_at')
       .eq('id', id)
       .single();
 
@@ -66,7 +66,7 @@ export const categoryService = {
   async getBySlug(slug: string) {
     const { data, error } = await supabase
       .from('product_categories')
-      .select('*')
+      .select('id, name_ar, name_en, slug, description, image_url, parent_id, sort_order, is_active, created_at')
       .eq('slug', slug)
       .single();
 
@@ -146,7 +146,7 @@ export const bannerService = {
   async getById(id: string) {
     const { data, error } = await supabase
       .from('storefront_banners')
-      .select('*')
+      .select('id, title_ar, title_en, subtitle_ar, subtitle_en, image_url, link_url, link_type, target_id, position, sort_order, is_active, start_date, end_date, created_at, updated_at')
       .eq('id', id)
       .single();
 

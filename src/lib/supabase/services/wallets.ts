@@ -17,7 +17,7 @@ export interface WalletTransaction {
   customer_id: string;
   type: 'deposit' | 'withdrawal' | 'purchase' | 'refund' | 'loyalty_earned' | 'loyalty_redeemed';
   amount: number;
-  balance_after: number;
+  balance_after?: number;
   reference_type?: string;
   reference_id?: string;
   notes?: string;
@@ -31,7 +31,7 @@ export const walletService = {
   async getWallet(customerId: string) {
     const { data, error } = await supabase
       .from('customer_wallets')
-      .select('*')
+      .select('id, customer_id, balance, loyalty_points, total_recharged, total_spent, created_at, updated_at')
       .eq('customer_id', customerId)
       .single();
     if (error && error.code !== 'PGRST116') throw error;
@@ -189,7 +189,7 @@ export const walletService = {
     const wallet = await this.getWallet(customerId);
     const { data, error, count } = await supabase
       .from('wallet_transactions')
-      .select('*')
+      .select('id, wallet_id, customer_id, type, amount, description, reference, status, created_at')
       .eq('wallet_id', wallet.id)
       .limit(limit)
       .order('created_at', { ascending: false });

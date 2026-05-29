@@ -25,7 +25,7 @@ export const employeeService = {
   },
 
   async getById(id: string) {
-    return supabase.from('employees').select('*').eq('id', id).single();
+    return supabase.from('employees').select('id, employee_code, full_name_ar, full_name_en, phone, role, department, salary, hire_date, is_active, created_at').eq('id', id).single();
   },
 
   async create(data: {

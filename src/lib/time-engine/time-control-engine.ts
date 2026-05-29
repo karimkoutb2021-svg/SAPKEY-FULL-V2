@@ -58,7 +58,7 @@ export const timeControlSettingsService = {
   async get(): Promise<TimeControlSettings> {
     const { data, error } = await supabase
       .from('time_control_settings')
-      .select('*')
+      .select('id, total_delivery_minutes, pending_minutes, preparing_minutes, ready_minutes, delivery_minutes, auto_escalate, alert_blink_threshold_seconds')
       .limit(1)
       .maybeSingle();
 
@@ -93,7 +93,7 @@ export const stageTimerService = {
   async getByOrder(orderId: string): Promise<StageTimer[]> {
     const { data, error } = await supabase
       .from('order_stage_timers')
-      .select('*')
+      .select('id, order_id, stage, started_at, completed_at, sla_seconds, is_overdue, assigned_user_id')
       .eq('order_id', orderId)
       .order('started_at');
     if (error) throw error;
@@ -144,7 +144,7 @@ export const stageTimerService = {
   async getActiveStages(): Promise<StageTimer[]> {
     const { data, error } = await supabase
       .from('order_stage_timers')
-      .select('*')
+      .select('id, order_id, stage, started_at, completed_at, sla_seconds, is_overdue, assigned_user_id')
       .is('completed_at', null)
       .order('started_at');
     if (error) throw error;
@@ -166,7 +166,7 @@ export const slaPerformanceService = {
   async getByUser(userId: string): Promise<SLAPerformance[]> {
     const { data, error } = await supabase
       .from('sla_performance_log')
-      .select('*')
+      .select('id, order_id, user_id, stage, sla_seconds, actual_seconds, variance_seconds, met_sla')
       .eq('user_id', userId)
       .order('recorded_at', { ascending: false });
     if (error) throw error;
@@ -180,7 +180,7 @@ export const slaPerformanceService = {
     const targetDate = date || new Date().toISOString().split('T')[0];
     const { data, error } = await supabase
       .from('sla_performance_log')
-      .select('*')
+      .select('id, order_id, user_id, stage, sla_seconds, actual_seconds, variance_seconds, met_sla')
       .gte('recorded_at', `${targetDate}T00:00:00Z`)
       .lte('recorded_at', `${targetDate}T23:59:59Z`);
 

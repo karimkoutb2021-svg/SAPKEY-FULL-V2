@@ -69,7 +69,7 @@ export const reconciliationService = {
   },
 
   async getById(id: string) {
-    return supabase.from('reconciliation_sessions').select('*').eq('id', id).single();
+    return supabase.from('reconciliation_sessions').select('id, session_date, status, total_system_balance, total_actual_balance, total_difference, started_by, started_at, notes, created_at').eq('id', id).single();
   },
 
   async getTodaySession() {

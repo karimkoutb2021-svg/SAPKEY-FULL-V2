@@ -6,7 +6,7 @@ export const customerOrderService = {
   async getOrderHistory(userId: string) {
     const { data: orders, error } = await supabase
       .from('orders')
-      .select('*')
+      .select('id, order_number, customer_name, customer_phone, total, status, payment_status, payment_method, created_at, items, notes')
       .or(`customer_id.eq.${userId},customer_phone.neq.`)
       .order('created_at', { ascending: false })
       .limit(20);
@@ -18,13 +18,13 @@ export const customerOrderService = {
   },
 
   async getOrderById(orderId: string) {
-    const { data, error } = await supabase.from('orders').select('*').eq('id', orderId).single();
+    const { data, error } = await supabase.from('orders').select('id, order_number, customer_name, customer_phone, total, status, payment_status, payment_method, created_at, items, notes').eq('id', orderId).single();
     if (error) throw error;
     return { ...data, items: typeof data.items === 'string' ? JSON.parse(data.items) : data.items };
   },
 
   async quickReorder(orderId: string) {
-    const { data: original } = await supabase.from('orders').select('*').eq('id', orderId).single();
+    const { data: original } = await supabase.from('orders').select('id, order_number, customer_name, customer_phone, total, status, payment_status, payment_method, created_at, items, notes').eq('id', orderId).single();
     if (!original) throw new Error('Order not found');
     const items = typeof original.items === 'string' ? JSON.parse(original.items) : original.items;
     return { items, total: original.total, notes: `إعادة طلب من الفاتورة ${original.order_number || original.id.slice(0, 8)}` };
@@ -58,11 +58,11 @@ export const customerOrderService = {
   },
 
   async deductReservations(orderId: string) {
-    const { data: reservations } = await supabase.from('stock_reservations').select('*').eq('order_id', orderId).eq('status', 'active');
+    const { data: reservations } = await supabase.from('stock_reservations').select('id, order_id, product_id, quantity, status, warehouse_id').eq('order_id', orderId).eq('status', 'active');
     if (!reservations) return;
 
     for (const r of reservations) {
-      const { data: stock } = await supabase.from('stock_items').select('*').eq('product_id', r.product_id).maybeSingle();
+      const { data: stock } = await supabase.from('stock_items').select('id, product_id, product_name, sku, current_qty, unit').eq('product_id', r.product_id).maybeSingle();
       if (stock) {
         await supabase.from('stock_items').update({ current_qty: stock.current_qty - r.quantity }).eq('id', stock.id);
         await supabase.from('product_history').insert({

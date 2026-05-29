@@ -49,7 +49,7 @@ export default function PurchaseOrdersPage() {
       // Try to fetch from Supabase purchase_invoices
       const { data, error } = await supabase
         .from('purchase_invoices')
-        .select('*')
+        .select('id, invoice_number, supplier_name_ar, supplier_id, invoice_date, due_date, total, paid_amount, remaining_amount, status, importance, created_at')
         .order('created_at', { ascending: false })
         .limit(20);
       if (error) throw error;

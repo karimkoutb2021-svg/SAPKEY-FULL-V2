@@ -3,6 +3,9 @@ import type { Product, ProductSupplier, InventoryStock } from '@/types/erp';
 
 const supabase = createClient();
 
+const LIST_FIELDS = 'id, sku, name_ar, name_en, barcode, unit, unit_price, sale_price, cost_price, image_url, category_id, current_stock, is_active, min_stock_level';
+const DETAIL_FIELDS = 'id, sku, name_ar, name_en, barcode, unit, unit_price, sale_price, cost_price, image_url, category_id, current_stock, is_active, min_stock_level, max_stock, has_expiry, description, wholesale_price, sort_order, images, tags, created_at, updated_at';
+
 export const productService = {
   async getAll(params?: {
     category_id?: string;
@@ -14,7 +17,7 @@ export const productService = {
     offset?: number;
     fields?: string;
   }) {
-    let query = supabase.from('products').select(params?.fields || '*', { count: 'exact' });
+    let query = supabase.from('products').select(params?.fields || LIST_FIELDS, { count: 'exact' });
 
     if (params?.category_id) {
       query = query.eq('category_id', params.category_id);
@@ -47,7 +50,7 @@ export const productService = {
   async getById(id: string) {
     const { data, error } = await supabase
       .from('products')
-      .select('*')
+      .select(DETAIL_FIELDS)
       .eq('id', id)
       .single();
 
@@ -58,7 +61,7 @@ export const productService = {
   async getByBarcode(barcode: string) {
     const { data, error } = await supabase
       .from('products')
-      .select('*')
+      .select(LIST_FIELDS)
       .eq('barcode', barcode)
       .single();
 
@@ -69,7 +72,7 @@ export const productService = {
   async getBySku(sku: string) {
     const { data, error } = await supabase
       .from('products')
-      .select('*')
+      .select(LIST_FIELDS)
       .eq('sku', sku)
       .single();
 
@@ -145,7 +148,7 @@ export const productService = {
     const field = language === 'ar' ? 'name_ar' : 'name_en';
     const { data, error } = await supabase
       .from('products')
-      .select('*')
+      .select(LIST_FIELDS)
       .ilike(field, `%${query}%`)
       .eq('is_active', true)
       .limit(20);

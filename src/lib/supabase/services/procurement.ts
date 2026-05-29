@@ -174,7 +174,7 @@ export const warehouseService = {
     return supabase.from('warehouses').select('id, name, name_ar, type, location, address, capacity, is_active').eq('is_active', true).order('name_ar');
   },
   async getById(id: string) {
-    return supabase.from('warehouses').select('*').eq('id', id).single();
+    return supabase.from('warehouses').select('id, name, name_ar, type, location, capacity, is_active').eq('id', id).single();
   },
   async create(data: Partial<Warehouse>) {
     return supabase.from('warehouses').insert(data).select().single();
@@ -191,7 +191,7 @@ export const codingDraftService = {
     return query;
   },
   async getById(id: string) {
-    return supabase.from('coding_drafts').select('*').eq('id', id).single();
+    return supabase.from('coding_drafts').select('id, request_type, product_code, product_name, category, unit, cost_price, selling_price, status, created_at').eq('id', id).single();
   },
   async create(data: Partial<CodingDraft>) {
     return supabase.from('coding_drafts').insert(data).select().single();

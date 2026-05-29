@@ -196,7 +196,7 @@ async function getAIResponse(query: string, role: string, userId?: string): Prom
     }
 
     if (q.includes('قاعدة') || q.includes('database') || q.includes('supabase')) {
-      return '🗄️ قاعدة البيانات:\n• المشروع: fpcpqgpbznbsmeqqxmhx\n• الجداول الرئيسية: products, orders, customers, stock_items, treasury, ...\n• الحالة: متصلة ومزامنة في الوقت الفعلي ✅';
+      return '🗄️ قاعدة البيانات متصلة ومزامنة في الوقت الفعلي ✅';
     }
 
     return '💡 المطور الكامل! يمكنك سؤالي عن:\n• "صحة النظام"\n• "حالة قاعدة البيانات"\n• وأي استعلام إداري أو مالي أو تشغيلي بلا استثناء.';

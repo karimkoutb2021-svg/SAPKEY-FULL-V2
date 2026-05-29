@@ -62,7 +62,8 @@ async function checkAuth(): Promise<TestResult> {
 
 async function checkStorage(): Promise<TestResult> {
   try {
-    const res = await fetch('https://cshpnhzhzahnpvfflsgx.supabase.co/storage/v1/bucket', {
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://cshpnhzhzahnpvfflsgx.supabase.co';
+    const res = await fetch(`${supabaseUrl}/storage/v1/bucket`, {
       headers: { 'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '' },
       signal: AbortSignal.timeout(5000),
     });

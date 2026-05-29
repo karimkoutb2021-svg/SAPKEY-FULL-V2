@@ -200,20 +200,15 @@ export default function TreasuryPage() {
       if (newLoans) {
         setLoans(newLoans);
       }
-    } catch {
-      try {
-        const { data: oldLoans } = await supabase.from('treasury_loans').select('*').order('created_at', { ascending: false }).limit(20);
-        if (oldLoans) {
-          setLoans(oldLoans.map(mapToInternalLoan));
-        }
-      } catch {
-        try {
-          const stored = localStorage.getItem('treasury_loans');
-          if (stored) {
+    } catch {} finally {
+      if (!loans || loans.length === 0) {
+        const stored = localStorage.getItem('treasury_loans');
+        if (stored) {
+          try {
             const parsed = JSON.parse(stored);
             setLoans(parsed.map(mapToInternalLoan));
-          }
-        } catch {}
+          } catch {}
+        }
       }
     }
 
@@ -301,7 +296,7 @@ export default function TreasuryPage() {
     const { error } = await internalLoanService.create({
       borrower_id: '',
       borrower_name: newLoanBorrowerName,
-      borrower_role: roleMap[newLoanType],
+      borrower_role: roleMap[newLoanType as keyof typeof roleMap],
       loan_type: newLoanType,
       amount: parseFloat(newLoanAmount2),
       remaining_amount: parseFloat(newLoanAmount2),

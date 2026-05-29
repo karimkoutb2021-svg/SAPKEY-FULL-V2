@@ -63,7 +63,7 @@ export const inventoryService = {
     return { data: merged, error: null };
   },
   async getById(id: string) {
-    return supabase.from('stock_items').select('*').eq('id', id).single();
+    return supabase.from('stock_items').select('id, product_id, product_name, sku, current_qty, min_qty, unit, cost_price, selling_price, barcode').eq('id', id).single();
   },
   async update(id: string, data: Partial<StockItem>) {
     return supabase.from('stock_items').update({ ...data, updated_at: new Date().toISOString() }).eq('id', id).select().single();

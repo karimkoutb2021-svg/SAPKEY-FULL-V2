@@ -94,6 +94,18 @@ CREATE TRIGGER update_storefront_banners_updated_at
 ALTER TABLE product_categories ENABLE ROW LEVEL SECURITY;
 ALTER TABLE storefront_banners ENABLE ROW LEVEL SECURITY;
 
+-- Public can view active banners
+CREATE POLICY "Anyone can view active banners"
+    ON storefront_banners FOR SELECT
+    USING (true);
+
+-- Authenticated users can manage banners
+CREATE POLICY "Authenticated users can manage banners"
+    ON storefront_banners FOR ALL
+    TO authenticated
+    USING (true)
+    WITH CHECK (true);
+
 -- ============================================
 -- SEED CATEGORIES
 -- ============================================

@@ -5,22 +5,24 @@ const supabase = createClient();
 export interface TrackingSession {
   id: string;
   order_id: string;
-  current_stage: 'confirmed' | 'preparing' | 'ready' | 'out_for_delivery' | 'delivered';
-  stage_started_at: string;
-  total_delivery_minutes: number;
-  elapsed_minutes: number;
-  progress_pct: number;
+  current_stage?: string;
+  stage_started_at?: string;
+  total_delivery_minutes?: number;
+  elapsed_minutes?: number;
+  progress_pct?: number;
   driver_name?: string;
   driver_phone?: string;
   driver_lat?: number;
   driver_lng?: number;
-  store_lat: number;
-  store_lng: number;
+  store_lat?: number;
+  store_lng?: number;
   customer_lat?: number;
   customer_lng?: number;
-  is_completed: boolean;
-  created_at: string;
+  is_completed?: boolean;
+  created_at?: string;
   updated_at: string;
+  is_late?: boolean;
+  location_updated_at?: string;
 }
 
 const STORE_LOCATION = { lat: 30.0444, lng: 31.2357 };
@@ -28,10 +30,10 @@ const CUSTOMER_LOCATION = { lat: 30.0544, lng: 31.2457 };
 
 export const trackingService = {
   async getOrCreateSession(orderId: string, totalMinutes?: number): Promise<TrackingSession> {
-    let { data } = await supabase.from('tracking_sessions').select('*').eq('order_id', orderId).maybeSingle();
+    let { data } = await supabase.from('tracking_sessions').select('id, order_id, driver_id, status, location_lat, location_lng, updated_at').eq('order_id', orderId).maybeSingle();
 
     if (!data) {
-      const { data: order } = await supabase.from('orders').select('*').eq('id', orderId).single();
+      const { data: order } = await supabase.from('orders').select('id, order_number, customer_name, status, total').eq('id', orderId).single();
       const totalMins = totalMinutes || 60;
 
       // Calculate driver position (simulate halfway)
@@ -68,19 +70,22 @@ export const trackingService = {
     currentStage: string;
   }> {
     const now = Date.now();
-    const startedAt = new Date(session.created_at).getTime();
-    const totalMs = session.total_delivery_minutes * 60000;
+    const startedAt = new Date(session.created_at || Date.now()).getTime();
+    const totalMins = session.total_delivery_minutes || 60;
+    const totalMs = totalMins * 60000;
     const elapsed = Math.max(0, now - startedAt);
     const progressPct = Math.min(100, (elapsed / totalMs) * 100);
     const remainingMinutes = Math.max(0, Math.round((totalMs - elapsed) / 60000));
-    const elapsedMinutes = Math.min(session.total_delivery_minutes, Math.round(elapsed / 60000));
+    const elapsedMinutes = Math.min(totalMins, Math.round(elapsed / 60000));
 
     // Simulate driver movement along the path (0 to 1)
     const t = Math.min(1, elapsed / totalMs);
-    const custLat = session.customer_lat || session.store_lat + 0.01;
-    const custLng = session.customer_lng || session.store_lng + 0.01;
-    const driverLat = session.store_lat + (custLat - session.store_lat) * t;
-    const driverLng = session.store_lng + (custLng - session.store_lng) * t;
+    const sLat = session.store_lat || 30.0444;
+    const sLng = session.store_lng || 31.2357;
+    const custLat = session.customer_lat || sLat + 0.01;
+    const custLng = session.customer_lng || sLng + 0.01;
+    const driverLat = sLat + (custLat - sLat) * t;
+    const driverLng = sLng + (custLng - sLng) * t;
 
     // Determine stage based on progress
     let currentStage = 'confirmed';
@@ -113,8 +118,8 @@ export const trackingService = {
   },
 
   getRoutePath(session: TrackingSession) {
-    const storeLat = session.store_lat;
-    const storeLng = session.store_lng;
+    const storeLat = session.store_lat || 30.0444;
+    const storeLng = session.store_lng || 31.2357;
     const custLat = session.customer_lat || storeLat + 0.01;
     const custLng = session.customer_lng || storeLng + 0.01;
     const steps = 20;

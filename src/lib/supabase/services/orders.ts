@@ -100,7 +100,7 @@ export const orderService = {
   async getById(id: string) {
     const { data, error } = await supabase
       .from('orders')
-      .select('*')
+      .select('id, order_number, customer_name, customer_phone, total, status, payment_status, payment_method, created_at, items, notes, subtotal, discount, tax_total, paid_amount, change_amount, user_id')
       .eq('id', id)
       .single();
 
@@ -142,7 +142,7 @@ export const orderService = {
   },
 
   async updateStatus(orderId: string, status: string, changedBy?: string, notes?: string) {
-    const { data: order } = await supabase.from('orders').select('*').eq('id', orderId).single();
+    const { data: order } = await supabase.from('orders').select('id, order_number, customer_name, customer_phone, total, status, payment_status, payment_method, created_at, items, notes, subtotal, discount, tax_total, paid_amount, change_amount, user_id').eq('id', orderId).single();
     if (!order) throw new Error('Order not found');
 
     const { error: orderError } = await supabase
@@ -159,7 +159,7 @@ export const orderService = {
       notes,
     });
 
-    const { data } = await supabase.from('orders').select('*').eq('id', orderId).single();
+    const { data } = await supabase.from('orders').select('id, order_number, customer_name, customer_phone, total, status, payment_status, payment_method, created_at, items, notes, subtotal, discount, tax_total, paid_amount, change_amount, user_id').eq('id', orderId).single();
     return normalizeOrder(data);
   },
 

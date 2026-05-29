@@ -59,7 +59,7 @@ export async function getCurrentUser(): Promise<ERPUser | null> {
   
   const { data } = await supabase
     .from('users')
-    .select('*')
+    .select('id, email, full_name_ar, full_name_en, phone, role, avatar_url, is_active, branch_id, created_at')
     .eq('email', user.email)
     .single();
   
@@ -78,7 +78,7 @@ export function onAuthStateChange(callback: (user: ERPUser | null) => void) {
     if (session?.user) {
       const { data } = await supabase
         .from('users')
-        .select('*')
+        .select('id, email, full_name_ar, full_name_en, phone, role, avatar_url, is_active, branch_id, created_at')
         .eq('email', session.user.email)
         .single();
       

@@ -88,13 +88,13 @@ export const deliveryService = {
   },
 
   async getById(id: string) {
-    const { data, error } = await supabase.from('deliveries').select('*').eq('id', id).single();
+    const { data, error } = await supabase.from('deliveries').select('id, order_id, driver_id, customer_name, customer_phone, customer_address, status, estimated_minutes, actual_minutes, delivery_fee, created_at').eq('id', id).single();
     if (error) throw error;
     return data as Delivery;
   },
 
   async getByOrderId(orderId: string) {
-    const { data, error } = await supabase.from('deliveries').select('*').eq('order_id', orderId).single();
+    const { data, error } = await supabase.from('deliveries').select('id, order_id, driver_id, customer_name, customer_phone, customer_address, status, estimated_minutes, actual_minutes, delivery_fee, created_at').eq('order_id', orderId).single();
     if (error && error.code !== 'PGRST116') throw error;
     return data as Delivery | null;
   },

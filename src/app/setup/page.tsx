@@ -37,7 +37,7 @@ export default function SetupPage() {
   useEffect(() => { checkTables(); }, []);
 
   const allReady = Object.values(status).every(v => v === '✅ exists');
-  const sqlUrl = 'https://supabase.com/dashboard/project/fpcpqgpbznbsmeqqxmhx/sql';
+  const sqlUrl = 'https://supabase.com/dashboard/project/cshpnhzhzahnpvfflsgx/sql';
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-6" dir="rtl">
@@ -122,7 +122,7 @@ export default function SetupPage() {
               <a href="https://github.com/karimkoutb2021-svg/SAPKEY-SOLUTIONS" className="text-blue-600 hover:underline" target="_blank">karimkoutb2021-svg/SAPKEY-SOLUTIONS</a>
             </p>
             <p><span className="font-medium">Supabase:</span>{' '}
-              <a href="https://supabase.com/dashboard/project/fpcpqgpbznbsmeqqxmhx" className="text-blue-600 hover:underline" target="_blank">fpcpqgpbznbsmeqqxmhx</a>
+              <a href="https://supabase.com/dashboard/project/cshpnhzhzahnpvfflsgx" className="text-blue-600 hover:underline" target="_blank">cshpnhzhzahnpvfflsgx</a>
             </p>
           </div>
         </div>

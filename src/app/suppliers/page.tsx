@@ -68,7 +68,7 @@ interface Invoice {
   invoice_date: string;
   due_date: string | null;
   status: InvoiceStatus;
-  subtotal: number;
+  subtotal?: number;
   total: number;
   paid_amount: number;
   remaining_amount: number;
@@ -127,7 +127,7 @@ export default function SuppliersPage() {
   const fetchData = useCallback(async () => {
     setLoading(true);
     try {
-      let query = supabase.from('suppliers').select('*').order('created_at', { ascending: false });
+      let query = supabase.from('suppliers').select('id, code, name_ar, name_en, category_id, contact_person, phone, phone_2, email, address, city, country, tax_number, commercial_registration, bank_name, bank_account, opening_balance, current_balance, credit_limit, payment_terms, status, rating, created_at').order('created_at', { ascending: false });
       
       if (statusFilter !== 'all') {
         query = query.eq('status', statusFilter);
@@ -144,14 +144,14 @@ export default function SuppliersPage() {
 
       const { data: categoriesData } = await supabase
         .from('supplier_categories')
-        .select('*')
+        .select('id, name_ar, name_en, code, description')
         .eq('is_active', true)
         .order('name_ar');
       if (categoriesData) setCategories(categoriesData as Category[]);
 
       const { data: invoicesData } = await supabase
         .from('purchase_invoices')
-        .select('*')
+        .select('id, invoice_number, supplier_name_ar, supplier_id, invoice_date, due_date, total, paid_amount, remaining_amount, status, importance, notes, created_at')
         .order('created_at', { ascending: false })
         .limit(50);
       if (invoicesData) setInvoices(invoicesData as Invoice[]);
