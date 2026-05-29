@@ -5,31 +5,36 @@ import { getNavItemsForRole } from '@/lib/permissions';
 import * as Icons from 'lucide-react';
 import type { UserRole } from '@/types';
 
-const ROLE_INFO: Record<string, { title: string; subtitle: string; color: string }> = {
+const ROLE_INFO: Record<string, { title: string; subtitle: string; color: string; gradient: string }> = {
   developer: {
     title: 'دليل المطور',
     subtitle: 'التحكم الكامل في بنية النظام، قواعد البيانات، والخوادم',
-    color: 'from-zinc-900 to-zinc-700',
+    color: 'text-zinc-900',
+    gradient: 'from-zinc-100 to-zinc-300',
   },
   admin: {
     title: 'دليل مدير النظام',
     subtitle: 'الإشراف الكامل على المنشأة، الأرباح، وإدارة الفروع',
-    color: 'from-blue-700 to-indigo-900',
+    color: 'text-indigo-900',
+    gradient: 'from-blue-50 to-indigo-100',
   },
   manager: {
     title: 'دليل المدير',
     subtitle: 'إدارة العمليات اليومية، المخزون، والمنتجات',
-    color: 'from-emerald-600 to-teal-800',
+    color: 'text-teal-900',
+    gradient: 'from-emerald-50 to-teal-100',
   },
   cashier: {
     title: 'دليل الكاشير',
     subtitle: 'نقطة البيع، خدمة العملاء، وإصدار الفواتير',
-    color: 'from-orange-500 to-red-600',
+    color: 'text-red-900',
+    gradient: 'from-orange-50 to-red-100',
   },
   customer: {
     title: 'دليل العميل',
     subtitle: 'التسوق الذكي، متابعة الطلبات، والمحفظة',
-    color: 'from-violet-600 to-purple-800',
+    color: 'text-purple-900',
+    gradient: 'from-violet-50 to-purple-100',
   }
 };
 
@@ -43,59 +48,46 @@ export function DynamicInfographic({ role = 'customer', lang = 'ar' }: { role?: 
     const Icon = (Icons as any)[nav.icon as string] || Icons.Circle;
     return {
       title: nav.titleAr,
-      desc: `إمكانية الوصول إلى ${nav.titleAr} (${nav.title})`,
+      desc: `صلاحية الدخول والتحكم الكامل في قسم ${nav.titleAr} (${nav.title}) الخاص بك.`,
       icon: Icon,
-      color: `text-${info.color.split(' ')[0].replace('from-', '')}`
     };
   });
 
   return (
-    <div className="w-full h-full bg-[#fbfbfd] text-[#1d1d1f] font-sans" dir="rtl" id="printable-guide">
+    <div className="w-full min-h-screen bg-[#F5F5F7] text-[#1d1d1f] font-sans overflow-hidden" dir={lang === 'ar' ? 'rtl' : 'ltr'} id="printable-guide">
       {/* Hero Section */}
-      <div className="relative overflow-hidden bg-black text-white py-24 md:py-32 px-6 rounded-b-[3rem] shadow-2xl flex flex-col items-center text-center">
-        <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, ease: 'easeOut' }} className="z-10 max-w-4xl">
-          <h1 className={cn("text-5xl md:text-7xl font-black tracking-tight mb-6 bg-clip-text text-transparent bg-gradient-to-r", info.color)}>
+      <div className={cn("relative overflow-hidden py-24 md:py-32 px-6 bg-gradient-to-br", info.gradient)}>
+        <div className="absolute inset-0 bg-white/40 backdrop-blur-3xl" />
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, ease: 'easeOut' }} className="relative z-10 max-w-4xl mx-auto text-center">
+          <h1 className={cn("text-3xl md:text-5xl font-semibold tracking-tight mb-4", info.color)}>
             {info.title}
           </h1>
-          <p className="text-xl md:text-3xl font-medium text-gray-300 leading-relaxed max-w-3xl mx-auto mb-10">
+          <p className="text-base md:text-lg font-medium text-gray-600 leading-relaxed max-w-2xl mx-auto">
             {info.subtitle}
           </p>
-          <div className="relative mx-auto max-w-2xl rounded-2xl overflow-hidden shadow-2xl border-4 border-white/10 group">
-            <img loading="lazy" src={`/guides/${role || 'customer'}_${lang}.png`} alt={`Infographic for ${role}`} className="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-700" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent pointer-events-none" />
-          </div>
         </motion.div>
       </div>
 
-      {/* Grid Features dynamically generated */}
-      <div className="max-w-7xl mx-auto px-6 py-20">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-5xl font-bold tracking-tight text-[#1d1d1f] mb-4">صلاحياتك الحية من النظام</h2>
-          <p className="text-lg md:text-xl text-gray-500 font-medium">تم استخراج هذه الصلاحيات تلقائياً وبشكل حي بناءً على إعدادات حسابك.</p>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      {/* Dynamic Features Grid (Apple Style Infographic) */}
+      <div className="max-w-6xl mx-auto px-6 py-16 -mt-16 relative z-20">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {features.map((feat, idx) => (
             <motion.div 
               key={idx}
-              initial={{ opacity: 0, y: 40 }}
+              initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-50px' }}
-              transition={{ duration: 0.5, delay: idx * 0.05, ease: 'easeOut' }}
-              className="bg-white p-6 rounded-3xl shadow-sm hover:shadow-xl border border-gray-100 transition-all duration-300"
+              transition={{ duration: 0.6, delay: idx * 0.05, ease: [0.25, 0.1, 0.25, 1] }}
+              className="bg-white/80 backdrop-blur-xl p-8 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-white hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all duration-500 group"
             >
-              <div className="mb-4">
-                <feat.icon className={cn("w-10 h-10", feat.color)} strokeWidth={1.5} />
+              <div className="w-12 h-12 rounded-2xl bg-gray-100 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
+                <feat.icon className={cn("w-6 h-6", info.color)} strokeWidth={1.5} />
               </div>
-              <h3 className="text-xl font-bold mb-2 text-[#1d1d1f]">{feat.title}</h3>
-              <p className="text-[#86868b] text-sm font-medium">{feat.desc}</p>
+              <h3 className="text-lg font-semibold mb-2 text-[#1d1d1f] tracking-tight">{feat.title}</h3>
+              <p className="text-[#86868b] text-sm leading-relaxed">{feat.desc}</p>
             </motion.div>
           ))}
         </div>
-      </div>
-      
-      <div className="bg-[#f5f5f7] py-8 text-center border-t border-gray-200">
-        <p className="text-[#86868b] text-sm font-medium">هذا الدليل ديناميكي - أي تغيير في صلاحيات النظام سينعكس هنا تلقائياً.</p>
       </div>
     </div>
   );

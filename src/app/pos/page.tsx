@@ -238,7 +238,7 @@ function POSContent({ primaryColor, userRole, userName, userId }: { primaryColor
           await cacheProducts(localProducts);
         }
         if (catRes.status === 'fulfilled' && catRes.value) {
-          const cats = [{ id: 'all', name: 'الكل', image: '' }, ...catRes.value.map((c: ProductCategory) => ({ id: c.id, name: c.name_ar, image: c.image_url || '' }))];
+          const cats = [{ id: 'all', name: 'الكل', image: '/categories/all.png' }, ...catRes.value.map((c: ProductCategory) => ({ id: c.id, name: c.name_ar, image: c.image_url || '' }))];
           setCategories(cats);
         }
       } catch (e) {

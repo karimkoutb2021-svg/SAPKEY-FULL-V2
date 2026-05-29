@@ -139,7 +139,7 @@ export default function CodingPage() {
     ]);
     if (stockRes.data) setStockItems(stockRes.data);
     if (draftsRes.data) setDrafts(draftsRes.data as any);
-    if (catRes) setCategories([{id: 'all', name: 'الكل', image: ''} as any, ...catRes.map((c: any) => ({id: c.id, name: c.name_ar, image: c.image_url || ''}))]);
+    if (catRes) setCategories([{id: 'all', name: 'الكل', image: '/categories/all.png'} as any, ...catRes.map((c: any) => ({id: c.id, name: c.name_ar, image: c.image_url || ''}))]);
     setLoading(false);
   }
 

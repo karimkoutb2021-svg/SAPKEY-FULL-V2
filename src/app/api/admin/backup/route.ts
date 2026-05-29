@@ -2,7 +2,6 @@ import { NextResponse } from 'next/server';
 import { createAdminClient } from '@/lib/supabase/admin';
 
 // GET: Export all data as JSON backup
-// Only accessible from server-side (protected by admin route)
 export async function GET() {
   try {
     const supabase = createAdminClient();
@@ -12,21 +11,17 @@ export async function GET() {
       source: 'SAPKEY SOLUTIONS',
     };
 
-    // 1. Fetch audit logs (contains subscription data)
     const { data: auditLogs } = await supabase
       .from('audit_logs')
       .select('*')
-      .order('created_at', { ascending: false })
-      .limit(500);
+      .order('created_at', { ascending: false });
     backup.auditLogs = auditLogs || [];
 
-    // 2. Fetch users (tenant info)
     const { data: users } = await supabase
       .from('users')
-      .select('email, full_name_ar, full_name_en, phone, role, is_active');
+      .select('*');
     backup.users = users || [];
 
-    // 3. Get all tenant subscriptions from audit logs
     const subscriptions = (auditLogs || [])
       .filter((log: any) => log.entity_type === 'tenant')
       .reduce((acc: any, log: any) => {
@@ -68,33 +63,55 @@ export async function POST(request: Request) {
     }
 
     const supabase = createAdminClient();
-    let imported = { auditLogs: 0, skipped: 0, errors: 0 };
+    let imported = { auditLogs: 0, users: 0, errors: 0 };
 
-    // 1. Import audit logs (subscription data)
+    // 1. Import audit logs
     if (backup.auditLogs?.length > 0) {
-      // Only import tenant-related logs to avoid conflicts
-      const tenantLogs = backup.auditLogs.filter((log: any) => log.entity_type === 'tenant');
-      for (const log of tenantLogs) {
+      for (const log of backup.auditLogs) {
         const { error } = await supabase.from('audit_logs').insert({
-          entity_type: log.entity_type || 'tenant',
+          id: log.id,
+          user_id: log.user_id,
+          entity_type: log.entity_type,
           entity_id: log.entity_id,
-          action: log.action || 'restored',
+          action: log.action,
           new_values: log.new_values || {},
           old_values: log.old_values || null,
-        });
-        if (error) {
+          created_at: log.created_at,
+        }).select();
+        
+        // If conflict occurs, it's already there
+        if (error && error.code !== '23505') {
           imported.errors++;
-        } else {
+        } else if (!error) {
           imported.auditLogs++;
         }
       }
-      // Non-tenant logs are skipped (already in DB or auto-generated)
-      imported.skipped = backup.auditLogs.length - tenantLogs.length;
+    }
+
+    // 2. Import users (Careful with passwords/auth, this just updates public profiles if needed)
+    if (backup.users?.length > 0) {
+      for (const user of backup.users) {
+        const { error } = await supabase.from('users').upsert({
+          id: user.id,
+          email: user.email,
+          full_name_ar: user.full_name_ar,
+          full_name_en: user.full_name_en,
+          phone: user.phone,
+          role: user.role,
+          is_active: user.is_active,
+        });
+        
+        if (error) {
+          imported.errors++;
+        } else {
+          imported.users++;
+        }
+      }
     }
 
     return NextResponse.json({
       success: true,
-      message: `تم استيراد ${imported.auditLogs} سجل, تخطي ${imported.skipped}, أخطاء ${imported.errors}`,
+      message: `تم استيراد ${imported.auditLogs} سجل مراجعة, ${imported.users} مستخدم. الأخطاء: ${imported.errors}`,
       imported,
     });
   } catch (err: any) {

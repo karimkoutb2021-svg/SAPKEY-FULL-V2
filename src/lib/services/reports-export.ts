@@ -1,8 +1,8 @@
 'use client';
 
-import * as XLSX from 'xlsx';
-import { jsPDF } from 'jspdf';
-import html2canvas from 'html2canvas';
+import ExcelJS from 'exceljs';
+import { saveAs } from 'file-saver';
+import html2pdf from 'html2pdf.js';
 
 export interface ReportColumn {
   key: string;
@@ -10,6 +10,7 @@ export interface ReportColumn {
   labelAr: string;
   type?: 'text' | 'number' | 'date' | 'currency';
   width?: number;
+  dropdown?: string[]; // Data validation options
 }
 
 export interface ReportData {
@@ -25,14 +26,7 @@ export interface ReportData {
 }
 
 function triggerDownload(blob: Blob, filename: string) {
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
+  saveAs(blob, filename);
 }
 
 export function exportToJson(data: any, filename: string) {
@@ -41,31 +35,118 @@ export function exportToJson(data: any, filename: string) {
   triggerDownload(blob, `${filename}.json`);
 }
 
-export function exportToExcel(report: ReportData, filename: string) {
-  const wb = XLSX.utils.book_new();
-  const headerRow = report.columns.map((c) => c.labelAr);
-  const dataRows = report.rows.map((row) =>
-    report.columns.map((col) => formatCellValue(row[col.key], col))
-  );
-  const wsData: any[][] = [[report.titleAr]];
-  if (report.subtitleAr) wsData.push([report.subtitleAr]);
-  wsData.push([]);
-  wsData.push(headerRow);
-  dataRows.forEach((r) => wsData.push(r));
-  if (report.totals) {
-    const totalsRow = report.columns.map((col) => {
-      const val = report.totals![col.key];
-      return val !== undefined ? String(val) : (col.key === '' ? 'الإجمالي' : '');
-    });
-    wsData.push(totalsRow);
+export async function exportToExcel(report: ReportData, filename: string) {
+  const workbook = new ExcelJS.Workbook();
+  const worksheet = workbook.addWorksheet('التقرير', { views: [{ rightToLeft: true }] });
+
+  // Add Title
+  worksheet.mergeCells('A1', `${String.fromCharCode(64 + report.columns.length)}1`);
+  const titleCell = worksheet.getCell('A1');
+  titleCell.value = report.titleAr;
+  titleCell.font = { name: 'Cairo', size: 16, bold: true, color: { argb: 'FFFFFFFF' } };
+  titleCell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF10B981' } };
+  titleCell.alignment = { horizontal: 'center', vertical: 'middle' };
+  worksheet.getRow(1).height = 40;
+
+  // Add Subtitle
+  let currentRow = 2;
+  if (report.subtitleAr) {
+    worksheet.mergeCells(`A2:${String.fromCharCode(64 + report.columns.length)}2`);
+    const subtitleCell = worksheet.getCell('A2');
+    subtitleCell.value = report.subtitleAr;
+    subtitleCell.font = { name: 'Cairo', size: 11, color: { argb: 'FF6B7280' } };
+    subtitleCell.alignment = { horizontal: 'center', vertical: 'middle' };
+    worksheet.getRow(2).height = 25;
+    currentRow = 3;
   }
-  const ws = XLSX.utils.aoa_to_sheet(wsData);
-  ws['!cols'] = report.columns.map((c) => ({ wch: c.width || 20 }));
-  const merges: XLSX.Range[] = [{ s: { r: 0, c: 0 }, e: { r: 0, c: report.columns.length - 1 } }];
-  if (report.subtitleAr) merges.push({ s: { r: 1, c: 0 }, e: { r: 1, c: report.columns.length - 1 } });
-  ws['!merges'] = merges;
-  XLSX.utils.book_append_sheet(wb, ws, 'تقرير');
-  XLSX.writeFile(wb, `${filename}.xlsx`);
+
+  // Blank Row
+  currentRow++;
+
+  // Add Headers
+  const headerRow = worksheet.getRow(currentRow);
+  report.columns.forEach((col, index) => {
+    const cell = headerRow.getCell(index + 1);
+    cell.value = col.labelAr;
+    cell.font = { name: 'Cairo', bold: true, color: { argb: 'FF374151' } };
+    cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFF3F4F6' } };
+    cell.alignment = { horizontal: 'center', vertical: 'middle' };
+    cell.border = {
+      top: { style: 'thin', color: { argb: 'FFE5E7EB' } },
+      bottom: { style: 'medium', color: { argb: 'FF10B981' } },
+    };
+    worksheet.getColumn(index + 1).width = col.width || 20;
+  });
+  headerRow.height = 30;
+  currentRow++;
+
+  // Add Data Rows with Formatting
+  report.rows.forEach((rowData, index) => {
+    const row = worksheet.getRow(currentRow);
+    report.columns.forEach((col, colIndex) => {
+      const cell = row.getCell(colIndex + 1);
+      const val = rowData[col.key];
+
+      if (col.type === 'number' || col.type === 'currency') {
+        cell.value = Number(val) || 0;
+        cell.numFmt = col.type === 'currency' ? '#,##0.00 "ج.م"' : '#,##0';
+        cell.alignment = { horizontal: 'center' };
+      } else if (col.type === 'date') {
+        cell.value = val ? new Date(val).toLocaleDateString('ar-EG') : '—';
+        cell.alignment = { horizontal: 'center' };
+      } else {
+        cell.value = val ?? '—';
+        cell.alignment = { horizontal: 'right' };
+      }
+
+      // Dropdown (Data Validation)
+      if (col.dropdown && col.dropdown.length > 0) {
+        cell.dataValidation = {
+          type: 'list',
+          allowBlank: true,
+          formulae: [`"${col.dropdown.join(',')}"`],
+          showErrorMessage: true,
+          errorTitle: 'قيمة غير صالحة',
+          error: 'يرجى اختيار قيمة من القائمة المنسدلة',
+        };
+      }
+
+      // Conditional Formatting (Coloring rows based on values)
+      if ((col.type === 'number' || col.type === 'currency') && cell.value < 0) {
+        cell.font = { color: { argb: 'FFEF4444' } }; // Red for negative
+      }
+
+      cell.border = { bottom: { style: 'hair', color: { argb: 'FFF3F4F6' } } };
+    });
+    currentRow++;
+  });
+
+  // Add Totals
+  if (report.totals) {
+    const totalsRow = worksheet.getRow(currentRow);
+    report.columns.forEach((col, colIndex) => {
+      const cell = totalsRow.getCell(colIndex + 1);
+      const val = report.totals![col.key];
+      
+      if (val !== undefined) {
+        cell.value = val;
+        cell.numFmt = col.type === 'currency' ? '#,##0.00 "ج.م"' : '#,##0';
+        cell.alignment = { horizontal: 'center' };
+      } else if (colIndex === 0) {
+        cell.value = 'الإجمالي الكلي';
+        cell.alignment = { horizontal: 'right' };
+      }
+      
+      cell.font = { name: 'Cairo', bold: true, size: 12, color: { argb: 'FF111827' } };
+      cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFF9FAFB' } };
+      cell.border = { top: { style: 'medium', color: { argb: 'FFD1D5DB' } } };
+    });
+    totalsRow.height = 35;
+  }
+
+  // Generate Excel file
+  const buffer = await workbook.xlsx.writeBuffer();
+  triggerDownload(new Blob([buffer]), `${filename}.xlsx`);
 }
 
 export async function exportToPdf(
@@ -74,13 +155,12 @@ export async function exportToPdf(
   filename: string
 ) {
   const container = document.createElement('div');
-  // FIX: Instead of -9999px which causes blank captures on some browsers, use fixed positioning with opacity.
-  container.style.cssText = 'position:fixed;top:0;left:0;width:794px;background:#fff;font-family:"Cairo",Tahoma,sans-serif;direction:rtl;z-index:-9999;opacity:0.01;pointer-events:none;';
+  // Visible off-screen instead of hidden so that browsers actually render it
+  container.style.cssText = 'position:absolute;top:-9999px;left:-9999px;width:794px;background:#fff;font-family:"Cairo",Tahoma,sans-serif;direction:rtl;';
   document.body.appendChild(container);
 
   const totalsEntries = report.totals ? Object.entries(report.totals) : [];
   
-  // Apple/Binance style professional CSS with Cairo Font injection
   container.innerHTML = `
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800;900&display=swap" rel="stylesheet">
     <div style="padding:0; box-sizing: border-box; display: flex; flex-direction: column; min-height: 1122px; position: relative; font-family: 'Cairo', sans-serif;">
@@ -172,43 +252,19 @@ export async function exportToPdf(
   `;
 
   try {
-    // Wait for fonts to load
     await document.fonts.ready;
-    await new Promise((r) => setTimeout(r, 1000)); // Give it an extra second to render fully
+    
+    const opt = {
+      margin:       0,
+      filename:     `${filename}.pdf`,
+      image:        { type: 'jpeg', quality: 0.98 },
+      html2canvas:  { scale: 2, useCORS: true, logging: false },
+      jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    };
 
-    const canvas = await html2canvas(container, {
-      scale: 2,
-      useCORS: true,
-      allowTaint: true,
-      logging: false,
-      backgroundColor: '#ffffff',
-      width: container.scrollWidth,
-      height: container.scrollHeight,
-    });
+    // Use html2pdf instead of custom jsPDF canvas slicing
+    await html2pdf().set(opt).from(container).save();
 
-    const imgData = canvas.toDataURL('image/png', 1.0);
-    const pdf = new jsPDF('p', 'mm', 'a4');
-    const pdfWidth = pdf.internal.pageSize.getWidth();
-    const pdfHeight = pdf.internal.pageSize.getHeight();
-    const imgWidth = canvas.width;
-    const imgHeight = canvas.height;
-    const ratio = pdfWidth / imgWidth;
-    const scaledHeight = imgHeight * ratio;
-
-    let heightLeft = scaledHeight;
-    let position = 0;
-
-    pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, scaledHeight, '', 'FAST');
-    heightLeft -= pdfHeight;
-
-    while (heightLeft > 0) {
-      position -= pdfHeight;
-      pdf.addPage();
-      pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, scaledHeight, '', 'FAST');
-      heightLeft -= pdfHeight;
-    }
-
-    pdf.save(`${filename}.pdf`);
   } catch (err) {
     console.error('PDF generation failed:', err);
     throw new Error('فشل في إنشاء PDF، يرجى المحاولة مرة أخرى');
@@ -293,3 +349,4 @@ export function exportBackupAsExcel(backupData: any) {
     exportToExcel(logReport, `sapkey-audit-logs-${date}`);
   }
 }
+

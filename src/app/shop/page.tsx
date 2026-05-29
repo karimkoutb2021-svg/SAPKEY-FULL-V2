@@ -332,7 +332,7 @@ export default function ShopPage() {
       }
       if (catRes.status === 'fulfilled' && catRes.value) {
         newCategories = [
-          { id: 'all', name: 'الكل', image: '/category-placeholder.svg' },
+          { id: 'all', name: 'الكل', image: '/categories/all.png' },
           ...catRes.value.map((c: ProductCategory) => ({ id: c.id, name: c.name_ar, image: c.image_url || '/category-placeholder.svg' }))
         ];
       }
