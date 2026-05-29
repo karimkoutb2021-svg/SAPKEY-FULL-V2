@@ -37,17 +37,46 @@ export function ImageUpload({ value, onChange, label, width, height, maxSizeMB =
     setError('');
 
     try {
-      const reader = new FileReader();
-      reader.onload = (ev) => {
-        const result = ev.target?.result as string;
-        onChange(result);
+      const img = new globalThis.Image();
+      const objectUrl = URL.createObjectURL(file);
+      
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        let w = img.width;
+        let h = img.height;
+        const maxDim = 800; // Resize to max 800px
+
+        if (w > maxDim || h > maxDim) {
+          if (w > h) {
+            h = Math.round((h * maxDim) / w);
+            w = maxDim;
+          } else {
+            w = Math.round((w * maxDim) / h);
+            h = maxDim;
+          }
+        }
+
+        canvas.width = w;
+        canvas.height = h;
+        const ctx = canvas.getContext('2d');
+        if (ctx) {
+          ctx.drawImage(img, 0, 0, w, h);
+          const compressedDataUrl = canvas.toDataURL('image/webp', 0.8);
+          onChange(compressedDataUrl);
+        } else {
+          setError('حدث خطأ أثناء معالجة الصورة');
+        }
+        URL.revokeObjectURL(objectUrl);
         setUploading(false);
       };
-      reader.onerror = () => {
+
+      img.onerror = () => {
         setError('فشل قراءة الملف');
+        URL.revokeObjectURL(objectUrl);
         setUploading(false);
       };
-      reader.readAsDataURL(file);
+
+      img.src = objectUrl;
     } catch {
       setError('فشل رفع الصورة');
       setUploading(false);
