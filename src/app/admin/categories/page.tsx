@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/lib/store/auth-store';
 import { categoryService, type ProductCategory } from '@/lib/supabase/services/categories';
-import { uploadImage, compressImage, IMAGE_SIZES, deleteImage } from '@/lib/supabase/storage';
+import { uploadImage, deleteImage, IMAGE_SIZES } from '@/lib/supabase/storage';
 import { Plus, Edit2, Trash2, Image as ImageIcon, Upload, Loader2, Save, X, ChevronUp, ChevronDown, Eye, EyeOff } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
@@ -135,8 +135,7 @@ export default function AdminCategoriesPage() {
     if (!file) return;
     setUploading(true);
     try {
-      const compressed = await compressImage(file, IMAGE_SIZES.category.width, IMAGE_SIZES.category.height);
-      const url = await uploadImage(compressed, 'categories');
+      const url = await uploadImage(file, 'categories');
       setForm((f) => ({ ...f, image_url: url }));
       toast.success('تم رفع الصورة');
     } catch (err: any) {

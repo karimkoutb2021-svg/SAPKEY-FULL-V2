@@ -1,8 +1,10 @@
 'use client';
 
 import { useState, useRef } from 'react';
-import { Image, Upload, X, Link as LinkIcon, Loader2 } from 'lucide-react';
-import { uploadImage } from '@/lib/cloudinary';
+import { Upload, X, Link as LinkIcon, Loader2 } from 'lucide-react';
+
+const CLOUD_NAME = 'dhv9lgmys';
+const UPLOAD_PRESET = 'rpytrgb6';
 
 interface ImageUploadProps {
   value: string;
@@ -16,7 +18,7 @@ interface ImageUploadProps {
 }
 
 export function ImageUpload({ value, onChange, label, width, height, maxSizeMB = 2, previewSize = 'h-16 w-16', folder = 'products' }: ImageUploadProps) {
-  const [mode, setMode] = useState<'url' | 'upload'>(value && !value.startsWith('data:') ? 'url' : 'upload');
+  const [mode, setMode] = useState<'url' | 'upload'>(!!value && !value.startsWith('data:') ? 'url' : 'upload');
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -39,10 +41,25 @@ export function ImageUpload({ value, onChange, label, width, height, maxSizeMB =
     setError('');
 
     try {
-      const cloudinaryUrl = await uploadImage(file, folder);
-      onChange(cloudinaryUrl);
-    } catch {
-      setError('فشل رفع الصورة');
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('upload_preset', UPLOAD_PRESET);
+      formData.append('folder', folder);
+
+      const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!res.ok) {
+        const err = await res.text();
+        throw new Error(err);
+      }
+
+      const data = await res.json();
+      onChange(data.secure_url);
+    } catch (err) {
+      setError('فشل رفع الصورة — لم يتم الحفظ');
     } finally {
       setUploading(false);
     }
@@ -55,7 +72,6 @@ export function ImageUpload({ value, onChange, label, width, height, maxSizeMB =
     <div>
       <label className="text-xs font-medium text-gray-500 block mb-1.5">{label}</label>
 
-      {/* Mode Toggle */}
       <div className="flex items-center gap-1 mb-2">
         <button onClick={() => setMode('url')}
           className={`px-2.5 py-1 rounded-lg text-[10px] font-medium transition-all ${mode === 'url' ? 'bg-gray-900 dark:bg-white text-white dark:text-gray-900' : 'bg-gray-100 dark:bg-slate-800 text-gray-500'}`}>
@@ -67,7 +83,6 @@ export function ImageUpload({ value, onChange, label, width, height, maxSizeMB =
         </button>
       </div>
 
-      {/* Size & Format Info */}
       {(sizeText || formatHint) && (
         <div className="flex items-center gap-2 mb-2 text-[9px] text-gray-400">
           {sizeText && <span className="px-1.5 py-0.5 rounded bg-gray-100 dark:bg-slate-800">{sizeText}</span>}

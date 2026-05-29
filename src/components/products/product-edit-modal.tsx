@@ -6,8 +6,10 @@ import { X, Upload, ImageIcon, Package, Settings, Database, Check, Tag, Barcode,
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
-import { uploadImage } from '@/lib/cloudinary';
 import toast from 'react-hot-toast';
+
+const CLOUD_NAME = 'dhv9lgmys';
+const UPLOAD_PRESET = 'rpytrgb6';
 
 interface ProductEditModalProps {
   product: any;
@@ -27,15 +29,31 @@ export function ProductEditModal({ product, isOpen, onClose, onSave }: ProductEd
     const file = e.target.files?.[0];
     if (!file) return;
 
+    const toastId = toast.loading('جاري رفع الصورة...');
+
     try {
-      toast.loading('جاري رفع الصورة...');
-      const cloudinaryUrl = await uploadImage(file, 'products');
-      setEditProduct({ ...editProduct, image_url: cloudinaryUrl });
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('upload_preset', UPLOAD_PRESET);
+      formData.append('folder', 'products');
+
+      const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!res.ok) {
+        const errMsg = await res.text();
+        throw new Error(errMsg);
+      }
+
+      const data = await res.json();
+      setEditProduct({ ...editProduct, image_url: data.secure_url });
       toast.dismiss();
       toast.success('تم رفع الصورة بنجاح');
     } catch {
       toast.dismiss();
-      toast.error('فشل رفع الصورة');
+      toast.error('فشل رفع الصورة — لم يتم حفظ أي بيانات');
     }
 
     if (fileInputRef.current) fileInputRef.current.value = '';
