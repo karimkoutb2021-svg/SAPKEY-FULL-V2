@@ -254,10 +254,10 @@ export async function exportToPdf(
   try {
     await document.fonts.ready;
     
-    const opt = {
+    const opt: any = {
       margin:       0,
       filename:     `${filename}.pdf`,
-      image:        { type: 'jpeg', quality: 0.98 },
+      image:        { type: 'jpeg' as const, quality: 0.98 },
       html2canvas:  { scale: 2, useCORS: true, logging: false },
       jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
     };
