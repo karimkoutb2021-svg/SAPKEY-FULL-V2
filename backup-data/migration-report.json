@@ -1,0 +1,2746 @@
+{
+  "products": {
+    "total": 456,
+    "migrated": 8,
+    "skipped": 448,
+    "failed": 0,
+    "details": [
+      {
+        "id": "8379608d-1d33-4da0-84fb-e047cd15c316",
+        "sku": "PROD-002",
+        "action": "migrated",
+        "new_url": "https://res.cloudinary.com/dhv9lgmys/image/upload/v1780086194/products/outvjslmfj2zhcjmlfie.jpg"
+      },
+      {
+        "id": "a94607bb-b1de-4318-b1a2-5367f20de446",
+        "sku": "PAS-002",
+        "action": "migrated",
+        "new_url": "https://res.cloudinary.com/dhv9lgmys/image/upload/v1780086196/products/pykyzacrswo1pa2zbjld.jpg"
+      },
+      {
+        "id": "35e70451-a940-4814-9024-c8b0b2a3c851",
+        "sku": "SNACK-001",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "2b40b82a-48ef-42f2-939d-55587c2139d0",
+        "sku": "PROD-001",
+        "action": "migrated",
+        "new_url": "https://res.cloudinary.com/dhv9lgmys/image/upload/v1780086198/products/rnpavvv89yhiv4bs5mnv.jpg"
+      },
+      {
+        "id": "63beb966-4d39-4389-866f-081bfc7e31cd",
+        "sku": "SNACK-010",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "cb2feac1-dd96-4fb2-87e9-15d72e9a943d",
+        "sku": "BEV-010",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "c7d946e0-d396-444a-89e0-5fcbc83a3df1",
+        "sku": "PROD-003",
+        "action": "migrated",
+        "new_url": "https://res.cloudinary.com/dhv9lgmys/image/upload/v1780086199/products/cgfgqpqac96tsxfftjs7.jpg"
+      },
+      {
+        "id": "d832177b-26af-409e-8ef3-5b58f4857b11",
+        "sku": "PROD-005",
+        "action": "migrated",
+        "new_url": "https://res.cloudinary.com/dhv9lgmys/image/upload/v1780086202/products/znjhcz92s04angtzjhek.jpg"
+      },
+      {
+        "id": "c3cec85a-390a-4ba9-ab22-f1436f74b069",
+        "sku": "PROD-004",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "c378f3ca-d7ac-47a3-b70b-dcbcb67e4623",
+        "sku": "BAKERY-001",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "309e6cab-90fb-47df-879f-ebb0da0f2426",
+        "sku": "BEV-003",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "e7ceff87-5578-471b-9b4a-97b0c0bba790",
+        "sku": "SPICE-002",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "dfe01bfd-c545-448c-92c7-d1d77b492f9c",
+        "sku": "CANNED-007",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "49b4e8e0-9ac9-44ce-9ce0-4bc75d6cd6ba",
+        "sku": "BEV-004",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "656dd664-d37a-4e85-85b0-2b66e5052901",
+        "sku": "SWEET-003",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "6085836d-7942-4c8a-a4c0-2e3cbf83a867",
+        "sku": "BEV-002",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "2ebe9ded-dcfc-4352-b520-38c97859de9b",
+        "sku": "SWEET-008",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "089aa5fb-e074-4ffe-a75d-738ac6078cc9",
+        "sku": "PASTA-006",
+        "action": "skipped-local-path",
+        "url": "/products/pasta.png"
+      },
+      {
+        "id": "db5b7579-aedf-4d6f-8e34-d23e91acb10e",
+        "sku": "GRC-008",
+        "action": "skipped-local-path",
+        "url": "/products/pasta.png"
+      },
+      {
+        "id": "a8bb88c1-2edc-44c3-8425-d35da7f61585",
+        "sku": "GRC-004",
+        "action": "skipped-local-path",
+        "url": "/products/pasta.png"
+      },
+      {
+        "id": "7413c738-8130-4618-bd09-3032582b811c",
+        "sku": "GRC-009",
+        "action": "skipped-local-path",
+        "url": "/products/pasta.png"
+      },
+      {
+        "id": "7ff1e2c5-2763-4a29-927a-800fc7fc4a02",
+        "sku": "GRC-050",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "77733b35-3e70-4d12-a114-ed3666f59ea2",
+        "sku": "SNACK-002",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "d689a0df-c811-4d20-8514-2b0fcf9faabd",
+        "sku": "OIL-004",
+        "action": "skipped-local-path",
+        "url": "/products/cooking_oil.png"
+      },
+      {
+        "id": "11426784-0616-4237-bc9d-b2bdb0a86bfa",
+        "sku": "BAKERY-006",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "8e54e50f-a405-47d1-83c2-1614c9aaa2fb",
+        "sku": "CLEAN-003",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "23f129c9-365a-47eb-bce8-3cc4d85826e0",
+        "sku": "CLEAN-008",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "cf732192-7031-4ac1-94d9-5f4d3a42433e",
+        "sku": "PERSONAL-005",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "5d448fee-70a5-4c70-8186-e03759c4112c",
+        "sku": "FROZEN-004",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "20ef78f9-4992-492a-a2b0-bdaca1937c39",
+        "sku": "SPICE-007",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "28cc533e-cde6-48ac-bf26-5ec5d3448dee",
+        "sku": "SNACK-007",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "8085098e-a0cc-429b-be5b-23a98d8838fc",
+        "sku": "CANNED-002",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "70a2520f-57bd-4319-a686-61505acc439d",
+        "sku": "GRC-031",
+        "action": "skipped-local-path",
+        "url": "/products/cooking_oil.png"
+      },
+      {
+        "id": "90bcb838-0922-4e4b-8747-7a19a22cce88",
+        "sku": "GRC-037",
+        "action": "skipped-local-path",
+        "url": "/products/cooking_oil.png"
+      },
+      {
+        "id": "96f4b87c-e392-4f50-831c-38727a75b65b",
+        "sku": "GRC-040",
+        "action": "skipped-local-path",
+        "url": "/products/cooking_oil.png"
+      },
+      {
+        "id": "8e298929-2539-4b4a-af0c-53fee76aded9",
+        "sku": "GRC-045",
+        "action": "skipped-local-path",
+        "url": "/products/tomato_paste.png"
+      },
+      {
+        "id": "a6b8af82-d15b-480b-800d-89a2b99a3ffb",
+        "sku": "BEV-001",
+        "action": "migrated",
+        "new_url": "https://res.cloudinary.com/dhv9lgmys/image/upload/v1780086205/products/jltigfblqurocjki40n4.jpg"
+      },
+      {
+        "id": "68f3ca8a-d4af-4cbe-a68a-725557e3aaa4",
+        "sku": "SNACK-003",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "68b5c0d4-cda8-4edd-9ca1-1e2ad5a5d132",
+        "sku": "BEV-006",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "18dc3946-c091-45a0-882f-48b291f62953",
+        "sku": "GRC-005",
+        "action": "skipped-local-path",
+        "url": "/products/pasta.png"
+      },
+      {
+        "id": "b5c43729-74e4-442a-9ed9-ea690bf487e7",
+        "sku": "DAIRY-003",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "36e3dbdb-1891-4395-b4b9-fd5495ac3875",
+        "sku": "FROZEN-002",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "a762d3ec-bf1b-453c-a53c-8aa031105b43",
+        "sku": "PASTA-002",
+        "action": "skipped-local-path",
+        "url": "/products/pasta.png"
+      },
+      {
+        "id": "472f097d-9324-4f19-8788-57ea82ee3871",
+        "sku": "CANNED-003",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "5c4fc5b9-c789-4d9d-ad5b-7f5552c7c201",
+        "sku": "GRC-010",
+        "action": "skipped-local-path",
+        "url": "/products/pasta.png"
+      },
+      {
+        "id": "363b2562-f598-4a83-b030-f055e42c485a",
+        "sku": "GRC-015",
+        "action": "skipped-local-path",
+        "url": "/products/pasta.png"
+      },
+      {
+        "id": "51a20fe9-3122-47d9-a278-8529f24d24ea",
+        "sku": "GRC-027",
+        "action": "skipped-local-path",
+        "url": "/products/cooking_oil.png"
+      },
+      {
+        "id": "c81ce713-b35d-4457-8ee0-c96ad16d8872",
+        "sku": "BAKERY-004",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "b42060d2-6356-4dda-93ba-fec7d377750b",
+        "sku": "DAIRY-001",
+        "action": "migrated",
+        "new_url": "https://res.cloudinary.com/dhv9lgmys/image/upload/v1780086207/products/pvzyadzcitlgm8tevno0.jpg"
+      },
+      {
+        "id": "8f55852a-edeb-43e3-8542-4085410dc035",
+        "sku": "BAKERY-002",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "5df6aff7-8f45-4b37-8f2a-7696cbd9ccc3",
+        "sku": "PERSONAL-001",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "cea3527e-4d6a-407f-bcfb-cf7f4ea374a9",
+        "sku": "FROZEN-005",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "835296d2-2b43-41a3-9ed3-0f3b0ec31f97",
+        "sku": "SPICE-003",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "f8781698-56fb-47f5-860c-5d7bef6e33e6",
+        "sku": "BAKERY-007",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "ddc67b30-66f5-4670-8fce-c6b3f0c021f2",
+        "sku": "CLEAN-004",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "07a5b4ec-da72-4e70-a8fc-bd1f401c2e98",
+        "sku": "PERSONAL-006",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "bd5a0267-4ff0-43b9-a2fd-3aedeffcb9bf",
+        "sku": "SPICE-008",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "9cedbb67-efe8-40f2-ba51-4d82647ea640",
+        "sku": "PASTA-007",
+        "action": "skipped-local-path",
+        "url": "/products/pasta.png"
+      },
+      {
+        "id": "19b82945-0538-43cf-8d20-c439cada0a61",
+        "sku": "SWEET-004",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "efbbc630-7260-44da-be8d-c1d2ddd47172",
+        "sku": "SWEET-009",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "4fdca60c-00a7-4893-9a3f-1c4e644b8fbc",
+        "sku": "FROZEN-003",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "a05c402c-a3af-4a04-a1ee-7408aebcf336",
+        "sku": "CANNED-008",
+        "action": "skipped-local-path",
+        "url": "/products/cooking_oil.png"
+      },
+      {
+        "id": "0350ff09-ed98-4cb9-930f-c80a44ee14e3",
+        "sku": "GRC-022",
+        "action": "skipped-local-path",
+        "url": "/products/cooking_oil.png"
+      },
+      {
+        "id": "ee5cc1e7-57bb-4aa6-9fc0-32863eb9696c",
+        "sku": "OIL-005",
+        "action": "skipped-local-path",
+        "url": "/products/cooking_oil.png"
+      },
+      {
+        "id": "9d532ae6-3a73-48f4-b7f0-a7bc5e771b1e",
+        "sku": "SNK-001",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "c91b5e41-8d15-4436-85e0-2dec3fd71905",
+        "sku": "SWEET-007",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "039bec64-862d-421e-b205-99577dd08d61",
+        "sku": "DAIRY-004",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "1e72ad74-3d9c-4c3c-a47a-e6e3360a2890",
+        "sku": "GRC-013",
+        "action": "skipped-local-path",
+        "url": "/products/pasta.png"
+      },
+      {
+        "id": "f0cf7ba7-1443-406b-a324-2fcc803d6000",
+        "sku": "SNK-002",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "ee74e586-7240-4017-b26f-4b5713c92a73",
+        "sku": "CLEAN-006",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "4fc1c1f3-5e75-4482-8479-96c532ef60c0",
+        "sku": "PASTA-005",
+        "action": "skipped-local-path",
+        "url": "/products/pasta.png"
+      },
+      {
+        "id": "2af1f781-fa77-4a91-8049-eb0d9fd15301",
+        "sku": "SWEET-006",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "9ee568f0-e88f-4e88-b147-49ea0aab55b7",
+        "sku": "OIL-006",
+        "action": "skipped-local-path",
+        "url": "/products/cooking_oil.png"
+      },
+      {
+        "id": "f9bbf57e-00b1-4ba8-a61d-0ff626cceae9",
+        "sku": "DAIRY-002",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "3f0a0774-62b5-46dd-ad0f-2412c4d098b5",
+        "sku": "GRC-006",
+        "action": "skipped-local-path",
+        "url": "/products/pasta.png"
+      },
+      {
+        "id": "1a88e7f0-c2aa-4be0-a2b2-34ee39802dcf",
+        "sku": "PASTA-004",
+        "action": "migrated",
+        "new_url": "https://res.cloudinary.com/dhv9lgmys/image/upload/v1780086210/products/nvetksq0uyruouxedveb.jpg"
+      },
+      {
+        "id": "783b6aef-661f-4566-88ad-eda6604c2e2f",
+        "sku": "GRC-003",
+        "action": "skipped-local-path",
+        "url": "/products/pasta.png"
+      },
+      {
+        "id": "3341f5e5-d8dd-45e4-8853-fbd963fc5835",
+        "sku": "SNACK-004",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "1cd75c8e-f050-4bf8-89e3-6ce6590f5272",
+        "sku": "CANNED-004",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "149833f4-52b2-45a5-b6a5-f4125e060d45",
+        "sku": "FROZEN-006",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "5b35b0f0-836f-47c4-83f0-c83bf4968f15",
+        "sku": "BAKERY-008",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "57fbfc5f-3508-433a-b8dd-87cce66fb0a3",
+        "sku": "PERSONAL-002",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "cf162d93-6d10-48d0-bcbb-0993fb27111f",
+        "sku": "SPICE-004",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "49825cba-dd25-4a69-814b-7d98efd75e39",
+        "sku": "PASTA-008",
+        "action": "skipped-local-path",
+        "url": "/products/pasta.png"
+      },
+      {
+        "id": "55c6689d-a366-42a8-a96a-729d8580472a",
+        "sku": "SWEET-010",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "0622b060-79b0-4de6-8eb7-51054e454082",
+        "sku": "GRC-035",
+        "action": "skipped-local-path",
+        "url": "/products/cooking_oil.png"
+      },
+      {
+        "id": "f1c57936-9fd6-4fa4-a702-9abf6578ec84",
+        "sku": "PERSONAL-008",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "5d52116c-5a3e-49c7-a138-c9e584d6099e",
+        "sku": "FROZEN-008",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "59772c5f-5754-4fbd-9068-c518f8a1d374",
+        "sku": "CLEAN-007",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "f60b4a09-45a6-4cc0-b114-77ee8e75228a",
+        "sku": "SPICE-001",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "315a8360-c4b5-4986-966d-6c509c52a2d4",
+        "sku": "SNK-004",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "93ebbd8b-f543-4358-8968-8eb9732b75d3",
+        "sku": "SNK-005",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "4c44386f-f7e2-4f27-baba-e7bc5fc16900",
+        "sku": "CAN-001",
+        "action": "skipped-local-path",
+        "url": "/products/tomato_paste.png"
+      },
+      {
+        "id": "1c722b17-cedb-481b-91e9-f63340e9ca62",
+        "sku": "FRZ-001",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "a5e2ddf6-1b16-469e-adc9-488f84e6ce74",
+        "sku": "SWEET-001",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "9f5eb8b2-af30-44eb-9706-4adc1ae1d6b4",
+        "sku": "GRC-016",
+        "action": "skipped-local-path",
+        "url": "/products/pasta.png"
+      },
+      {
+        "id": "9fcde38a-0d20-4dab-9e16-5394f3f3f065",
+        "sku": "CAN-002",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "474d1bb5-5481-4684-ac50-3890a12bce80",
+        "sku": "PASTA-001",
+        "action": "skipped-local-path",
+        "url": "/products/pasta.png"
+      },
+      {
+        "id": "513d77f7-924d-42fa-9304-2ce0a30d0349",
+        "sku": "PERSONAL-003",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "e1f4f6ab-d2a5-4333-b763-d94896160aca",
+        "sku": "DAIRY-005",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "c47b9d3b-c5a9-4db6-b1de-7b54c62ebae5",
+        "sku": "FRZ-002",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "2f28a926-7178-4df9-8e6d-87f7ae29ba07",
+        "sku": "FRZ-003",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "c8746624-3ab7-442c-959a-7ca7327f3f65",
+        "sku": "SNACK-005",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "33c13991-3c15-443d-b319-71e70f4906bd",
+        "sku": "CANNED-005",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "e6c38b78-4d61-4d77-a5fa-43b9f480a102",
+        "sku": "FROZEN-007",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "9df1a245-d39d-47cd-a6e0-5546ef95d21e",
+        "sku": "CLEAN-001",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "f5efae55-551f-41ab-bd30-5d53a060c072",
+        "sku": "OIL-008",
+        "action": "skipped-local-path",
+        "url": "/products/cooking_oil.png"
+      },
+      {
+        "id": "e99d7a34-055f-491b-960d-d246a857a674",
+        "sku": "GRC-038",
+        "action": "skipped-local-path",
+        "url": "/products/cooking_oil.png"
+      },
+      {
+        "id": "a0296292-b79f-4d56-b278-26f7509a15b1",
+        "sku": "GRC-019",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "91cfc36c-ccad-4cda-996d-d66a74e67bc2",
+        "sku": "SNK-003",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "046abd28-821e-45f9-a965-0ea12d2cf099",
+        "sku": "OIL-007",
+        "action": "skipped-local-path",
+        "url": "/products/cooking_oil.png"
+      },
+      {
+        "id": "9e7ed20b-8cc3-4397-849d-a1df659e9261",
+        "sku": "GRC-023",
+        "action": "skipped-local-path",
+        "url": "/products/cooking_oil.png"
+      },
+      {
+        "id": "8d900587-5ac1-4f7b-80dc-1bb543365620",
+        "sku": "GRC-028",
+        "action": "skipped-local-path",
+        "url": "/products/cooking_oil.png"
+      },
+      {
+        "id": "0f5badc5-135d-423f-9be3-be7f122433b8",
+        "sku": "GRC-024",
+        "action": "skipped-local-path",
+        "url": "/products/cooking_oil.png"
+      },
+      {
+        "id": "c4add0c8-9e3f-4859-9661-e7d13a4861b9",
+        "sku": "GRC-029",
+        "action": "skipped-local-path",
+        "url": "/products/cooking_oil.png"
+      },
+      {
+        "id": "b236cd29-0c50-47be-925e-6998a89b7514",
+        "sku": "BAK-004",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "4a300a44-76e7-4970-b066-e228c491f8a1",
+        "sku": "BAK-003",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "8b2936b3-ea51-40b1-97ac-461788be57c2",
+        "sku": "PAS-001",
+        "action": "skipped-local-path",
+        "url": "/products/pasta.png"
+      },
+      {
+        "id": "4c3e9247-5d0b-45ab-b9f0-884bbc2111d6",
+        "sku": "SWEET-002",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "fc07e2bc-2210-4983-bd36-8497f2747da6",
+        "sku": "GRC-021",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "b0503d85-4438-4dc6-afe1-23c2feec83bf",
+        "sku": "CAN-004",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "aafbaa31-9eca-413f-bcc9-3e15190b59b1",
+        "sku": "CLN-001",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "87f5e153-7acb-42b2-be7f-aa997e32864c",
+        "sku": "CLN-003",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "0afea200-3e32-4c8b-8cf4-092626f6719d",
+        "sku": "CLN-004",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "17f64c97-655a-4a6f-ac12-58d453822180",
+        "sku": "CLN-005",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "ffe3139e-59cf-448c-b0a7-7931d9f584b1",
+        "sku": "SPI-001",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "830de76e-5051-456e-8e00-5423d2dc0a85",
+        "sku": "SNACK-006",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "dfab328a-55ae-436b-88e6-3f1dcff363a9",
+        "sku": "CANNED-006",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "72c8caf8-1e77-4912-b574-111b71eec4bc",
+        "sku": "CLEAN-002",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "ae024b94-5d04-4fe3-af91-9581b5bf06fa",
+        "sku": "BAK-001",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "cd6d66f8-ac4f-426a-95ba-1ee89b4a9356",
+        "sku": "SPICE-006",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "b04e4810-b62e-41e9-96a8-d91ad318f9a8",
+        "sku": "FRU-006",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "e0d3d114-c1f9-4806-a163-dfe857fb8203",
+        "sku": "SPI-004",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "34e5d265-25bf-44eb-b405-7df6b740b7ac",
+        "sku": "PER-004",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "ca98b60d-7c6d-4e95-8f27-866a3ad81267",
+        "sku": "CAN-005",
+        "action": "skipped-local-path",
+        "url": "/products/cooking_oil.png"
+      },
+      {
+        "id": "dafd02e3-12bd-44ae-b747-0a3fbd134673",
+        "sku": "BAK-002",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "edda2f79-92dc-47e5-a0d3-b979602a6e58",
+        "sku": "PER-002",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "217a184e-d968-41f7-adb4-0854480a9000",
+        "sku": "PERSONAL-004",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "e3f2afb8-aa40-4b2a-a44b-27738daeb2b8",
+        "sku": "SWT-001",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "75904e78-24dc-4ff7-a4cf-cf7c8b4c5591",
+        "sku": "PAS-004",
+        "action": "skipped-local-path",
+        "url": "/products/pasta.png"
+      },
+      {
+        "id": "73915596-ce20-4422-ab15-ea5e3795c2fc",
+        "sku": "PAS-003",
+        "action": "skipped-local-path",
+        "url": "/products/pasta.png"
+      },
+      {
+        "id": "3b1044ee-4f0a-440a-bb3f-c7303b884db3",
+        "sku": "BAKERY-005",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "586cd19d-f711-48d4-9833-15a750864d8a",
+        "sku": "GRC-041",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "df72d738-d0c9-42fd-8764-56ec7c58540d",
+        "sku": "SWT-003",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "171fc257-8136-4cc8-b69a-e0a7c4075e39",
+        "sku": "SWT-004",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "e6f7676e-22b3-47af-a124-7ed549420571",
+        "sku": "SWT-005",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "6c1f3b18-3fa1-4586-b5ae-2a3676bd526c",
+        "sku": "VEG-001",
+        "action": "skipped-local-path",
+        "url": "/products/tomato_paste.png"
+      },
+      {
+        "id": "3d36f904-91c8-4b2c-a9a6-7cf6f053f78d",
+        "sku": "VEG-004",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "5dc8330a-0399-4193-8c57-b4c0251fd414",
+        "sku": "OIL-003",
+        "action": "skipped-local-path",
+        "url": "/products/cooking_oil.png"
+      },
+      {
+        "id": "7e0e9763-5cce-45c3-b16d-ea14bfb24e49",
+        "sku": "VEG-006",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "7507b195-aa9c-4ab8-ba90-937a762778d5",
+        "sku": "FRU-001",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "02f5feee-5dd0-42f0-b806-5b5363da349f",
+        "sku": "FRU-003",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "ed051fd5-505f-4e6a-8e47-952f52b0ae88",
+        "sku": "VEG-003",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "86653795-a9ee-4684-8fdc-7aee2d33527f",
+        "sku": "VEG-007",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "87c48faa-d27d-4de0-bb75-a40ebb7ea6cf",
+        "sku": "FRU-004",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "41169032-6f2a-4516-be4f-8536c3bc0011",
+        "sku": "GRC-032",
+        "action": "skipped-local-path",
+        "url": "/products/cooking_oil.png"
+      },
+      {
+        "id": "e81809d0-3b29-4071-bf32-8270fd63a312",
+        "sku": "FRU-005",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "0ebbba99-59a1-4eae-a425-a078aa8d2e64",
+        "sku": "FRU-007",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "20ac060f-3bed-4333-b029-103ff012ef5b",
+        "sku": "VEG-005",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "b88d818e-418f-4b1a-8b06-360200f5adb0",
+        "sku": "OIL-002",
+        "action": "skipped-local-path",
+        "url": "/products/cooking_oil.png"
+      },
+      {
+        "id": "efd0968f-e827-4ef4-8b87-a37debb52a30",
+        "sku": "CAN-003",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "bd91e18d-6835-4733-8582-424c3a9f75c0",
+        "sku": "MEA-003",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "c406a24e-57ec-4874-8c43-0ef3b950a244",
+        "sku": "BRK-004",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "ae52e093-7aba-470a-b598-40cc99a0d54a",
+        "sku": "MEA-005",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "cd88bb9d-8392-4cde-8ddd-62529e097989",
+        "sku": "MEA-006",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "dee5b6c8-431e-4b7e-89ec-2f9470df6f4b",
+        "sku": "SEA-002",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "aa59ea39-ad41-4e5a-a9f8-eaba07879674",
+        "sku": "SEA-003",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "d81dbf36-8afa-4ac4-b774-1bceb9a7ac34",
+        "sku": "SEA-004",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "fc3b7a17-6cce-4d68-802a-4992a11a4f1c",
+        "sku": "DAIRY-007",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "954b8bef-5cf5-4c8e-8422-550b3a0735ae",
+        "sku": "BRK-002",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "f85be4c3-7944-428d-bb44-4fb011765433",
+        "sku": "DAI-001",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "40e338e3-ec50-4c98-b29d-fc5ff3d8d8f1",
+        "sku": "BRK-003",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "d6a536d6-0f20-4e27-a6bd-d8777b720ab4",
+        "sku": "PER-003",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "6b492f14-ffac-47be-bc82-ee38faa64651",
+        "sku": "PET-002",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "2bcfe8a3-1b98-43e7-8993-ee417c1893e2",
+        "sku": "PET-003",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "559a6dce-0ae6-4c16-a7a8-849ce05baf39",
+        "sku": "MEA-002",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "d1f3de86-9b9d-489f-87c9-060dbe5bdc8f",
+        "sku": "MEA-004",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "70ff33be-b1e6-4cec-92f4-0a55dae498b7",
+        "sku": "MEA-001",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "8b27aa66-ddd1-4467-8a79-3c009a6f9a5d",
+        "sku": "SEA-001",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "291e4de0-9ca9-460c-b8dc-12c562c0b252",
+        "sku": "DAI-003",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "be41caaf-a6a7-47f5-8e0d-5e9cc458c051",
+        "sku": "PER-001",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "b4838697-2e79-4b2a-8890-1205905bb9de",
+        "sku": "BEV-005",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "ec921d8f-2a95-4b41-a6bc-be1a64874f57",
+        "sku": "SNACK-009",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "d9517fb2-95e7-4749-a9f6-53f013611a9d",
+        "sku": "SNACK-008",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "cd996b48-fadb-4bc6-a35e-4d77f4755f5b",
+        "sku": "BEV-008",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "dc980c9d-f32d-4429-a0b6-7d6444888ae4",
+        "sku": "BEV-009",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "4f50759b-d063-48fc-843a-0def230d7e97",
+        "sku": "PASTA-003",
+        "action": "skipped-local-path",
+        "url": "/products/pasta.png"
+      },
+      {
+        "id": "296562c9-db06-4019-baff-cf8bff0830b9",
+        "sku": "GRC-002",
+        "action": "skipped-local-path",
+        "url": "/products/pasta.png"
+      },
+      {
+        "id": "39edcbdb-1486-433d-abe2-c01ea372aec6",
+        "sku": "GRC-007",
+        "action": "skipped-local-path",
+        "url": "/products/pasta.png"
+      },
+      {
+        "id": "872d1e4f-e614-4714-8095-51ad03c16fa3",
+        "sku": "GRC-012",
+        "action": "skipped-local-path",
+        "url": "/products/pasta.png"
+      },
+      {
+        "id": "b564582d-0ca2-4ae5-a579-5328c59aa92a",
+        "sku": "DAI-006",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "d85ab242-d7a7-4523-9bfa-414cd534116d",
+        "sku": "FROZEN-001",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "547579f8-2327-4422-a6c1-afa97820cc2f",
+        "sku": "BAB-002",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "3f4e6892-c35e-42ff-b5f7-2483a726a2da",
+        "sku": "BRK-005",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "678d93e9-2b0d-4925-bb22-99fb26e34d2f",
+        "sku": "BAB-001",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "45b2557f-d706-4a0c-9a3c-f92ba2cef53b",
+        "sku": "BAB-003",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "5615971a-61f8-460f-868c-ae0069a06d60",
+        "sku": "PET-001",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "b6f5381b-9ee9-49f4-8c69-0f325c239daf",
+        "sku": "FRZ-004",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "3b6b5d16-f9ce-4922-92f2-66c1535e9a84",
+        "sku": "BAKERY-003",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "59340dfc-d518-4db3-8bee-2f6af68fcc2c",
+        "sku": "CLEAN-005",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "3392a275-08d5-4304-9e77-eb31b7354db2",
+        "sku": "PERSONAL-007",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "b6af8625-0f88-4db5-b8d6-40ec59ea5380",
+        "sku": "SWEET-005",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "2604094d-996c-4d33-8d6a-303c13e70990",
+        "sku": "GRC-020",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "65d0e653-4065-4c00-99ba-50f4039b732f",
+        "sku": "OIL-001",
+        "action": "skipped-local-path",
+        "url": "/products/cooking_oil.png"
+      },
+      {
+        "id": "2c8edfd6-b5e1-4526-9e34-f7884bf9ca54",
+        "sku": "GRC-025",
+        "action": "skipped-local-path",
+        "url": "/products/cooking_oil.png"
+      },
+      {
+        "id": "543248b2-6497-400c-ae18-8ae3649f51b4",
+        "sku": "GRC-030",
+        "action": "skipped-local-path",
+        "url": "/products/cooking_oil.png"
+      },
+      {
+        "id": "e87f60d1-122b-483b-9f59-46edbca3ca16",
+        "sku": "GRC-064",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "3a4832ff-2ff5-4c13-95ff-5fc963952ab0",
+        "sku": "GRC-069",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "b21b925b-55dd-402a-b471-93e060763960",
+        "sku": "GRC-079",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "8a2e5fd3-84f1-4258-9569-7cdceee1b6cb",
+        "sku": "DRY-012",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "544bfca7-a55c-4ec8-a42c-923ca2bbadf5",
+        "sku": "DRY-017",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "03062439-9ded-4fc8-91fd-f2f2af18ae5d",
+        "sku": "DRY-002",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "77d943a1-d397-40ba-80ca-2f4c81bbb06a",
+        "sku": "MEAT-007",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "97020fda-bc94-4d39-b087-40eaf9167428",
+        "sku": "MEAT-012",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "eca8239c-292e-48d6-9010-d6b0c68edf4b",
+        "sku": "MEAT-017",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "ab9219ad-9073-4b8c-84ca-b7ceb58a0511",
+        "sku": "MEAT-022",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "280fe27d-75fa-4e18-a918-aa7942d83f2c",
+        "sku": "GRC-033",
+        "action": "skipped-local-path",
+        "url": "/products/cooking_oil.png"
+      },
+      {
+        "id": "9c95d191-c7c8-4717-9a4f-f9c0e6dbc54a",
+        "sku": "GRC-054",
+        "action": "skipped-local-path",
+        "url": "/products/cooking_oil.png"
+      },
+      {
+        "id": "607ab04b-1a6c-4a76-9c13-6363a9cc8e74",
+        "sku": "MEAT-027",
+        "action": "skipped-local-path",
+        "url": "/products/cooking_oil.png"
+      },
+      {
+        "id": "4d17c8a8-00d3-4946-85a2-80a044e5158c",
+        "sku": "GRC-059",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "a95499f9-a126-4999-8e7c-52090352ed94",
+        "sku": "DRY-007",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "9c75c342-faf3-4a5f-916e-dc54775200c1",
+        "sku": "DRY-022",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "0eb5beba-a27d-47fa-af23-9e1dc62a7daf",
+        "sku": "DRY-027",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "fab7d6c4-ce37-47a2-bfa5-8199226bb31f",
+        "sku": "DRY-037",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "ad5b90ef-0cc0-4883-b6f2-d605250b6f83",
+        "sku": "DRY-042",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "35080c7c-219c-4b1d-ae1e-dc414ca1aaf7",
+        "sku": "DRY-052",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "904b51bf-9a6f-42e2-a87d-36d1de75825a",
+        "sku": "MEAT-002",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "c5a25e04-5e2d-40b9-8bb3-fcd992594f6b",
+        "sku": "DAIRY-006",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "d10a5550-d0ba-4da9-a671-0e315f100df5",
+        "sku": "DRY-009",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "be565c77-382c-466a-912a-a46ccbf207f9",
+        "sku": "GRC-066",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "6ae225ae-dfa3-4a55-852c-760fa5c14435",
+        "sku": "GRC-071",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "f4ff4bb7-bbbe-4b48-a08f-75f5dab0982f",
+        "sku": "GRC-076",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "28b76826-b68c-448e-9aca-49da69f6cb9a",
+        "sku": "GRC-081",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "58b76be1-a48b-4a33-a4be-4e0d7d1b8a5e",
+        "sku": "DRY-014",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "1966efc5-1c14-42db-9543-dc901787aa50",
+        "sku": "GRC-061",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "687c91ab-08a0-457c-859b-8cbbf84301b5",
+        "sku": "MEAT-009",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "0dcc53f8-7dc9-4fa3-a49f-ef9b336df51a",
+        "sku": "MEAT-014",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "9447c8ae-4a30-4c0b-b002-6b24fc2f865f",
+        "sku": "MEAT-019",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "e035942a-5cae-4299-a78a-57350aa76933",
+        "sku": "MEAT-024",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "a0f7ca10-be3e-4a6f-b672-d32ec74a73ae",
+        "sku": "GRC-042",
+        "action": "skipped-local-path",
+        "url": "/products/tomato_paste.png"
+      },
+      {
+        "id": "81d651cc-61ea-4b9f-99f5-32d8d0bfec38",
+        "sku": "DRY-004",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "c43d1af0-d93f-4cd3-837d-2565df30ee1d",
+        "sku": "DAIRY-010",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "00270036-7492-4321-a7d2-083aae5f2442",
+        "sku": "DRY-019",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "c502afb4-5b78-44dd-9896-0b044a0544b9",
+        "sku": "DRY-024",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "8b9e0ada-e05e-436f-8b20-ef2c972a1954",
+        "sku": "DRY-029",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "db9ab8cf-680d-49ad-b70b-6e2ea053ad0f",
+        "sku": "DRY-044",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "80851703-c590-4b8f-93d2-98f545f04770",
+        "sku": "DRY-049",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "9168d92e-4a61-4a66-bb08-1223a2b46127",
+        "sku": "DRY-054",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "6037e0ea-0709-44d1-8988-060c12b2f8e6",
+        "sku": "MEAT-004",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "83848bdf-379f-4cae-bfbd-8c8260deecca",
+        "sku": "GRC-067",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "e8715ce1-8a2e-4ffc-9d19-0abaa486ca9b",
+        "sku": "GRC-072",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "4958d963-3ce5-4ea3-af2e-341da44f54e8",
+        "sku": "GRC-077",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "bccc55d2-a24b-4ce8-bf17-4950802b8920",
+        "sku": "GRC-082",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "a0d53983-5a8b-4510-9c73-6c299e8948af",
+        "sku": "DRY-010",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "e1d79928-d971-48d7-bbf5-f57204fa418d",
+        "sku": "MEAT-005",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "986271b9-cd16-46d3-a7bf-e3284cabb065",
+        "sku": "FRZ-005",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "de9070d8-0d62-49de-869e-223163f42822",
+        "sku": "MEAT-010",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "eab76ace-d802-43ab-8d08-f98c6294a0bc",
+        "sku": "MEAT-015",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "58ec22ce-57a1-4f80-89a0-ebcab640ac2e",
+        "sku": "MEAT-020",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "7d01d3e1-0ac3-4373-af6b-d4ec5d0c5f92",
+        "sku": "MEAT-025",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "4b521f4e-283e-4fa0-a388-30ef5f32396d",
+        "sku": "DRY-005",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "4fdd1884-7af0-435f-9bcd-08a2e98a0c80",
+        "sku": "GRC-062",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "c273032e-7af9-4fa5-a0c3-9697fe11e5d5",
+        "sku": "DRY-020",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "afcc3be8-7c40-4247-8f20-5698c3e51ebe",
+        "sku": "DRY-025",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "503d35b6-df2d-4dee-80ff-888ed3673d63",
+        "sku": "DRY-030",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "c756422e-dbea-4952-865e-eb7cea9f6852",
+        "sku": "DRY-035",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "0ee32142-072f-4b69-a225-3f16ef34f9e4",
+        "sku": "DRY-040",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "13d2894e-9ad3-412f-9b05-912fdb0db818",
+        "sku": "DRY-055",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "e566da06-6ca1-451a-90a4-96801217f4f8",
+        "sku": "DRY-045",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "416e5ece-eb16-4189-9114-45d2480f0ea0",
+        "sku": "GRC-068",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "855c18e6-0324-40ba-8b03-f1556ad2882f",
+        "sku": "GRC-073",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "9f950a39-fe14-4630-91be-51f1a7b8b5bf",
+        "sku": "GRC-078",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "8786060a-fcc4-4ce8-838b-5b00a1c89cc3",
+        "sku": "DRY-006",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "a919b2c5-ffb3-4d0f-9dec-178762645093",
+        "sku": "DRY-026",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "9734e133-2db9-4b73-ad33-4ec78ee1be23",
+        "sku": "CLN-002",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "58a3f9e9-170c-48c2-9146-04ed8d3be63b",
+        "sku": "MEAT-006",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "496bf910-3ccb-44fe-a91b-9bf21beb5ec1",
+        "sku": "MEAT-011",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "0f5db87e-0c94-453a-a3de-5e040c289cd5",
+        "sku": "MEAT-016",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "7601ed8b-de06-482e-85d9-acdbc761742d",
+        "sku": "BEV-011",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "11753547-3f03-4fc1-8f39-ac74b599dbc4",
+        "sku": "GRC-055",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "01d70dc3-ba26-473b-97b7-05d2c4922273",
+        "sku": "DRY-001",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "4b34fead-6e13-4f21-8f8d-0ae9b37f819a",
+        "sku": "GRC-063",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "671160d3-e5f7-4af5-b8ba-b3bf31a42d56",
+        "sku": "DRY-021",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "87084f17-2955-4ee4-aee4-b3b8ae1a2164",
+        "sku": "DRY-016",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "e97db189-7c78-49c2-a383-962cf9dc3dee",
+        "sku": "DRY-031",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "dac8f2b8-eea3-497d-8d3c-6021363c1be3",
+        "sku": "DRY-036",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "344627c1-e0e2-42f6-9a7c-c3314670c545",
+        "sku": "DRY-041",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "e0304ca5-b56c-4d8b-ae03-a0e2f6c0d1fb",
+        "sku": "DRY-046",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "402a9701-9443-41e7-8851-9a753302891f",
+        "sku": "MEAT-001",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "78d4ea5f-a195-4cc3-ae8a-9db67c5d2dd9",
+        "sku": "GRC-080",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "20bfc299-437f-41df-a4f0-8d2164999a5b",
+        "sku": "DRY-013",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "91bef8b4-1533-43c2-a957-f59a656055fd",
+        "sku": "GRC-075",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "5608603a-326c-4dd8-abb5-ed3eed52fb02",
+        "sku": "MEAT-008",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "23e4bcf5-fb7a-44db-8443-2ba945f7d7e3",
+        "sku": "MEAT-013",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "6779eb5d-b432-4b68-a7b7-685abe5e3d82",
+        "sku": "MEAT-018",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "aca2eedf-99d0-44d4-b17a-dd31f2317e53",
+        "sku": "MEAT-023",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "539ebb93-dc85-486d-8e06-3f8f435a7809",
+        "sku": "SPI-003",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "aa1581db-6f7e-44c4-9bea-33319e83ffc8",
+        "sku": "BEV-012",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "8ef81b6d-c049-434c-b1e9-9971df7c9959",
+        "sku": "BEV-045",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "7be31b08-a0cf-4c59-a70c-f4ef7b770bce",
+        "sku": "DRY-003",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "c3aa7e26-c55d-4bb1-941b-961924eff619",
+        "sku": "DRY-018",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "6d7fc9aa-7792-4359-b3a8-5afbb373a398",
+        "sku": "DRY-023",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "2050ff71-9a90-4fc2-9ce8-31e0f4ded830",
+        "sku": "DRY-028",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "4781a97c-7b9e-4529-aeaa-1606d2efd822",
+        "sku": "DRY-033",
+        "action": "skipped-local-path",
+        "url": "/products/cooking_oil.png"
+      },
+      {
+        "id": "37760840-fad4-4957-a80e-b01d2ee119c0",
+        "sku": "DRY-038",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "41138564-1271-43e6-a71f-669777dd6d5a",
+        "sku": "DRY-043",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "d94866cb-66c5-4716-b240-7bee2d2d0d25",
+        "sku": "DRY-053",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "ec20dadc-2108-4dbb-aaeb-aaf50639b932",
+        "sku": "MEAT-003",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "68d6bf68-eb31-4804-8fd6-c6f3f7d85829",
+        "sku": "BEV-053",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "06ab4e49-06c2-4eb8-86db-993a6779bd0e",
+        "sku": "BEV-064",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "d6e51c8e-41ff-42fa-bde9-535c83b869ac",
+        "sku": "BEV-063",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "d0e63501-3849-4d89-a871-0caaa1eabc22",
+        "sku": "BEV-070",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "29686080-047c-4619-8794-7a4ff81b1401",
+        "sku": "BEV-054",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "09d986f0-51b9-43e6-a74f-8785a33d9447",
+        "sku": "BEV-058",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "3f93cdc3-e2bc-45f9-904f-4b48376b302f",
+        "sku": "BEV-059",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "3e0e13c0-7712-453d-a494-e4de952ef69a",
+        "sku": "BEV-061",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "78f9b5ca-b65d-4be8-9f5a-2505152a2bef",
+        "sku": "BEV-060",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "0d676087-0ee9-42b5-b92c-53467cf4472b",
+        "sku": "BEV-048",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "3a5a6d02-d2f7-4535-8cba-1647c90c4d37",
+        "sku": "BEV-068",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "46896604-dfbd-457b-a6a7-a858f4ddc6f7",
+        "sku": "BEV-043",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "b5b43ff8-f6d3-424e-b797-33baed6abf3a",
+        "sku": "CLN-013",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "c2645462-ae80-4a9c-9a5c-680f3d3e4d4f",
+        "sku": "CLN-014",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "4175a69f-d854-48d8-aff3-d1d30906878f",
+        "sku": "BEV-069",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "beb0ab71-8a1c-4144-9f44-10be9adeade6",
+        "sku": "SPI-002",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "c34cba8c-c929-4d83-a196-f3eb2ac972e2",
+        "sku": "CLN-010",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "c05934f8-9269-4347-bfcf-6b485358646d",
+        "sku": "CLN-008",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "1b02d63b-1fdb-4336-bdb6-0786b03e3809",
+        "sku": "CLN-009",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "1427cfba-8c0f-47a9-b4a1-5a2d59090f1c",
+        "sku": "SWT-002",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "83625a75-13f6-4652-b306-511f7be21287",
+        "sku": "BEV-030",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "38b9c6d8-a964-49b1-ab67-588273a6ef0c",
+        "sku": "BEV-032",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "59e44bab-7cd7-4080-bdf1-157d1aee603d",
+        "sku": "CLN-016",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "64eb3f6e-d5ee-40cc-b624-6d91d2674da0",
+        "sku": "MEAT-026",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "b0285060-e5e9-4d11-852e-9849a313dbb2",
+        "sku": "DAIRY-008",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "9e2d76d0-5655-4875-b2fc-fb11a4896696",
+        "sku": "FRU-002",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "7d3404f2-1b0c-44b5-b07e-64caea7ae7aa",
+        "sku": "VEG-008",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "fa593697-f018-4f17-a915-f238a85fbe3d",
+        "sku": "BRK-001",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "284f08b7-0f72-43fc-b5a0-849ea50d26c3",
+        "sku": "VEG-002",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "6e2df29e-972f-49da-ac0c-b8a8506163d2",
+        "sku": "BEV-066",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "44fefdc0-c401-4bad-9fd6-c7861d65f033",
+        "sku": "DAI-005",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "dc4a7915-884f-4572-bd56-764c408787a9",
+        "sku": "CLN-006",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "6e73b35d-9fe2-4eb5-88a8-8c0da4ef5f57",
+        "sku": "BEV-015",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "2d461f62-c3f8-457f-8b95-719b46012e66",
+        "sku": "BEV-020",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "5da007d6-e12c-4fac-bee5-f58faf2e4d9f",
+        "sku": "CLN-011",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "399934ac-aee0-4482-af0f-dce4980e1bbb",
+        "sku": "BEV-017",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "2248a849-c2d5-4df1-8b41-812bf4724332",
+        "sku": "BEV-022",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "7df875ea-8a90-486a-8b29-fec22c3e46b9",
+        "sku": "BEV-027",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "14106119-4b37-4be2-b347-f0c5ed2b3c73",
+        "sku": "MEAT-031",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "c23b7228-d521-427b-a730-7a3903cc7a56",
+        "sku": "GRC-074",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "b2e7cfa8-f9ca-41b6-acee-d55b670abe02",
+        "sku": "BAB-004",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "97dc7962-8671-4b42-b867-e36e36915218",
+        "sku": "GRC-017",
+        "action": "skipped-local-path",
+        "url": "/products/pasta.png"
+      },
+      {
+        "id": "c2dc8679-38a2-42c8-ad9f-d6cfea546d3e",
+        "sku": "BEV-047",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "6ffbfb42-8167-4372-8024-156202d5fa44",
+        "sku": "BEV-037",
+        "action": "skipped-local-path",
+        "url": "/products/tomato_paste.png"
+      },
+      {
+        "id": "0d79e79d-c8ed-468c-86af-00bbffd0b0cc",
+        "sku": "BEV-052",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "92adb965-7840-409b-bf83-37962aa0f601",
+        "sku": "MEAT-029",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "b126fbcc-eb1e-4e92-946b-ddb877598585",
+        "sku": "BEV-042",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "a630be61-5641-4160-bcd2-1b7c76967705",
+        "sku": "BEV-057",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "2b381fc5-7323-4727-917a-d325e3ac0a96",
+        "sku": "CLN-007",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "ccf9ebfd-5d78-44aa-9170-56d849e017fc",
+        "sku": "CLN-012",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "4dcb0240-3eae-416f-9a63-c5275209a3a6",
+        "sku": "BEV-062",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "843d149d-060f-470b-a69e-f4a16a984950",
+        "sku": "BEV-018",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "2f25bff8-6884-4ecf-ae30-afc09f430fff",
+        "sku": "GRC-049",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "5989c146-e40e-48da-8c12-c7e67f5f2c8c",
+        "sku": "BEV-013",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "441821a4-924c-4429-8485-a00d5029d595",
+        "sku": "BEV-038",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "d59b41b3-10ae-44eb-83dc-314c9db9b88a",
+        "sku": "BEV-028",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "6dabe4c4-2fa8-4d8d-8c9b-3b1dbdcb6800",
+        "sku": "BEV-067",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "8577091a-f850-4a50-be36-085a4ad59382",
+        "sku": "CLN-017",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "7007130b-bae9-48ed-a489-ec984afc1beb",
+        "sku": "DRY-047",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "8b4d867b-c9ee-4d33-9cc9-700fcfcc308a",
+        "sku": "BEV-019",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "08cc4d6b-b79e-443b-9464-87dd486e1ea7",
+        "sku": "BEV-034",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "c18cf73f-0381-497b-b9de-67e08da96da2",
+        "sku": "GRC-036",
+        "action": "skipped-local-path",
+        "url": "/products/cooking_oil.png"
+      },
+      {
+        "id": "cd8bc856-0ec7-442c-8096-56540e82b6ad",
+        "sku": "BEV-039",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "b7c39849-3449-4edf-b572-a20c9ce48d2f",
+        "sku": "BEV-029",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "c33af6d2-f090-4fc7-8dfb-4aae24688106",
+        "sku": "GRC-011",
+        "action": "skipped-local-path",
+        "url": "/products/pasta.png"
+      },
+      {
+        "id": "2182b45e-9d62-4a0b-ae53-fc7e97700365",
+        "sku": "GRC-014",
+        "action": "skipped-local-path",
+        "url": "/products/pasta.png"
+      },
+      {
+        "id": "e35a253f-887d-466e-9569-b912fc6e6bd9",
+        "sku": "DRY-032",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "38296485-5370-4d5f-b5d1-cf1e1fe3195f",
+        "sku": "GRC-001",
+        "action": "skipped-local-path",
+        "url": "/products/pasta.png"
+      },
+      {
+        "id": "7f7a4628-32cf-4e39-b4a3-5ad47b9e133b",
+        "sku": "GRC-018",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "b0663c9e-a556-469d-87c0-1274f39368ae",
+        "sku": "BEV-049",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "29d40648-cc70-4a91-85c2-96a44ff0a6fb",
+        "sku": "GRC-039",
+        "action": "skipped-local-path",
+        "url": "/products/cooking_oil.png"
+      },
+      {
+        "id": "7b21700d-f285-49ff-9e8a-05ceb0cb9174",
+        "sku": "GRC-044",
+        "action": "skipped-local-path",
+        "url": "/products/tomato_paste.png"
+      },
+      {
+        "id": "816e8dbb-799b-46a0-89a8-c1ae998160b0",
+        "sku": "GRC-046",
+        "action": "skipped-local-path",
+        "url": "/products/tomato_paste.png"
+      },
+      {
+        "id": "60cf072b-80b0-4227-9b59-7b8037a1757a",
+        "sku": "CLN-022",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "3ec14b34-7e99-4751-ae87-814e0c9de7af",
+        "sku": "BEV-044",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "591bed40-75cf-4897-9f78-1fa76ae2e2bc",
+        "sku": "CLN-023",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "ce61627a-af23-462b-abd1-75ca810f7f07",
+        "sku": "GRC-056",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "0646c921-cd60-4167-9272-b04ddda2060b",
+        "sku": "BEV-024",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "d4c452ff-c936-4356-931b-06b4158f550e",
+        "sku": "CLN-020",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "ab81d6ba-4eee-4af1-a3ef-6496f1f96505",
+        "sku": "GRC-057",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "9e3f0f01-fe7b-4948-914d-eb05efbd5e5c",
+        "sku": "GRC-058",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "e2f55812-a0f1-4f84-a626-e075a0e6e6f8",
+        "sku": "MEAT-021",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "a2174347-8301-46c5-8451-ca794609836f",
+        "sku": "BEV-036",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "4186091e-9f72-4bb1-b640-690243bc6fb7",
+        "sku": "GRC-065",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "7cbd0f42-42b2-4fec-ad36-04b27342e554",
+        "sku": "BEV-031",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "3eecba37-c110-4583-bd30-7ff6b27357cc",
+        "sku": "GRC-047",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "36b39dda-edc7-450a-b3c7-62432d25ff6a",
+        "sku": "GRC-051",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "683b0d55-a02b-4a2e-b66a-6c60af91b702",
+        "sku": "BEV-026",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "ebf62bf8-0582-4ff0-9499-aeaff8e19559",
+        "sku": "GRC-070",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "245577ab-135d-46fb-a2f7-bfdb3ed6bc90",
+        "sku": "BEV-021",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "778dee2c-3737-4b60-a4d1-1b27959a2973",
+        "sku": "GRC-052",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "534b82eb-66f9-4452-854b-0b712a8b825d",
+        "sku": "BEV-041",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "f609c323-bcc9-4e19-80cf-a42c2eb67c5b",
+        "sku": "BEV-046",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "c31c17ec-33e0-435e-8339-43c3be9661cd",
+        "sku": "DRY-034",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "00748062-3a41-4041-a706-d6a8b5f4339f",
+        "sku": "DRY-050",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "2fc3eb20-ed69-4372-adef-f6f2d2c13a22",
+        "sku": "DRY-039",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "89379a31-05f9-47f4-80a3-fc057d5554bc",
+        "sku": "DRY-015",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "1df58f7a-7af7-4edd-88d1-1f4d68a0a52c",
+        "sku": "DRY-011",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "6b43ae61-c819-4a4a-be9f-e06fa94a69fe",
+        "sku": "BEV-016",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "10be53c3-1f66-4330-9b37-c6f74bd8311f",
+        "sku": "BEV-035",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "1070921b-e551-49be-abac-1fbf71cdb173",
+        "sku": "DRY-048",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "6704e698-8c19-4b5b-9fdc-2a822f9e07a3",
+        "sku": "GRC-034",
+        "action": "skipped-local-path",
+        "url": "/products/cooking_oil.png"
+      },
+      {
+        "id": "159a20fb-81d8-45b4-8a3a-b02969301917",
+        "sku": "BEV-055",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "8a5b1740-1ee4-47c6-9276-171acb18b001",
+        "sku": "MEAT-030",
+        "action": "skipped-local-path",
+        "url": "/products/cooking_oil.png"
+      },
+      {
+        "id": "c5ea6690-7f8f-435c-9979-f355efe1a67e",
+        "sku": "GRC-048",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "84398a97-80ad-470d-938e-2d0bdf07c97f",
+        "sku": "BEV-065",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "5659bb82-9536-4b39-a815-ac564a28d14d",
+        "sku": "CLN-019",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "2fb3aa9c-b16e-4090-afdf-1466512e0af8",
+        "sku": "DRY-008",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "7612153f-5981-4ffd-a084-0745f4ca972b",
+        "sku": "BEV-050",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "1e58a190-5084-4651-b50d-782a5180d35e",
+        "sku": "BEV-033",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "e47d7298-6535-4c52-b71f-4a8d68bed60a",
+        "sku": "BEV-014",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "0ccbd7be-ddc5-4afd-86bc-91fc3f4fc506",
+        "sku": "BEV-040",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "e1fab8e9-5d86-48da-8e38-f830933b7300",
+        "sku": "GRC-060",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "76587d55-e737-4181-a055-45a25dbf01bb",
+        "sku": "CLN-015",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "5b71723e-cfb6-4624-887d-22dfd87a8d35",
+        "sku": "BEV-025",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "0d6a0be4-e9ae-4e2d-a224-8a3199079780",
+        "sku": "CANNED-001",
+        "action": "skipped-local-path",
+        "url": "/products/tomato_paste.png"
+      },
+      {
+        "id": "859af0a4-c171-45c6-bc4a-3a4782ea699d",
+        "sku": "BEV-023",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "9234ebee-cf60-426f-a35b-5c489ac38b80",
+        "sku": "DRY-051",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "a72d8959-bf86-4abb-817a-d879e72c60bf",
+        "sku": "BEV-051",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "fc75dc6d-c7a1-4653-b4ec-08e5ffeb443f",
+        "sku": "CLN-021",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "1a2404c4-80d7-41d4-a491-24393c96fe23",
+        "sku": "BEV-056",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "644a72d3-5183-4f90-a63e-097091a25162",
+        "sku": "GRC-053",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "4aa18b6c-f815-4762-bf63-dc304b6f5836",
+        "sku": "CLN-027",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "12b599a8-9639-40c6-9f35-8c52953ff030",
+        "sku": "CLN-034",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "2a8f3745-2b82-42e4-b22c-c5b8a04b10f1",
+        "sku": "CLN-039",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "e24a7c6e-e4fc-4e1b-9d70-879ce2368bb2",
+        "sku": "CLN-032",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "dc3c04cd-73d0-481c-96b1-b01113bb10b2",
+        "sku": "CLN-028",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "c0724abb-e0c4-4805-85e0-c4a5ee4e3aff",
+        "sku": "CLN-035",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "208a83e5-6e75-4c83-9311-e7d0ccbbe07d",
+        "sku": "CLN-040",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "18a34b2a-cccb-4f4a-b736-c5102c671282",
+        "sku": "MEAT-028",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "d69bd4e3-2d64-4dc6-9480-68f023cd058b",
+        "sku": "GRC-026",
+        "action": "skipped-local-path",
+        "url": "/products/cooking_oil.png"
+      },
+      {
+        "id": "48f32496-e3e3-4d4b-8329-4b6ffee6c21e",
+        "sku": "CLN-033",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "6569c55c-2e95-445f-850e-79e7b45dd042",
+        "sku": "CLN-029",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "eabddcfa-50c3-45d5-aff9-e08decaf6b2b",
+        "sku": "GRC-043",
+        "action": "skipped-local-path",
+        "url": "/products/tomato_paste.png"
+      },
+      {
+        "id": "d9eb4d87-a416-40d6-b934-7d6f740dd29d",
+        "sku": "CLN-036",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "e89eb99a-dbf4-4551-9a09-37a2fa6544a6",
+        "sku": "CLN-030",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "68a587a2-fd05-4a61-b464-3fc0f12e3327",
+        "sku": "CLN-037",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "61088003-16f1-4365-b943-5488a5440100",
+        "sku": "CLN-018",
+        "action": "skipped-local-path",
+        "url": "/products/cooking_oil.png"
+      },
+      {
+        "id": "cb32d480-17cc-4c99-a3fa-63c714fafcf9",
+        "sku": "DAI-002",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "7f5e490c-ae82-4323-916e-d6962426f67c",
+        "sku": "CLN-038",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "ba4ede9c-08b4-4cfe-a59d-3414abb1062a",
+        "sku": "CLN-031",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "3b7b77a1-4027-4a38-a388-29c4544c1e9c",
+        "sku": "BEV-007",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "49c9d5e3-f2ec-46b5-9560-845a55cf6b20",
+        "sku": "SPICE-005",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "a05f48c6-4d29-455f-88b4-7443c990b8b5",
+        "sku": "DAI-004",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "6f7282b4-99e3-43f0-a477-f7f19aa4bd44",
+        "sku": "CLN-024",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "20350f69-7154-4f30-bea7-d40a4df36372",
+        "sku": "DAIRY-009",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "52e344b4-e47b-4bde-9707-c60d8e4111ca",
+        "sku": "CLN-025",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      },
+      {
+        "id": "e0ed1c36-8472-4c3b-894d-29e404157b13",
+        "sku": "CLN-026",
+        "action": "skipped-local-path",
+        "url": "/products/generic_product.png"
+      }
+    ]
+  }
+}
