@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useRef } from 'react';
-import { Image, Upload, X, Link as LinkIcon, Loader2, Check } from 'lucide-react';
+import { Image, Upload, X, Link as LinkIcon, Loader2 } from 'lucide-react';
+import { uploadImage } from '@/lib/cloudinary';
 
 interface ImageUploadProps {
   value: string;
@@ -11,9 +12,10 @@ interface ImageUploadProps {
   height?: number;
   maxSizeMB?: number;
   previewSize?: string;
+  folder?: string;
 }
 
-export function ImageUpload({ value, onChange, label, width, height, maxSizeMB = 2, previewSize = 'h-16 w-16' }: ImageUploadProps) {
+export function ImageUpload({ value, onChange, label, width, height, maxSizeMB = 2, previewSize = 'h-16 w-16', folder = 'products' }: ImageUploadProps) {
   const [mode, setMode] = useState<'url' | 'upload'>(value && !value.startsWith('data:') ? 'url' : 'upload');
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState('');
@@ -37,48 +39,11 @@ export function ImageUpload({ value, onChange, label, width, height, maxSizeMB =
     setError('');
 
     try {
-      const img = new globalThis.Image();
-      const objectUrl = URL.createObjectURL(file);
-      
-      img.onload = () => {
-        const canvas = document.createElement('canvas');
-        let w = img.width;
-        let h = img.height;
-        const maxDim = 800; // Resize to max 800px
-
-        if (w > maxDim || h > maxDim) {
-          if (w > h) {
-            h = Math.round((h * maxDim) / w);
-            w = maxDim;
-          } else {
-            w = Math.round((w * maxDim) / h);
-            h = maxDim;
-          }
-        }
-
-        canvas.width = w;
-        canvas.height = h;
-        const ctx = canvas.getContext('2d');
-        if (ctx) {
-          ctx.drawImage(img, 0, 0, w, h);
-          const compressedDataUrl = canvas.toDataURL('image/webp', 0.8);
-          onChange(compressedDataUrl);
-        } else {
-          setError('حدث خطأ أثناء معالجة الصورة');
-        }
-        URL.revokeObjectURL(objectUrl);
-        setUploading(false);
-      };
-
-      img.onerror = () => {
-        setError('فشل قراءة الملف');
-        URL.revokeObjectURL(objectUrl);
-        setUploading(false);
-      };
-
-      img.src = objectUrl;
+      const cloudinaryUrl = await uploadImage(file, folder);
+      onChange(cloudinaryUrl);
     } catch {
       setError('فشل رفع الصورة');
+    } finally {
       setUploading(false);
     }
   };

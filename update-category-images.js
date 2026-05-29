@@ -1,5 +1,5 @@
 const { createClient } = require('@supabase/supabase-js');
-const supabase = createClient(process.env.SUPABASE_URL || 'https://fpcpqgpbznbsmeqqxmhx.supabase.co', process.env.SUPABASE_SERVICE_ROLE_KEY);
+const supabase = createClient(process.env.SUPABASE_URL || 'https://cshpnhzhzahnpvfflsgx.supabase.co', process.env.SUPABASE_SERVICE_ROLE_KEY);
 
 const categoryImages = {
   'اللحوم والدواجن': 'https://images.unsplash.com/photo-1607623814075-e51df1bd682f?auto=format&fit=crop&w=800&q=80',

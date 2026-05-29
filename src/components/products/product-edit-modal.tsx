@@ -6,6 +6,7 @@ import { X, Upload, ImageIcon, Package, Settings, Database, Check, Tag, Barcode,
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
+import { uploadImage } from '@/lib/cloudinary';
 import toast from 'react-hot-toast';
 
 interface ProductEditModalProps {
@@ -22,51 +23,22 @@ export function ProductEditModal({ product, isOpen, onClose, onSave }: ProductEd
 
   if (!isOpen || !product) return null;
 
-  const handleUploadImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleUploadImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    
-    const img = new globalThis.Image();
-    const objectUrl = URL.createObjectURL(file);
-    
-    img.onload = () => {
-      const canvas = document.createElement('canvas');
-      let w = img.width;
-      let h = img.height;
-      const maxDim = 800; // Resize to max 800px
 
-      if (w > maxDim || h > maxDim) {
-        if (w > h) {
-          h = Math.round((h * maxDim) / w);
-          w = maxDim;
-        } else {
-          w = Math.round((w * maxDim) / h);
-          h = maxDim;
-        }
-      }
+    try {
+      toast.loading('جاري رفع الصورة...');
+      const cloudinaryUrl = await uploadImage(file, 'products');
+      setEditProduct({ ...editProduct, image_url: cloudinaryUrl });
+      toast.dismiss();
+      toast.success('تم رفع الصورة بنجاح');
+    } catch {
+      toast.dismiss();
+      toast.error('فشل رفع الصورة');
+    }
 
-      canvas.width = w;
-      canvas.height = h;
-      const ctx = canvas.getContext('2d');
-      if (ctx) {
-        ctx.drawImage(img, 0, 0, w, h);
-        const compressedDataUrl = canvas.toDataURL('image/webp', 0.8);
-        setEditProduct({ ...editProduct, image_url: compressedDataUrl });
-        toast.success('تم رفع وضغط الصورة بنجاح');
-      } else {
-        toast.error('حدث خطأ أثناء معالجة الصورة');
-      }
-      URL.revokeObjectURL(objectUrl);
-      if (fileInputRef.current) fileInputRef.current.value = '';
-    };
-
-    img.onerror = () => {
-      toast.error('فشل قراءة الملف');
-      URL.revokeObjectURL(objectUrl);
-      if (fileInputRef.current) fileInputRef.current.value = '';
-    };
-
-    img.src = objectUrl;
+    if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
   const handleSave = () => {

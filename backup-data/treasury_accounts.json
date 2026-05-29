@@ -1,0 +1,56 @@
+[
+  {
+    "id": "cc30f942-aab4-4d25-9918-64c20cc1b340",
+    "name_ar": "الخزينة الرئيسية (كاش)",
+    "type": "cash",
+    "current_balance": 15000.5,
+    "is_active": true,
+    "created_at": "2026-05-27T22:09:55.621713+00:00",
+    "updated_at": "2026-05-27T22:09:55.621713+00:00"
+  },
+  {
+    "id": "228008ad-dc44-4fe4-9b78-0928bc451f6a",
+    "name_ar": "حساب البنك (الأهلي)",
+    "type": "bank",
+    "current_balance": 45000,
+    "is_active": true,
+    "created_at": "2026-05-27T22:09:55.621713+00:00",
+    "updated_at": "2026-05-27T22:09:55.621713+00:00"
+  },
+  {
+    "id": "6a9cfa12-d071-4dbd-b960-c4f36d5392fc",
+    "name_ar": "محفظة إلكترونية (فودافون كاش)",
+    "type": "wallet",
+    "current_balance": 8500,
+    "is_active": true,
+    "created_at": "2026-05-27T22:09:55.621713+00:00",
+    "updated_at": "2026-05-27T22:09:55.621713+00:00"
+  },
+  {
+    "id": "fd6cecb7-00a7-40d3-b370-4f470fad89e6",
+    "name_ar": "الخزينة الرئيسية (كاش)",
+    "type": "cash",
+    "current_balance": 15000.5,
+    "is_active": true,
+    "created_at": "2026-05-27T22:10:22.449742+00:00",
+    "updated_at": "2026-05-27T22:10:22.449742+00:00"
+  },
+  {
+    "id": "15467611-39ca-4202-ac77-f9a9ffac1952",
+    "name_ar": "حساب البنك (الأهلي)",
+    "type": "bank",
+    "current_balance": 45000,
+    "is_active": true,
+    "created_at": "2026-05-27T22:10:22.449742+00:00",
+    "updated_at": "2026-05-27T22:10:22.449742+00:00"
+  },
+  {
+    "id": "e12de83d-d7d8-4dcd-bfe5-b96134fbb3ef",
+    "name_ar": "محفظة إلكترونية (فودافون كاش)",
+    "type": "wallet",
+    "current_balance": 8500,
+    "is_active": true,
+    "created_at": "2026-05-27T22:10:22.449742+00:00",
+    "updated_at": "2026-05-27T22:10:22.449742+00:00"
+  }
+]

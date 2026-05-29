@@ -1,0 +1,82 @@
+[
+  {
+    "table": "users",
+    "rows": 5,
+    "file": "users.json"
+  },
+  {
+    "table": "categories",
+    "rows": 0,
+    "file": "categories.json"
+  },
+  {
+    "table": "product_categories",
+    "rows": 28,
+    "file": "product_categories.json"
+  },
+  {
+    "table": "products",
+    "rows": 456,
+    "file": "products.json"
+  },
+  {
+    "table": "customers",
+    "rows": 5,
+    "file": "customers.json"
+  },
+  {
+    "table": "suppliers",
+    "rows": 5,
+    "file": "suppliers.json"
+  },
+  {
+    "table": "inventory",
+    "rows": 0,
+    "file": "inventory.json"
+  },
+  {
+    "table": "stock_items",
+    "rows": 458,
+    "file": "stock_items.json"
+  },
+  {
+    "table": "treasury_accounts",
+    "rows": 6,
+    "file": "treasury_accounts.json"
+  },
+  {
+    "table": "orders",
+    "rows": 18,
+    "file": "orders.json"
+  },
+  {
+    "table": "audit_sessions",
+    "rows": 17,
+    "file": "audit_sessions.json"
+  },
+  {
+    "table": "order_pipeline",
+    "rows": 0,
+    "file": "order_pipeline.json"
+  },
+  {
+    "table": "branding_settings",
+    "rows": 31,
+    "file": "branding_settings.json"
+  },
+  {
+    "table": "banners",
+    "rows": 0,
+    "file": "banners.json"
+  },
+  {
+    "table": "audit_logs",
+    "rows": 0,
+    "file": "audit_logs.json"
+  },
+  {
+    "table": "notifications",
+    "rows": 0,
+    "file": "notifications.json"
+  }
+]

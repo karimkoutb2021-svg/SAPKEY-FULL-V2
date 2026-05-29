@@ -1,0 +1,633 @@
+[
+  {
+    "id": "10b76109-8862-4a03-b15a-25f62f3f6dbe",
+    "customer_id": null,
+    "total": 0,
+    "status": "pending",
+    "notes": null,
+    "created_at": "2026-05-16T08:45:19.622206+00:00",
+    "customer_name": null,
+    "phone": "123",
+    "city": null,
+    "district": null,
+    "street": null,
+    "building": null,
+    "payment_method": null,
+    "items": null
+  },
+  {
+    "id": "58f5426b-c6e9-4620-afd6-f3ea6680ebbc",
+    "customer_id": null,
+    "total": 0,
+    "status": "pending",
+    "notes": null,
+    "created_at": "2026-05-16T08:45:35.447787+00:00",
+    "customer_name": null,
+    "phone": "123",
+    "city": null,
+    "district": null,
+    "street": null,
+    "building": null,
+    "payment_method": null,
+    "items": null
+  },
+  {
+    "id": "c3cdca6a-7263-46c1-bc17-3a2cbdd1548f",
+    "customer_id": null,
+    "total": 5,
+    "status": "completed",
+    "notes": "تم بنجاح",
+    "created_at": "2026-05-16T08:47:34.378928+00:00",
+    "customer_name": "اختبار النظام",
+    "phone": "0500000000",
+    "city": null,
+    "district": null,
+    "street": null,
+    "building": null,
+    "payment_method": "cash",
+    "items": [
+      {
+        "name": "مياه معدنية",
+        "price": 2.5,
+        "quantity": 2
+      }
+    ]
+  },
+  {
+    "id": "4b49c84e-de03-467c-8bd1-b91b3463d99f",
+    "customer_id": null,
+    "total": 7.5,
+    "status": "completed",
+    "notes": "طلب من التجربة",
+    "created_at": "2026-05-16T08:50:32.982959+00:00",
+    "customer_name": "عميل تجريبي",
+    "phone": "0551234567",
+    "city": "",
+    "district": "",
+    "street": "",
+    "building": "",
+    "payment_method": "cash",
+    "items": [
+      {
+        "name": "مياه معدنية",
+        "unit": "حبة",
+        "price": 2.5,
+        "total": 7.5,
+        "nameAr": "مياه معدنية",
+        "barcode": "123",
+        "taxRate": 15,
+        "quantity": 3,
+        "itemDiscount": 0
+      }
+    ]
+  },
+  {
+    "id": "ccae7a04-c458-4f45-90c5-f065fc114f24",
+    "customer_id": null,
+    "total": 25.5,
+    "status": "completed",
+    "notes": "طلب من نقطة البيع",
+    "created_at": "2026-05-16T09:01:39.941993+00:00",
+    "customer_name": "أحمد محمد",
+    "phone": "0551234567",
+    "city": "",
+    "district": "",
+    "street": "",
+    "building": "",
+    "payment_method": "cash",
+    "items": [
+      {
+        "name": "مياه معدنية",
+        "unit": "حبة",
+        "price": 2.5,
+        "total": 7.5,
+        "nameAr": "مياه معدنية",
+        "barcode": "123",
+        "taxRate": 15,
+        "quantity": 3,
+        "productId": "p1",
+        "itemDiscount": 0
+      },
+      {
+        "name": "أرز",
+        "unit": "كيس",
+        "price": 18,
+        "total": 18,
+        "nameAr": "أرز",
+        "barcode": "456",
+        "taxRate": 15,
+        "quantity": 1,
+        "productId": "p2",
+        "itemDiscount": 0
+      },
+      {
+        "_meta": {
+          "discount": 0,
+          "subtotal": 25.5,
+          "tax_total": 3.83,
+          "paid_amount": 25.5,
+          "order_number": "POS-8922099548",
+          "change_amount": 0,
+          "payment_status": "paid"
+        }
+      }
+    ]
+  },
+  {
+    "id": "356b2a53-135f-4aa3-a23e-90a5ee941508",
+    "customer_id": null,
+    "total": 155,
+    "status": "pending",
+    "notes": "",
+    "created_at": "2026-05-17T11:35:10.328554+00:00",
+    "customer_name": "-",
+    "phone": "000",
+    "city": "-",
+    "district": "-",
+    "street": "",
+    "building": "",
+    "payment_method": "cod",
+    "items": [
+      {
+        "name": "Toilet Paper",
+        "unit": "roll",
+        "price": 15,
+        "nameAr": "ورق حمام",
+        "quantity": 5,
+        "productId": "19",
+        "maxQuantity": 99
+      },
+      {
+        "name": "Bread",
+        "unit": "piece",
+        "price": 3,
+        "nameAr": "خبز",
+        "quantity": 2,
+        "productId": "4",
+        "maxQuantity": 99
+      },
+      {
+        "name": "Water 1.5L",
+        "unit": "bottle",
+        "price": 3,
+        "nameAr": "ماء 1.5 لتر",
+        "quantity": 3,
+        "productId": "3",
+        "maxQuantity": 99
+      },
+      {
+        "name": "Paper Towel",
+        "unit": "roll",
+        "price": 10,
+        "nameAr": "مناديل مطبخ",
+        "quantity": 5,
+        "productId": "18",
+        "maxQuantity": 99
+      }
+    ]
+  },
+  {
+    "id": "514a3cc9-ec12-4c76-bd93-cb047455d561",
+    "customer_id": null,
+    "total": 149.5,
+    "status": "pending",
+    "notes": "",
+    "created_at": "2026-05-17T14:03:07.77684+00:00",
+    "customer_name": "-0",
+    "phone": "00000",
+    "city": "-",
+    "district": "",
+    "street": "",
+    "building": "",
+    "payment_method": "cod",
+    "items": [
+      {
+        "name": "Basmati Rice 2kg",
+        "unit": "كيس",
+        "price": 32,
+        "nameAr": "أرز بسمتي 2 كجم",
+        "quantity": 1,
+        "productId": "a94607bb-b1de-4318-b1a2-5367f20de446",
+        "maxQuantity": 99
+      },
+      {
+        "name": "Green Olives 350g",
+        "unit": "برطمان",
+        "price": 9,
+        "nameAr": "زيتون أخضر 350 جرام",
+        "quantity": 4,
+        "productId": "ca98b60d-7c6d-4e95-8f27-866a3ad81267",
+        "maxQuantity": 99
+      },
+      {
+        "name": "Fresh Carrots 1kg",
+        "unit": "كجم",
+        "price": 6.5,
+        "nameAr": "جزر طازج 1 كجم",
+        "quantity": 1,
+        "productId": "7e0e9763-5cce-45c3-b16d-ea14bfb24e49",
+        "maxQuantity": 99
+      },
+      {
+        "name": "Frozen Chicken Nuggets 500g",
+        "unit": "كيس",
+        "price": 22,
+        "nameAr": "نゲットس دجاج مجمد 500 جرام",
+        "quantity": 2,
+        "productId": "c47b9d3b-c5a9-4db6-b1de-7b54c62ebae5",
+        "maxQuantity": 99
+      },
+      {
+        "name": "Bananas 1kg",
+        "unit": "كجم",
+        "price": 8,
+        "nameAr": "موز 1 كجم",
+        "quantity": 2,
+        "productId": "7507b195-aa9c-4ab8-ba90-937a762778d5",
+        "maxQuantity": 99
+      }
+    ]
+  },
+  {
+    "id": "1552d1d4-9d95-4a1d-a43a-11a0f73bd332",
+    "customer_id": null,
+    "total": 1014,
+    "status": "pending",
+    "notes": "",
+    "created_at": "2026-05-18T20:02:00.207344+00:00",
+    "customer_name": "-",
+    "phone": "00",
+    "city": "-",
+    "district": "-",
+    "street": "",
+    "building": "",
+    "payment_method": "cod",
+    "items": [
+      {
+        "name": "Pampers Medium 30pcs",
+        "unit": "باك",
+        "price": 65,
+        "nameAr": "حفاضات بامبرز مق Medium 30",
+        "quantity": 3,
+        "productId": "547579f8-2327-4422-a6c1-afa97820cc2f",
+        "maxQuantity": 99
+      },
+      {
+        "name": "Egyptian Rice 1kg",
+        "unit": "كيس",
+        "price": 12,
+        "nameAr": "أرز مصري 1 كجم",
+        "quantity": 6,
+        "productId": "75904e78-24dc-4ff7-a4cf-cf7c8b4c5591",
+        "maxQuantity": 99
+      },
+      {
+        "name": "Basmati Rice 2kg",
+        "unit": "كيس",
+        "price": 32,
+        "nameAr": "أرز بسمتي 2 كجم",
+        "quantity": 7,
+        "productId": "a94607bb-b1de-4318-b1a2-5367f20de446",
+        "maxQuantity": 99
+      },
+      {
+        "name": "Basmati Rice 1kg",
+        "unit": "كيس",
+        "price": 22,
+        "nameAr": "أرز بسمتي 1 كجم",
+        "quantity": 15,
+        "productId": "1a88e7f0-c2aa-4be0-a2b2-34ee39802dcf",
+        "maxQuantity": 99
+      },
+      {
+        "name": "Mixed Spices 100g",
+        "unit": "علبة",
+        "price": 20,
+        "nameAr": "بهارات مشكلة 100 جرام",
+        "quantity": 1,
+        "productId": "cd6d66f8-ac4f-426a-95ba-1ee89b4a9356",
+        "maxQuantity": 99
+      },
+      {
+        "name": "Egyptian Rice 1kg",
+        "unit": "كيس",
+        "price": 16,
+        "nameAr": "أرز مصري 1 كجم",
+        "quantity": 3,
+        "productId": "089aa5fb-e074-4ffe-a75d-738ac6078cc9",
+        "maxQuantity": 99
+      },
+      {
+        "name": "Frozen Chicken Nuggets 500g",
+        "unit": "كيس",
+        "price": 22,
+        "nameAr": "نゲットس دجاج مجمد 500 جرام",
+        "quantity": 3,
+        "productId": "c47b9d3b-c5a9-4db6-b1de-7b54c62ebae5",
+        "maxQuantity": 99
+      },
+      {
+        "name": "Vanilla Ice Cream 500ml",
+        "unit": "علبة",
+        "price": 22,
+        "nameAr": "آيس كريم فانيلا 500 مل",
+        "quantity": 2,
+        "productId": "5d52116c-5a3e-49c7-a138-c9e584d6099e",
+        "maxQuantity": 99
+      }
+    ]
+  },
+  {
+    "id": "290e37ea-0bb7-4d37-ba9f-d374e800895b",
+    "customer_id": null,
+    "total": 47,
+    "status": "pending",
+    "notes": "",
+    "created_at": "2026-05-18T20:05:26.724256+00:00",
+    "customer_name": "-",
+    "phone": "88",
+    "city": "0",
+    "district": "",
+    "street": "",
+    "building": "",
+    "payment_method": "cod",
+    "items": [
+      {
+        "name": "Basmati Rice 2kg",
+        "unit": "كيس",
+        "price": 32,
+        "nameAr": "أرز بسمتي 2 كجم",
+        "quantity": 1,
+        "productId": "a94607bb-b1de-4318-b1a2-5367f20de446",
+        "maxQuantity": 99
+      }
+    ]
+  },
+  {
+    "id": "c134dbae-ee73-4770-8f4e-a8342750b922",
+    "customer_id": null,
+    "total": 205,
+    "status": "pending",
+    "notes": "",
+    "created_at": "2026-05-18T20:10:34.586139+00:00",
+    "customer_name": "R",
+    "phone": "666",
+    "city": "T",
+    "district": "",
+    "street": "",
+    "building": "",
+    "payment_method": "cod",
+    "items": [
+      {
+        "name": "Vanilla Ice Cream 500ml",
+        "unit": "علبة",
+        "price": 22,
+        "nameAr": "آيس كريم فانيلا 500 مل",
+        "quantity": 4,
+        "productId": "5d52116c-5a3e-49c7-a138-c9e584d6099e",
+        "maxQuantity": 99
+      },
+      {
+        "name": "Biscuit 300g",
+        "unit": "كيس",
+        "price": 10,
+        "nameAr": "بسكوت 300 جرام",
+        "quantity": 3,
+        "productId": "5b35b0f0-836f-47c4-83f0-c83bf4968f15",
+        "maxQuantity": 99
+      },
+      {
+        "name": "White Rice 1kg",
+        "unit": "كيس",
+        "price": 18,
+        "nameAr": "أرز أبيض 1 كجم",
+        "quantity": 4,
+        "productId": "4fc1c1f3-5e75-4482-8479-96c532ef60c0",
+        "maxQuantity": 99
+      }
+    ]
+  },
+  {
+    "id": "992620ec-ac09-4f69-9ed5-010f00c0c037",
+    "customer_id": null,
+    "total": 81,
+    "status": "delivered",
+    "notes": null,
+    "created_at": "2026-05-27T20:50:51.090452+00:00",
+    "customer_name": "Test Customer",
+    "phone": "01000000000",
+    "city": null,
+    "district": null,
+    "street": null,
+    "building": null,
+    "payment_method": "cash",
+    "items": [
+      {
+        "name": "شاي أخضر 20 كيس",
+        "price": 16,
+        "quantity": 3,
+        "productId": "cb2feac1-dd96-4fb2-87e9-15d72e9a943d"
+      },
+      {
+        "name": "حليب طازج كامل الدسم 1 لتر",
+        "price": 5.5,
+        "quantity": 3,
+        "productId": "b42060d2-6356-4dda-93ba-fec7d377750b"
+      },
+      {
+        "name": "حليب طازج كامل الدسم 1 لتر",
+        "price": 5.5,
+        "quantity": 3,
+        "productId": "b42060d2-6356-4dda-93ba-fec7d377750b"
+      }
+    ]
+  },
+  {
+    "id": "d874bb05-09e4-49fa-94f0-c012c93707c3",
+    "customer_id": null,
+    "total": 108,
+    "status": "pending",
+    "notes": null,
+    "created_at": "2026-05-27T20:50:51.296572+00:00",
+    "customer_name": "Test Customer",
+    "phone": "01000000000",
+    "city": null,
+    "district": null,
+    "street": null,
+    "building": null,
+    "payment_method": "card",
+    "items": [
+      {
+        "name": "بطاطس محمرة 1 كجم",
+        "price": 22,
+        "quantity": 3,
+        "productId": "4fdca60c-00a7-4893-9a3f-1c4e644b8fbc"
+      },
+      {
+        "name": "شيبسي ملح 150 جرام",
+        "price": 10,
+        "quantity": 1,
+        "productId": "35e70451-a940-4814-9024-c8b0b2a3c851"
+      },
+      {
+        "name": "شاي أخضر 20 كيس",
+        "price": 16,
+        "quantity": 2,
+        "productId": "cb2feac1-dd96-4fb2-87e9-15d72e9a943d"
+      }
+    ]
+  },
+  {
+    "id": "7acab896-e816-485b-bc6e-a768b11d5380",
+    "customer_id": null,
+    "total": 130.5,
+    "status": "delivered",
+    "notes": null,
+    "created_at": "2026-05-27T20:50:51.398338+00:00",
+    "customer_name": "Test Customer",
+    "phone": "01000000000",
+    "city": null,
+    "district": null,
+    "street": null,
+    "building": null,
+    "payment_method": "cash",
+    "items": [
+      {
+        "name": "شاي أخضر 20 كيس",
+        "price": 16,
+        "quantity": 3,
+        "productId": "cb2feac1-dd96-4fb2-87e9-15d72e9a943d"
+      },
+      {
+        "name": "بطاطس محمرة 1 كجم",
+        "price": 22,
+        "quantity": 3,
+        "productId": "4fdca60c-00a7-4893-9a3f-1c4e644b8fbc"
+      },
+      {
+        "name": "حليب طازج كامل الدسم 1 لتر",
+        "price": 5.5,
+        "quantity": 3,
+        "productId": "b42060d2-6356-4dda-93ba-fec7d377750b"
+      }
+    ]
+  },
+  {
+    "id": "6cfab2fe-d12a-43a9-a52a-a1e1a7c49f2a",
+    "customer_id": null,
+    "total": 38.5,
+    "status": "pending",
+    "notes": null,
+    "created_at": "2026-05-27T20:50:51.593385+00:00",
+    "customer_name": "Test Customer",
+    "phone": "01000000000",
+    "city": null,
+    "district": null,
+    "street": null,
+    "building": null,
+    "payment_method": "card",
+    "items": [
+      {
+        "name": "حليب طازج كامل الدسم 1 لتر",
+        "price": 5.5,
+        "quantity": 3,
+        "productId": "b42060d2-6356-4dda-93ba-fec7d377750b"
+      },
+      {
+        "name": "شوكولاتة أصابع 200 جرام",
+        "price": 22,
+        "quantity": 1,
+        "productId": "63beb966-4d39-4389-866f-081bfc7e31cd"
+      }
+    ]
+  },
+  {
+    "id": "c9322330-cdc6-45ac-af9e-deab1f7f0d90",
+    "customer_id": null,
+    "total": 30,
+    "status": "delivered",
+    "notes": null,
+    "created_at": "2026-05-27T20:50:51.692596+00:00",
+    "customer_name": "Test Customer",
+    "phone": "01000000000",
+    "city": null,
+    "district": null,
+    "street": null,
+    "building": null,
+    "payment_method": "cash",
+    "items": [
+      {
+        "name": "شيبسي ملح 150 جرام",
+        "price": 10,
+        "quantity": 3,
+        "productId": "35e70451-a940-4814-9024-c8b0b2a3c851"
+      }
+    ]
+  },
+  {
+    "id": "f60b92bf-037c-483e-91ed-0725873edb55",
+    "customer_id": null,
+    "total": 150.5,
+    "status": "completed",
+    "notes": null,
+    "created_at": "2026-05-27T22:10:22.861822+00:00",
+    "customer_name": null,
+    "phone": null,
+    "city": null,
+    "district": null,
+    "street": null,
+    "building": null,
+    "payment_method": null,
+    "items": [
+      {
+        "qty": 2,
+        "name": "بيبسي 330 مل",
+        "price": 12
+      }
+    ]
+  },
+  {
+    "id": "d7ae7dba-b5af-444a-914a-971fafc19655",
+    "customer_id": null,
+    "total": 45,
+    "status": "pending",
+    "notes": null,
+    "created_at": "2026-05-27T22:10:22.861822+00:00",
+    "customer_name": null,
+    "phone": null,
+    "city": null,
+    "district": null,
+    "street": null,
+    "building": null,
+    "payment_method": null,
+    "items": [
+      {
+        "qty": 5,
+        "name": "شيبسي ليز",
+        "price": 6
+      }
+    ]
+  },
+  {
+    "id": "f227959f-082b-4672-93cf-268991eb1eb1",
+    "customer_id": null,
+    "total": 320,
+    "status": "completed",
+    "notes": null,
+    "created_at": "2026-05-27T22:10:22.861822+00:00",
+    "customer_name": null,
+    "phone": null,
+    "city": null,
+    "district": null,
+    "street": null,
+    "building": null,
+    "payment_method": null,
+    "items": [
+      {
+        "qty": 2,
+        "name": "وجبة",
+        "price": 150
+      }
+    ]
+  }
+]

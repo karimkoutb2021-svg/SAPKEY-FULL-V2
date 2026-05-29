@@ -36,7 +36,7 @@ function StatusBadge({ status }: { status: ServiceStatus }) {
 async function checkSupabase(): Promise<TestResult> {
   try {
     const start = performance.now();
-    const res = await fetch('https://fpcpqgpbznbsmeqqxmhx.supabase.co/rest/v1/', {
+    const res = await fetch('https://cshpnhzhzahnpvfflsgx.supabase.co/rest/v1/', {
       headers: { 'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '' },
       signal: AbortSignal.timeout(8000),
     });
@@ -50,7 +50,7 @@ async function checkSupabase(): Promise<TestResult> {
 
 async function checkAuth(): Promise<TestResult> {
   try {
-    const res = await fetch('https://fpcpqgpbznbsmeqqxmhx.supabase.co/auth/v1/user', {
+    const res = await fetch('https://cshpnhzhzahnpvfflsgx.supabase.co/auth/v1/user', {
       headers: { 'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '' },
       signal: AbortSignal.timeout(5000),
     });
@@ -62,7 +62,7 @@ async function checkAuth(): Promise<TestResult> {
 
 async function checkStorage(): Promise<TestResult> {
   try {
-    const res = await fetch('https://fpcpqgpbznbsmeqqxmhx.supabase.co/storage/v1/bucket', {
+    const res = await fetch('https://cshpnhzhzahnpvfflsgx.supabase.co/storage/v1/bucket', {
       headers: { 'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '' },
       signal: AbortSignal.timeout(5000),
     });

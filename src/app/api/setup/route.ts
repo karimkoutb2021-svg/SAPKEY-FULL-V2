@@ -336,14 +336,14 @@ export async function POST() {
     return NextResponse.json({
       status: 'error',
       message: text.substring(0, 500),
-      note: 'Please run SQL manually at: https://supabase.com/dashboard/project/fpcpqgpbznbsmeqqxmhx/sql'
+      note: 'Please run SQL manually at: https://supabase.com/dashboard/project/cshpnhzhzahnpvfflsgx/sql'
     }, { status: 500 });
 
   } catch (err: any) {
     return NextResponse.json({
       status: 'error',
       message: err.message,
-      note: 'Please run SQL manually at: https://supabase.com/dashboard/project/fpcpqgpbznbsmeqqxmhx/sql'
+      note: 'Please run SQL manually at: https://supabase.com/dashboard/project/cshpnhzhzahnpvfflsgx/sql'
     }, { status: 500 });
   }
 }

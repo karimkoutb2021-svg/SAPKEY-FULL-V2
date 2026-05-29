@@ -1,0 +1,72 @@
+[
+  {
+    "id": "854b1fcf-9ba5-4cf0-8be4-4c74264d8c30",
+    "email": "admin@sapkey.com",
+    "password_hash": "supabase_auth",
+    "full_name_ar": "مطور النظام",
+    "full_name_en": "Developer",
+    "phone": "05xxxxxxxx",
+    "role": "admin",
+    "is_active": true,
+    "avatar_url": null,
+    "branch_id": null,
+    "created_at": "2026-05-17T14:12:08.932272+00:00",
+    "updated_at": "2026-05-17T14:12:08.932272+00:00"
+  },
+  {
+    "id": "8bf2e45f-caaa-4791-8901-e6353a37bfdd",
+    "email": "manager@sapkey.com",
+    "password_hash": "supabase_auth",
+    "full_name_ar": "المدير",
+    "full_name_en": "Manager",
+    "phone": "05xxxxxxxx",
+    "role": "manager",
+    "is_active": true,
+    "avatar_url": null,
+    "branch_id": null,
+    "created_at": "2026-05-17T14:12:09.185168+00:00",
+    "updated_at": "2026-05-17T14:12:09.185168+00:00"
+  },
+  {
+    "id": "56ae7c17-a8ee-40da-8617-a8990c3d6f6c",
+    "email": "cashier@sapkey.com",
+    "password_hash": "supabase_auth",
+    "full_name_ar": "الكاشير",
+    "full_name_en": "Cashier",
+    "phone": "05xxxxxxxx",
+    "role": "cashier",
+    "is_active": true,
+    "avatar_url": null,
+    "branch_id": null,
+    "created_at": "2026-05-17T14:12:09.434915+00:00",
+    "updated_at": "2026-05-17T14:12:09.434915+00:00"
+  },
+  {
+    "id": "eccf85c6-2c49-4ed7-ad20-62dcf3312f47",
+    "email": "customer@sapkey.com",
+    "password_hash": "supabase_auth",
+    "full_name_ar": "العميل",
+    "full_name_en": "Customer",
+    "phone": "05xxxxxxxx",
+    "role": "customer",
+    "is_active": true,
+    "avatar_url": null,
+    "branch_id": null,
+    "created_at": "2026-05-17T14:12:09.684176+00:00",
+    "updated_at": "2026-05-17T14:12:09.684176+00:00"
+  },
+  {
+    "id": "6614e97d-c4e3-4818-97d8-42c0731be22e",
+    "email": "sapkeyglobal@gmail.com",
+    "password_hash": "supabase_auth",
+    "full_name_ar": "مطور النظام",
+    "full_name_en": "Developer",
+    "phone": "",
+    "role": "admin",
+    "is_active": true,
+    "avatar_url": null,
+    "branch_id": null,
+    "created_at": "2026-05-19T18:57:28.270605+00:00",
+    "updated_at": "2026-05-27T10:37:12.049812+00:00"
+  }
+]

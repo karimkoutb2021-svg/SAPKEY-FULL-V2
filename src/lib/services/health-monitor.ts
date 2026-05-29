@@ -44,7 +44,7 @@ async function checkService(url: string, label: string, headers?: Record<string,
 }
 
 async function runHealthCheck(): Promise<HealthResult[]> {
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://fpcpqgpbznbsmeqqxmhx.supabase.co';
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://cshpnhzhzahnpvfflsgx.supabase.co';
   const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
 
   const results: HealthResult[] = await Promise.all([

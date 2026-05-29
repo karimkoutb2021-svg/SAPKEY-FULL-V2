@@ -2,7 +2,7 @@ require('dotenv').config({ path: '.env.local' });
 const { createClient } = require('@supabase/supabase-js');
 const fs = require('fs');
 
-const supabaseUrl = 'https://fpcpqgpbznbsmeqqxmhx.supabase.co';
+const supabaseUrl = 'https://cshpnhzhzahnpvfflsgx.supabase.co';
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
 if (!supabaseKey) {

@@ -1,28 +1,42 @@
 import { createClient } from '@/lib/supabase/client';
+import { uploadImage as cloudinaryUpload, deleteImage as cloudinaryDelete } from '@/lib/cloudinary';
 
 const supabase = createClient();
-
 const BUCKET = 'storefront';
 
 export async function uploadImage(file: File, path: string): Promise<string> {
-  const ext = file.name.split('.').pop() || 'jpg';
-  const fileName = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
-  const fullPath = `${path}/${fileName}`;
+  try {
+    return await cloudinaryUpload(file, path);
+  } catch (cloudinaryErr) {
+    console.warn('[Storage] Cloudinary upload failed, falling back to Supabase Storage:', cloudinaryErr);
+    const ext = file.name.split('.').pop() || 'jpg';
+    const fileName = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
+    const fullPath = `${path}/${fileName}`;
 
-  const { error: uploadError } = await supabase.storage
-    .from(BUCKET)
-    .upload(fullPath, file, {
-      cacheControl: '3600',
-      upsert: false,
-    });
+    const { error: uploadError } = await supabase.storage
+      .from(BUCKET)
+      .upload(fullPath, file, {
+        cacheControl: '3600',
+        upsert: false,
+      });
 
-  if (uploadError) throw uploadError;
+    if (uploadError) throw uploadError;
 
-  const { data } = supabase.storage.from(BUCKET).getPublicUrl(fullPath);
-  return data.publicUrl;
+    const { data } = supabase.storage.from(BUCKET).getPublicUrl(fullPath);
+    return data.publicUrl;
+  }
 }
 
 export async function deleteImage(url: string): Promise<void> {
+  if (url.includes('cloudinary.com')) {
+    try {
+      await cloudinaryDelete(url);
+      return;
+    } catch (e) {
+      console.warn('[Storage] Cloudinary delete failed, falling back:', e);
+    }
+  }
+
   const path = url.split(`/storage/v1/object/public/${BUCKET}/`)[1];
   if (!path) return;
 

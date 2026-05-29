@@ -1,6 +1,6 @@
 const { Client } = require('pg');
 const password = encodeURIComponent('Msbchz@12345@');
-const connectionString = `postgresql://postgres:${password}@db.fpcpqgpbznbsmeqqxmhx.supabase.co:5432/postgres`;
+const connectionString = `postgresql://postgres:${password}@db.cshpnhzhzahnpvfflsgx.supabase.co:5432/postgres`;
 
 async function test() {
   const client = new Client({ connectionString });
